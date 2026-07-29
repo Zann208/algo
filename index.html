@@ -44,6 +44,24 @@ a:hover{text-decoration:underline}
   font-weight:700;padding:7px 11px;border-radius:7px;cursor:pointer;letter-spacing:.4px;white-space:nowrap;transition:.13s}
 .tbtn:hover{color:var(--am);border-color:var(--am)}
 
+
+.brand{display:flex;align-items:center;gap:9px;border:1px solid transparent;background:none;cursor:pointer;
+  padding:4px 8px 4px 5px;border-radius:9px;transition:.13s;font-family:inherit;color:inherit}
+.brand:hover{border-color:var(--line2);background:var(--panel)}
+.brand:hover .bcaret{color:var(--am)}
+.bmark{width:28px;height:28px;border-radius:8px;border:1px solid var(--line2);background:var(--panel2);
+  display:flex;align-items:center;justify-content:center;flex:0 0 auto;color:var(--dim)}
+.btext{line-height:1.2;text-align:left}
+.btext b{display:block;font-family:var(--mono);font-size:12.5px;font-weight:700;letter-spacing:-.2px;color:var(--ink)}
+.btext b i{font-style:normal;color:var(--faint);font-weight:600}
+.btext span{display:block;font-family:var(--mono);font-size:8px;letter-spacing:1.6px;color:var(--faint);text-transform:uppercase;margin-top:1px}
+.btext span em{font-style:normal;color:var(--am);animation:neon 2.2s ease-in-out infinite}
+@keyframes neon{0%,68%,100%{text-shadow:none;opacity:.75}76%{text-shadow:0 0 4px var(--am),0 0 11px var(--am);opacity:1}84%{opacity:.9}}
+@media (prefers-reduced-motion: reduce){.btext span em{animation:none;opacity:1}}
+.bcaret{font-family:var(--mono);font-size:9px;color:var(--faint);transition:.13s}
+#csPop{right:auto;left:0}
+@media(max-width:620px){.btext{display:none}}
+
 /* ---------- SIDEBAR ---------- */
 #side{position:fixed;top:54px;left:0;bottom:0;width:var(--rail);z-index:50;background:var(--bg);
   border-right:1px solid var(--line);padding:16px 10px 30px;overflow-y:auto}
@@ -289,33 +307,37 @@ html:not(.dark) #csPop{box-shadow:0 22px 55px rgba(15,23,42,.16)}
 
 <header id="top">
   <button id="burger" onclick="toggleSide()" aria-label="Menu">☰</button>
-  <div class="brand">
-    <span class="bmark">AL</span>
-    <span class="btext"><b>ALGO</b><span>269202 · ISNE</span></span>
-  </div>
-  <div class="tspace"></div>
   <div id="csWrap">
-    <button class="tbtn" id="csBtn" aria-haspopup="true" aria-expanded="false">COURSE ▾</button>
+    <button class="brand" id="logoBtn" title="Switch course" aria-haspopup="true" aria-expanded="false">
+      <span class="bmark"><svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true">
+      <line x1="8" y1="3.4" x2="4.2" y2="8.6" stroke="currentColor" stroke-width="1.1" opacity=".5"/>
+      <line x1="8" y1="3.4" x2="11.8" y2="8.6" stroke="currentColor" stroke-width="1.1" opacity=".5"/>
+      <line x1="4.2" y1="8.6" x2="2.6" y2="13" stroke="currentColor" stroke-width="1.1" opacity=".35"/>
+      <line x1="4.2" y1="8.6" x2="6.4" y2="13" stroke="currentColor" stroke-width="1.1" opacity=".35"/>
+      <circle cx="8" cy="3.4" r="2" fill="#f0b429"/><circle cx="4.2" cy="8.6" r="1.6" fill="#34d399"/>
+      <circle cx="11.8" cy="8.6" r="1.6" fill="#38bdf8"/><circle cx="2.6" cy="13" r="1.2" fill="#63718c"/>
+      <circle cx="6.4" cy="13" r="1.2" fill="#63718c"/></svg></span>
+      <span class="btext"><b>ALGO<i>://269202</i></b><span>by <em>ZANN</em></span></span>
+      <span class="bcaret">▾</span>
+    </button>
     <div id="csPop" role="menu">
       <div class="cshd"><span>Semester consoles</span><span>3</span></div>
       <a class="csi" href="https://zann208.github.io/netdes/" role="menuitem">
         <span class="csmk c1">NET</span>
         <span class="cstx"><b>Network Design</b><span>261434 · CPE434</span></span>
-        <span class="cssoon">OPEN</span>
-      </a>
+        <span class="cssoon">OPEN ↗</span></a>
       <a class="csi" href="https://zann208.github.io/wnet/" role="menuitem">
         <span class="csmk c2">WLN</span>
         <span class="cstx"><b>Wireless Networks</b><span>269430</span></span>
-        <span class="cssoon">OPEN</span>
-      </a>
+        <span class="cssoon">OPEN ↗</span></a>
       <a class="csi cur" href="#" id="csSelf" role="menuitem">
         <span class="csmk c3">ALG</span>
         <span class="cstx"><b>Algorithms for iSNE</b><span>269202 · ISNE</span></span>
-        <span class="csnow">HERE</span>
-      </a>
+        <span class="csnow">HERE</span></a>
       <div class="csft"><span>SEM 1 · 2026</span><a href="https://zann208.github.io" target="_blank" rel="noopener">portfolio ↗</a></div>
     </div>
   </div>
+  <div class="tspace"></div>
   <button class="tbtn" id="themebtn2" onclick="toggleTheme()" title="Theme">◐</button>
 </header>
 
@@ -2607,33 +2629,23 @@ fcBuild(); fcShow();
 qzStart(0);
 prFilter(0);
 
-/* ===== course switcher ===== */
+
+
+
+/* ===== course switcher (canonical) ===== */
 (function(){
-  var b=document.getElementById("csBtn"),p=document.getElementById("csPop");
+  var b=document.getElementById("logoBtn"),p=document.getElementById("csPop");
   if(!b||!p)return;
   b.addEventListener("click",function(e){e.stopPropagation();
-    var on=p.classList.toggle("on");b.setAttribute("aria-expanded",on?"true":"false")});
-  document.addEventListener("click",function(){p.classList.remove("on");b.setAttribute("aria-expanded","false")});
+    var on=p.classList.toggle("on");b.setAttribute("aria-expanded",on?"true":"false");});
   p.addEventListener("click",function(e){e.stopPropagation()});
+  document.addEventListener("click",function(){p.classList.remove("on");b.setAttribute("aria-expanded","false")});
   document.addEventListener("keydown",function(e){if(e.key==="Escape")p.classList.remove("on")});
   var s=document.getElementById("csSelf");
   if(s)s.addEventListener("click",function(e){e.preventDefault();p.classList.remove("on");
-    if(typeof go==="function")go("home")});
+    if(typeof go==="function"){go("home")}
+    else if(typeof showTab==="function"){showTab("home",true)}});
 })();
-
-/* ===== course switcher ===== */
-(function(){
-  var b=document.getElementById("csBtn"),p=document.getElementById("csPop");
-  if(!b||!p)return;
-  b.addEventListener("click",function(e){e.stopPropagation();
-    var on=p.classList.toggle("on");b.setAttribute("aria-expanded",on?"true":"false")});
-  document.addEventListener("click",function(){p.classList.remove("on");b.setAttribute("aria-expanded","false")});
-  p.addEventListener("click",function(e){e.stopPropagation()});
-  document.addEventListener("keydown",function(e){if(e.key==="Escape")p.classList.remove("on")});
-  var s=document.getElementById("csSelf");
-  if(s)s.addEventListener("click",function(e){e.preventDefault();p.classList.remove("on");go("home")});
-})();
-
 </script>
 </body>
 </html>
