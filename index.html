@@ -10,7 +10,7 @@
   --bg:#0a0d14; --bg2:#0e1220; --panel:#121724; --panel2:#171d2e; --panel3:#1c2438;
   --ink:#e8ecf6; --dim:#96a3bd; --faint:#63718c;
   --am:#f0b429; --am2:#fbbf24; --gr:#34d399; --cy:#38bdf8; --vi:#a78bfa; --rd:#f87171;
-  --line:#1e2637; --line2:#2b3550;
+  --line:#1e2637; --line2:#2b3550; --tline:#465878;
   --mono:"SF Mono",ui-monospace,"JetBrains Mono",Menlo,Consolas,monospace;
   --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   --rail:252px;
@@ -19,7 +19,7 @@ html:not(.dark){
   --bg:#f7f9fc; --bg2:#eef2f8; --panel:#ffffff; --panel2:#f5f8fc; --panel3:#eef3fa;
   --ink:#111827; --dim:#4b5768; --faint:#7b8798;
   --am:#b45309; --am2:#92400e; --gr:#047857; --cy:#0369a1; --vi:#6d28d9; --rd:#b91c1c;
-  --line:#e2e8f2; --line2:#cbd5e4;
+  --line:#e2e8f2; --line2:#cbd5e4; --tline:#9aa9c0;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{background:var(--bg);scroll-behavior:smooth}
@@ -239,13 +239,15 @@ code{font-family:var(--mono);font-size:.9em;background:var(--panel3);border:1px 
 /* ---------- TREE DIAGRAMS ---------- */
 .treebox{background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:16px;margin:13px 0;overflow-x:auto}
 .tcap{font-family:var(--mono);font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:var(--faint);margin-bottom:9px}
-.tc{fill:var(--panel);stroke:var(--line2)}
-.tc-hl{fill:color-mix(in srgb,var(--am) 24%,var(--panel));stroke:var(--am)}
-.tc-bad{fill:color-mix(in srgb,var(--rd) 20%,var(--panel));stroke:var(--rd)}
+.treebox svg{display:block;overflow:visible}
+.tln{stroke:var(--tline);stroke-width:1.7;stroke-linecap:round;fill:none}
+.tc{fill:var(--panel);stroke:var(--line2);stroke-width:1.7}
+.tc-hl{fill:color-mix(in srgb,var(--am) 24%,var(--panel));stroke:var(--am);stroke-width:1.9}
+.tc-bad{fill:color-mix(in srgb,var(--rd) 20%,var(--panel));stroke:var(--rd);stroke-width:1.9}
 .tt{fill:var(--ink);font-family:var(--mono);font-size:12px}
 .tt-onhl{fill:var(--am);font-family:var(--mono);font-size:12px;font-weight:700}
-.tb{stroke:var(--line2)}
-.tb-bad{stroke:var(--rd)}
+.tb{fill:var(--dim);stroke:none;font-family:var(--mono);font-weight:600}
+.tb-bad{fill:var(--rd);stroke:none;font-family:var(--mono);font-weight:700}
 
 /* ---------- MINI GRID ---------- */
 .minigrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:9px;margin-top:13px}
@@ -2054,7 +2056,7 @@ function drawTree(el){
   (function draw(n){
     if (!n) return;
     for (const c of [n.l, n.r]) if (c)
-      edges += '<line class="tl" x1="'+X(n)+'" y1="'+Y(n)+'" x2="'+X(c)+'" y2="'+Y(c)+'"/>';
+      edges += '<line class="tln" x1="'+X(n)+'" y1="'+Y(n)+'" x2="'+X(c)+'" y2="'+Y(c)+'"/>';
     const bf = tHeight(n.l) - tHeight(n.r);
     const bad = showBf && Math.abs(bf) > 1;
     nodes += '<circle class="'+(n.f==='h'?'tc-hl':bad?'tc-bad':'tc')+'" cx="'+X(n)+'" cy="'+Y(n)+'" r="'+r+'"/>';
