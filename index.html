@@ -247,6 +247,15 @@ code{font-family:var(--mono);font-size:.9em;background:var(--panel3);border:1px 
 .tt{fill:var(--ink);font-family:var(--mono);font-size:12px}
 .tt-onhl{fill:var(--am);font-family:var(--mono);font-size:12px;font-weight:700}
 .tb{fill:var(--dim);stroke:none;font-family:var(--mono);font-weight:600}
+.btreebox{background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:16px;margin:13px 0;overflow-x:auto}
+.btreebox svg{display:block;overflow:visible}
+.btl{stroke:var(--tline);stroke-width:1.7;stroke-linecap:round;fill:none}
+.btn{fill:var(--panel);stroke:var(--line2);stroke-width:1.7}
+.btn-hl{fill:color-mix(in srgb,var(--am) 20%,var(--panel));stroke:var(--am);stroke-width:1.9}
+.btn-of{fill:color-mix(in srgb,var(--rd) 18%,var(--panel));stroke:var(--rd);stroke-width:1.9}
+.btn-lf{fill:color-mix(in srgb,var(--cy) 14%,var(--panel));stroke:var(--cy)}
+.btd{stroke:var(--line2);stroke-width:1}
+.btt{fill:var(--ink);font-family:var(--mono);font-weight:600}
 .tb-bad{fill:var(--rd);stroke:none;font-family:var(--mono);font-weight:700}
 
 /* ---------- MINI GRID ---------- */
@@ -365,6 +374,7 @@ html:not(.dark) #csPop{box-shadow:0 22px 55px rgba(15,23,42,.16)}
   <button class="navbtn" data-page="week2" onclick="go('week2')"><span class="dot" style="background:var(--rd)"></span>Arrays &amp; lists<span class="num">W2</span></button>
   <button class="navbtn" data-page="week3" onclick="go('week3')"><span class="dot" style="background:var(--am2)"></span>Stacks &amp; queues<span class="num">W3</span></button>
   <button class="navbtn" data-page="week4" onclick="go('week4')"><span class="dot" style="background:var(--gr)"></span>Trees &amp; heaps<span class="num">W4</span></button>
+  <button class="navbtn" data-page="week6" onclick="go('week6')"><span class="dot" style="background:var(--vi)"></span>B-Trees &amp; Tries<span class="num">W6</span></button>
 
   <div class="navgroup">Assignments</div>
   <button class="navbtn" data-page="a1" onclick="go('a1')"><span class="dot" style="background:var(--cy)"></span>Worksheet 1</button>
@@ -1145,6 +1155,179 @@ html:not(.dark) #csPop{box-shadow:0 22px 55px rgba(15,23,42,.16)}
 
 </section>
 
+
+<!-- ===== WEEK 6 ===== -->
+<section class="page" id="page-week6">
+<div class="lvlchip c-green">Week 6</div>
+  <h1>B-Trees &amp; Tries</h1>
+  <p class="sub">What changes when the data is too big for RAM: multiway trees, the B-tree family (B, B*, B+, Prefix B+, Bit), and tries.</p>
+
+  <div class="card">
+    <h2><span class="sq"></span>Why binary trees stop working</h2>
+    <p><b>Last week we assumed everything was in RAM.</b> Now suppose the data is too big and lives on a hard disk. Reaching a piece of disk memory costs:</p>
+    <p class="center" style="font-size:19px"><b>seek time + rotation time + transfer time</b></p>
+    <p><b>Seek time is the killer.</b> It depends on the disk head <b>physically moving</b> to the right position — mechanical, not electronic.</p>
+    <ul>
+      <li>Seek time is measured in <b>milliseconds</b>.</li>
+      <li>CPU work is measured in <b>microseconds</b> — <b>at least 1,000× faster</b>.</li>
+    </ul>
+    <div class="box idea"><span class="tag">ℹ The key inversion</span> processing is essentially <b>free</b> compared with a disk access. So it is worth doing <b>extra CPU work</b> if that removes even one seek. This single fact is why every structure in this week exists.</div>
+    <p>A binary tree is the worst possible shape here: each node holds one key, so descending 5 levels can mean <b>5 separate disk seeks</b>. It was spread across blocks with no thought for how the disk reads.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-yel"></span>Multiway trees — fatter nodes, fewer levels</h2>
+    <p>A <b>multiway tree</b> differs from a binary tree in a few key ways:</p>
+    <ul>
+      <li>Each node has <b>m children</b>.</li>
+      <li>Each node has <b>m−1 keys</b>.</li>
+      <li>The keys are in <b>ascending order</b>.</li>
+      <li>The keys in the first <b>i</b> children are <b>smaller</b> than the i-th key.</li>
+      <li>The keys in the last <b>m−i</b> children are <b>larger</b> than the i-th key.</li>
+    </ul>
+    <div class="btreebox" data-btree="bt_multi"></div>
+    <p class="tcap">A multiway tree. Count them: a node with k keys always has k+1 pointers.</p>
+    <p class="small">This one still suffers from <b>malaise</b> — it is unbalanced, so finding 32 takes longer than finding 21. Fat nodes alone are not enough; we also need every leaf on the same level. That is what a B-tree adds.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-grn"></span>B-Trees — one node = one disk block</h2>
+    <p><b>The idea in one line:</b> make each node exactly the size of a disk <b>block</b>, so one seek brings back as many keys as possible.</p>
+    <p>How many keys fit in a node depends on the size of each key and the size of the block, and block size depends on the system.</p>
+    <p><b>A B-Tree of order m has these properties:</b></p>
+    <ul>
+      <li>The <b>root</b> has at least <b>2 subtrees</b>, unless it is a leaf.</li>
+      <li>Each <b>nonroot, nonleaf</b> node holds <b>k−1 keys</b> and <b>k pointers</b>, where <b>⌈m/2⌉ ≤ k ≤ m</b>.</li>
+      <li>Each <b>leaf</b> holds <b>k−1 keys</b>, where <b>⌈m/2⌉ ≤ k ≤ m</b>.</li>
+      <li><b>All leaves are on the same level.</b></li>
+    </ul>
+    <div class="box idea"><span class="tag">ℹ What those bounds actually mean</span> a B-tree is always <b>at least half full</b>. A node only splits when it fills an entire block — so space is never badly wasted, and the height stays low.</div>
+    <p class="small">Nice consequence: the root — and maybe the whole first level — can be kept in RAM, so a search of a big tree may cost only one or two real disk accesses.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq"></span>Implementing and searching</h2>
+    <p>The node carries its keys and pointers inline, plus a count of how many keys are actually in use:</p>
+    <pre class="code" data-code="w6_node"></pre>
+    <p><b>Searching is just a binary-tree search with a wider fan-out.</b> Start at the root and pick the branch whose range contains the search value:</p>
+    <pre class="code" data-code="w6_search"></pre>
+    <p class="small">Within a node you scan the keys in RAM, which is free. Following a pointer is what costs a seek — so the wider the node, the cheaper the search.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-yel"></span>Inserting — the tree grows upward</h2>
+    <p><b>The challenge:</b> in a B-tree all leaves must be on the same level. Not even a balanced binary tree demands that.</p>
+    <p>So the direction of construction flips. Binary trees are built <b>top down</b> — the root is placed and nodes divide around it. A B-tree is built <b>bottom up</b> — leaves are positioned and rearranged, and the root is decided last.</p>
+    <p><b>The algorithm:</b></p>
+    <ul>
+      <li>Search the tree to find the leaf the key belongs in.</li>
+      <li>If there is room (fewer than <b>m−1</b> keys already), just insert it. Done.</li>
+      <li>Otherwise the node must <b>split</b>. Choose the <b>median</b>: lower keys form the left node, higher keys form the right node.</li>
+      <li>The <b>median moves up to the parent</b> — which may itself now be full, so it may split too.</li>
+      <li>Repeat upward until something has room, or the root is reached.</li>
+    </ul>
+
+    <h3>Worked example — insert 33, order 5</h3>
+    <p class="small">Order 5 means at most 4 keys per node. Watch the highlighted node.</p>
+    <div class="btreebox" data-btree="bt_i0"></div>
+    <p class="tcap">1 — the target leaf already holds 4 keys. It is full.</p>
+    <div class="btreebox" data-btree="bt_i1"></div>
+    <p class="tcap">2 — inserting 33 gives it 5 keys. Overflow.</p>
+    <div class="btreebox" data-btree="bt_i2"></div>
+    <p class="tcap">3 — split at the median 32. Left keeps 25 30, right takes 33 35, and <b>32 moves up into the parent</b>. The parent had room, so it stops here.</p>
+    <div class="box notes"><span class="tag">★ Read the pointer count</span> the parent went from 2 keys / 3 pointers to 3 keys / 4 pointers. The rule holds at every step.</div>
+
+    <h3>When the root itself is full</h3>
+    <p>This is the <b>only</b> case where a B-tree gains height.</p>
+    <div class="btreebox" data-btree="bt_r0"></div>
+    <p class="tcap">A full root receives a promoted median and overflows.</p>
+    <div class="btreebox" data-btree="bt_r1"></div>
+    <p class="tcap">It splits in two and a <b>new root</b> is created above them. The tree is one level taller — and every leaf is still on the same level.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-red"></span>Deleting</h2>
+    <p>Deletion asks two questions first:</p>
+    <ul>
+      <li><b>Is the key in a leaf?</b> If so, will the leaf still be at least half full afterwards?</li>
+      <li><b>Is it in an internal node?</b> Then which value becomes the new separator?</li>
+    </ul>
+    <p><b>Leaf nodes</b> can simply be deleted, which may leave the leaf with too few keys. Then the tree must be rebalanced: pick a sibling leaf and <b>redistribute</b> the keys. If a neighbour has enough to share, the median becomes the new separator key and the rest are shared out. If that leaves the parent short of keys, the fix <b>iterates upward</b> toward the root.</p>
+    <p><b>Internal nodes</b> cannot just be removed — they separate two subtrees. Promote one of:</p>
+    <ul>
+      <li>the <b>largest value in the left subtree</b>, or</li>
+      <li>the <b>smallest value in the right subtree</b>.</li>
+    </ul>
+    <p class="small">Either choice reduces the problem to deleting from a leaf or from another internal node — both of which we have now defined. Same trick as deleting from a BST.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-grn"></span>B*-Trees — delay the split</h2>
+    <p>Every node is a block, and every block costs a seek. <b>B*-Trees</b> reduce accesses further by keeping nodes fuller:</p>
+    <ul>
+      <li>A B-tree must be <b>at least half full</b>.</li>
+      <li>A <b>B*-Tree must be two-thirds full</b>.</li>
+    </ul>
+    <p><b>How it achieves that:</b> it delays splitting by splitting <b>2 nodes into 3</b>, rather than 1 node into 2.</p>
+    <ul>
+      <li><b>Overflow first.</b> If a leaf fills up but its sibling has room, the surplus <b>overflows into the sibling</b> instead of splitting.</li>
+      <li><b>Split only when both are full.</b> Then the two full nodes become three, each about two-thirds full.</li>
+    </ul>
+    <p class="small">A <b>B**-Tree</b> pushes the same idea again: required to be <b>75% full</b>.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq"></span>B+Trees — all data in the leaves</h2>
+    <p><b>The problem being solved:</b> in-order traversal. On a binary tree, in-order gives you the values in ascending order cheaply. On a B-tree it is awkward — leaves can be read a block at a time, but internal nodes give you only <b>one value per visit</b>, and you keep bouncing between levels.</p>
+    <p><b>The fix:</b> in a B+Tree the internal nodes are <b>pure index</b> — signposts only.</p>
+    <ul>
+      <li>Values stored in index nodes are <b>repeated in the leaves</b>.</li>
+      <li><b>All data lives in the leaves</b>; indexes only point to the right leaf.</li>
+      <li>Leaves are <b>chained with forward pointers</b>, so an in-order traversal reads leaves straight through and never touches an internal node.</li>
+    </ul>
+    <div class="btreebox" data-btree="bplus"></div>
+    <p class="tcap">A B+Tree. The index keys 20 and 30 <b>reappear</b> in the leaves — that is the giveaway.</p>
+    <p><b>Insert:</b> when a leaf splits, the promoted value becomes <b>both</b> a value in the leaf and an index in the parent.<br>
+    <b>Delete:</b> removing a value from a leaf does <b>not</b> require removing the matching index — it is still a perfectly good signpost. If a leaf gets too small it merges with a sibling and the indexes are updated.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-yel"></span>Prefix B+Trees and Bit Trees — shrink the index</h2>
+    <p>That last point is the doorway. If an index key does not have to <b>be</b> a stored value, it only has to <b>separate</b> them. So store the shortest thing that still separates.</p>
+    <p><b>Prefix B+Tree:</b> the index holds only a <b>prefix</b> of the key — <b>BF</b> instead of <b>BF90</b>, like the guide word at the top of a dictionary page.</p>
+    <ul>
+      <li>Shorter prefix → <b>more keys per index node</b>.</li>
+      <li>More keys → <b>more children</b> per node.</li>
+      <li>More children → <b>fewer levels</b> → fewer seeks.</li>
+    </ul>
+    <p class="small">If every key in a region starts <b>AB12XY…</b>, storing "AB" at every level between the leaves and the root is pure waste. Keep only the distinguishing part.</p>
+    <p><b>Bit Tree:</b> take it to the extreme. Store the <b>D-bit</b> — the single <b>distinction bit</b>, the first bit position where two values differ:</p>
+    <pre class="code" data-code="w6_dbit"></pre>
+    <p class="small">Especially valuable when the tree stores complicated objects: you never store the object in the index, only enough to steer the search to the right leaf.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-grn"></span>Tries</h2>
+    <p>Only a <b>portion of the key</b> is ever needed to search. But finding the right prefix is awkward, and maintaining prefixes is complicated.</p>
+    <p><b>A tree that navigates using parts of the key itself is called a "trie."</b></p>
+    <p class="small">The name comes from re<b>trie</b>val. Instead of comparing whole keys at each node, you consume the key one piece at a time — one character, or one bit — and that piece chooses the branch. The path from the root <i>spells</i> the key.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-red"></span>Exam traps</h2>
+    <ul>
+      <li><b>Keys vs pointers.</b> A node with <b>k keys has k+1 pointers</b>. Order m means m pointers and <b>m−1 keys</b> — not m keys.</li>
+      <li><b>"Order 5" is the pointer count.</b> So a node holds at most <b>4</b> keys and splits on the 5th.</li>
+      <li><b>Half full, not half empty.</b> B-tree ≥ ½ · B*-Tree ≥ ⅔ · B**-Tree ≥ ¾.</li>
+      <li><b>Splitting promotes the median</b>, and the median goes <b>up</b>, not into either half.</li>
+      <li><b>Height only grows at the root.</b> Every other split is absorbed by a parent.</li>
+      <li><b>B+ ≠ B.</b> In a B+Tree every value is in a leaf and index values are <b>repeated</b>. In a plain B-tree a value appears exactly once, wherever it sits.</li>
+      <li><b>Why any of this exists:</b> seek time. If a question asks "why not just use an AVL tree", the answer is milliseconds vs microseconds.</li>
+    </ul>
+  </div>
+
+</section>
+
 <!-- ===== A1 ===== -->
 <section class="page" id="page-a1">
 <div class="lvlchip c-blue">Assignment · Worksheet 1</div>
@@ -1443,6 +1626,7 @@ html:not(.dark) #csPop{box-shadow:0 22px 55px rgba(15,23,42,.16)}
     <button class="chip" data-fw="2" onclick="fcFilter(2,this)">Week 2</button>
     <button class="chip" data-fw="3" onclick="fcFilter(3,this)">Week 3</button>
     <button class="chip" data-fw="4" onclick="fcFilter(4,this)">Week 4</button>
+    <button class="chip" data-fw="6" onclick="fcFilter(6,this)">Week 6</button>
   </div>
 
   <div class="fc-stage">
@@ -1481,6 +1665,7 @@ html:not(.dark) #csPop{box-shadow:0 22px 55px rgba(15,23,42,.16)}
     <button class="chip" onclick="qzStart(2,this)">Week 2</button>
     <button class="chip" onclick="qzStart(3,this)">Week 3</button>
     <button class="chip" onclick="qzStart(4,this)">Week 4</button>
+    <button class="chip" onclick="qzStart(6,this)">Week 6</button>
   </div>
 
   <div class="card" id="qz-card">
@@ -1573,6 +1758,36 @@ function hlCpp(src){
 
 /* ================= code samples (weeks & assignments) ================= */
 const CODE = {
+
+w6_node:
+`template <class T, int M>
+class BTreeNode {
+public:
+    BTreeNode();
+    BTreeNode(const T&);
+private:
+    bool leaf;
+    int keyTally;              // how many keys are in use
+    T keys[M-1];               // m-1 keys
+    BTreeNode *pointers[M];    // m pointers
+    friend BTree<T,M>;
+};`,
+
+w6_search:
+`BTreeNode *BTreeSearch(keyType K, BTreeNode *node) {
+    if (node != 0) {
+        for (int i = 1; i <= node->keyTally && node->keys[i-1] < K; i++)
+            return BTreeSearch(K, node->pointers[i-1]);
+        else return node;
+    }
+    else return 0;
+}`,
+
+w6_dbit:
+`K = 01001011
+N = 01001110
+        ^ first differing bit - the D-bit is all the index stores`,
+
 
 w1_main:
 `#include <iostream>              // gives us cout
@@ -2072,9 +2287,92 @@ function drawTree(el){
   el.innerHTML = '<svg viewBox="0 0 '+W+' '+H+'" width="'+W+'" xmlns="http://www.w3.org/2000/svg">'+edges+nodes+'</svg>';
 }
 
+
+/* ================= B-TREE / MULTIWAY TREE DRAWING ================= */
+/* spec: {k:[keys], c:[children], hl:1 highlight | 2 overflow, lf:1 leaf-of-a-B+tree } */
+const BTREES = {
+  /* an order-5 multiway tree: every node has k keys and k+1 pointers */
+  bt_multi:{k:[10,20,30,40],c:[{k:[3,5]},{k:[13]},{k:[21]},{k:[31,35],c:[{k:[32,33]},{k:[36]},{k:[38]}]},{k:[42]}]},
+
+  /* insert 33 into an order-5 B-tree: overflow, split, median promotes */
+  bt_i0:{k:[20,40],c:[{k:[5,10,15]},{k:[25,30,32,35],hl:1},{k:[45,50]}]},
+  bt_i1:{k:[20,40],c:[{k:[5,10,15]},{k:[25,30,32,33,35],hl:2},{k:[45,50]}]},
+  bt_i2:{k:[20,32,40],hl:1,c:[{k:[5,10,15]},{k:[25,30],hl:1},{k:[33,35],hl:1},{k:[45,50]}]},
+
+  /* the only way a B-tree gains height: the root itself splits */
+  bt_r0:{k:[10,20,30,40],hl:2,c:[{k:[5]},{k:[15]},{k:[25]},{k:[35]},{k:[45]}]},
+  bt_r1:{k:[25],hl:1,c:[{k:[10,20],c:[{k:[5]},{k:[15]},{k:[22]}]},{k:[30,40],c:[{k:[28]},{k:[35]},{k:[45]}]}]},
+
+  /* B+ tree: internal nodes are pure index, every value lives in a leaf */
+  bplus:{k:[20,30],c:[{k:[10,14,16],lf:1},{k:[20,22,24],lf:1},{k:[30,31,32],lf:1}]}
+};
+
+function drawBTree(el){
+  const spec = BTREES[el.dataset.btree];
+  if(!spec) return;
+  const small = el.dataset.small === '1';
+  const KW = small?26:32, KH = small?24:28, GAPX = small?16:20, GAPY = small?52:62, PAD = 14;
+
+  function wide(n){
+    const own = n.k.length*KW;
+    if(!n.c || !n.c.length) return own;
+    return Math.max(own, n.c.reduce((a,c)=>a+wide(c),0) + GAPX*(n.c.length-1));
+  }
+  let maxd = 0;
+  (function dep(n,d){ maxd=Math.max(maxd,d); (n.c||[]).forEach(c=>dep(c,d+1)); })(spec,0);
+  const W = wide(spec) + PAD*2, H = PAD*2 + maxd*GAPY + KH;
+
+  let edges='', nodes='';
+  (function place(n,left,d){
+    const w = wide(n), own = n.k.length*KW;
+    const x = left + (w-own)/2, y = PAD + d*GAPY;
+    if(n.c && n.c.length){
+      const span = n.c.reduce((a,c)=>a+wide(c),0) + GAPX*(n.c.length-1);
+      let cx = left + (w-span)/2;
+      n.c.forEach((c,i)=>{
+        const cw = wide(c);
+        /* pointer i sits on the i-th cell boundary of the parent box */
+        const px = x + Math.min(i, n.k.length)*KW;
+        edges += '<line class="btl" x1="'+px.toFixed(1)+'" y1="'+(y+KH)+'" x2="'+(cx+cw/2).toFixed(1)+'" y2="'+(PAD+(d+1)*GAPY)+'"/>';
+        place(c, cx, d+1);
+        cx += cw + GAPX;
+      });
+    }
+    const cls = n.hl===1?'btn btn-hl':n.hl===2?'btn btn-of':(n.lf?'btn btn-lf':'btn');
+    nodes += '<rect class="'+cls+'" x="'+x.toFixed(1)+'" y="'+y+'" width="'+own+'" height="'+KH+'" rx="5"/>';
+    n.k.forEach((k,i)=>{
+      if(i>0) nodes += '<line class="btd" x1="'+(x+i*KW).toFixed(1)+'" y1="'+y+'" x2="'+(x+i*KW).toFixed(1)+'" y2="'+(y+KH)+'"/>';
+      nodes += '<text class="btt" x="'+(x+i*KW+KW/2).toFixed(1)+'" y="'+(y+KH/2+4.5)+'" text-anchor="middle" font-size="'+(small?11:12.5)+'">'+esc(String(k))+'</text>';
+    });
+  })(spec, PAD, 0);
+
+  el.innerHTML = '<svg viewBox="0 0 '+W+' '+H+'" width="'+W+'" xmlns="http://www.w3.org/2000/svg">'+edges+nodes+'</svg>';
+}
+
 /* ================= FLASHCARDS data ================= */
 /* [week, question, answer] */
 const CARDS = [
+[6,`Why do B-trees exist at all?`,`Because <b>seek time</b> on a disk is mechanical — <b>milliseconds</b>, while CPU work is <b>microseconds</b> (1,000× faster). Processing is essentially free, so it is worth extra CPU work to avoid even one disk access.`],
+[6,`A multiway tree node has m children. How many keys?`,`<b>m − 1</b>. Always one fewer key than pointers.`],
+[6,`A node holds k keys. How many pointers?`,`<b>k + 1</b>.`],
+[6,`What does "a B-tree of order 5" mean?`,`Order = the <b>pointer</b> count. So up to <b>5 pointers</b> and at most <b>4 keys</b> per node — it splits when a 5th key arrives.`],
+[6,`The four properties of a B-tree of order m`,`1. Root has ≥ 2 subtrees (unless it is a leaf).<br>2. Nonroot, nonleaf nodes: k−1 keys, k pointers, ⌈m/2⌉ ≤ k ≤ m.<br>3. Leaves: k−1 keys, same bounds.<br>4. <b>All leaves on the same level.</b>`],
+[6,`How full is a B-tree guaranteed to be?`,`<b>At least half full.</b> A node only splits once it fills an entire block.`],
+[6,`Why is a B-tree node the size of a disk block?`,`So that <b>one seek</b> returns as many keys as possible. The node size is chosen from the key size and the block size.`],
+[6,`Binary trees are built top-down. How is a B-tree built?`,`<b>Bottom up.</b> Leaves are placed and rearranged; the root is decided last. That is the only way to keep every leaf on the same level.`],
+[6,`Insertion: the leaf is full. What happens?`,`<b>Split it.</b> Take the <b>median</b> — lower keys go left, higher keys go right — and the <b>median moves up</b> to the parent. The parent may then split too, and so on upward.`],
+[6,`When does a B-tree gain height?`,`<b>Only when the root splits.</b> Every other split is absorbed by a parent. That is why all leaves stay on one level.`],
+[6,`Deleting an internal node from a B-tree`,`Promote either the <b>largest value in the left subtree</b> or the <b>smallest in the right subtree</b>. That reduces the job to deleting from a leaf or another internal node.`],
+[6,`A leaf drops below half full after a deletion. Fix?`,`<b>Redistribute</b> with a sibling: the median becomes the new separator and the keys are shared out. If that starves the parent, the fix <b>iterates upward</b>.`],
+[6,`How full must a B*-Tree be, and how?`,`<b>Two-thirds.</b> It delays splitting by overflowing into a sibling first, and when both are full it splits <b>2 nodes into 3</b> rather than 1 into 2.`],
+[6,`What is a B**-Tree?`,`The same idea again — required to be <b>75% full</b>.`],
+[6,`What problem do B+Trees solve?`,`<b>In-order traversal.</b> On a plain B-tree internal nodes yield only one value per visit. B+Trees keep <b>all data in the leaves</b> and chain them with forward pointers, so a traversal reads leaves straight through.`],
+[6,`How do you spot a B+Tree?`,`Index values are <b>repeated in the leaves</b>. Internal nodes are signposts only — they store no data of their own.`],
+[6,`Delete a value from a B+Tree leaf — must the index change?`,`<b>No.</b> The index value is still a perfectly good separator even if it no longer exists as data. That observation is what leads to Prefix B+Trees.`],
+[6,`What is a Prefix B+Tree?`,`The index stores only a <b>prefix</b> long enough to separate keys — <b>BF</b> instead of <b>BF90</b>, like a dictionary guide word. Shorter index → more keys per node → more children → fewer levels → fewer seeks.`],
+[6,`What is a Bit Tree / D-bit?`,`The extreme of the prefix idea: store only the <b>distinction bit</b>, the first bit position at which two keys differ. Enough to steer the search, and tiny.`],
+[6,`What is a trie?`,`A tree that navigates using <b>parts of the key itself</b> — one character or bit at a time chooses the branch, so the path from the root spells the key. The name comes from re<b>trie</b>val.`],
+
 [1,`What is <b>computational complexity</b>?`,`A measure of how much <b>effort (cost)</b> an algorithm needs — mainly <b>time</b>, also space.`],
 [1,`Why don't we measure algorithm speed in seconds?`,`Speed depends on the <b>machine</b> and the <b>language</b>. So we compare with logical units instead.`],
 [1,`In complexity, what are <b>n</b> and <b>t</b>?`,`n = the size of the data (the file).<br>t = the time taken, in logical units.`],
@@ -2137,6 +2435,40 @@ const CARDS = [
 /* ================= QUIZ data ================= */
 /* [week, question, [4 options], correctIndex, one-line reason] */
 const QUIZ = [
+[6,`Why are B-trees used for data stored on disk?`,
+ [`Seek time is mechanical and ~1,000× slower than CPU work, so extra processing is worth it to avoid an access`,`They use less RAM than binary trees`,`They are easier to program than AVL trees`,`They keep the data sorted, which binary trees cannot`],0,
+ `Seek time is milliseconds, CPU time is microseconds. Processing is essentially free, so the whole design goal is fewer disk accesses.`],
+[6,`In a B-tree, a node holding 4 keys has how many pointers?`,
+ [`4`,`5`,`3`,`8`],1,
+ `Keys k, pointers k+1. Always.`],
+[6,`"A B-tree of order 5" means a node can hold at most…`,
+ [`5 keys`,`4 keys`,`5 levels`,`4 pointers`],1,
+ `Order counts pointers. 5 pointers → 4 keys, and the node splits when a 5th key arrives.`],
+[6,`Which property is unique to B-trees among the trees you have studied?`,
+ [`All leaves are on the same level`,`Each node has at most two children`,`The left subtree is smaller than the node`,`The root is always the largest value`],0,
+ `Not even a balanced binary tree requires every leaf on one level — that requirement is why B-trees are built bottom up.`],
+[6,`A leaf is full and a new key arrives. What happens to the median?`,
+ [`It is discarded`,`It stays in the left node`,`It moves up into the parent`,`It becomes the new root`],2,
+ `Lower keys form the left node, higher keys the right, and the median is promoted. The parent may then split too.`],
+[6,`When does a B-tree get taller?`,
+ [`Every time a leaf splits`,`Only when the root splits`,`When it becomes more than half full`,`Never`],1,
+ `All other splits are absorbed by a parent. Only a root split creates a new level — which is how every leaf stays on the same level.`],
+[6,`A B*-Tree differs from a B-Tree because it…`,
+ [`must be two-thirds full and splits 2 nodes into 3`,`must be half full and splits 1 node into 2`,`stores all data in the leaves`,`uses only a prefix as the index`],0,
+ `It delays splitting by overflowing into a sibling first, so nodes stay fuller and fewer blocks are read.`],
+[6,`In a B+Tree, where does the data live?`,
+ [`Spread evenly through every level`,`In the internal nodes only`,`In the leaves only, with internal nodes acting as index`,`In the root`],2,
+ `Index values are repeated in the leaves. Leaves are chained with forward pointers, so in-order traversal never touches an internal node.`],
+[6,`Why can a Prefix B+Tree search faster?`,
+ [`Shorter index entries → more keys per node → more children → fewer levels`,`It stores the data twice`,`It skips the leaf level entirely`,`It keeps the whole tree in RAM`],0,
+ `The index only has to separate keys, not be a key. Shorter separators mean a shallower tree and fewer seeks.`],
+[6,`A D-bit in a Bit Tree is…`,
+ [`the depth of the tree`,`the first bit position at which two keys differ`,`a flag marking a deleted node`,`the number of dirty blocks`],1,
+ `The minimum information that still distinguishes two values — the extreme end of the prefix idea.`],
+[6,`A trie navigates using…`,
+ [`whole-key comparisons at each node`,`the hash of the key`,`parts of the key itself, one piece at a time`,`the number of children`],2,
+ `Each character or bit chooses a branch, so the path from the root spells the key. The name comes from retrieval.`],
+
 [1,`Computational complexity measures…`,
  [`How much effort (cost) an algorithm needs — mainly time, also space`,`How many lines of code a program has`,`How expensive the computer was`,`How hard the code is to read`],0,
  `Complexity = the cost of applying an algorithm. Time and space — time being the most significant.`],
@@ -2633,6 +2965,7 @@ function prFilter(w, el){
 /* ================= boot ================= */
 document.querySelectorAll('pre.code[data-code]').forEach(p => { p.innerHTML = hlCpp(CODE[p.dataset.code] || ''); });
 document.querySelectorAll('.treebox[data-tree]').forEach(drawTree);
+document.querySelectorAll('.btreebox[data-btree]').forEach(drawBTree);
 (function(){
   let h1 = '', h2 = '';
   PRACTICE.forEach((p,pi)=>{ if (p.page === 'a1') h1 += prProgramHtml(p,pi); if (p.page === 'a2') h2 += prProgramHtml(p,pi); });
