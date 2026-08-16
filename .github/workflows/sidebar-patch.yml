@@ -1,4 +1,4 @@
-name: ALGO sidebar patch
+name: ALGO native midterm patch
 on: [push]
 permissions:
   contents: write
@@ -14,25 +14,53 @@ jobs:
           python3 - <<'PY'
           import os, json, base64, urllib.request
           repo=os.environ['REPO']; token=os.environ['GH_TOKEN']
-          api=f'https://api.github.com/repos/{repo}/contents/index.html'
           headers={'Authorization':f'Bearer {token}','Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
-          req=urllib.request.Request(api,headers=headers)
-          with urllib.request.urlopen(req) as r: d=json.load(r)
+
+          def get(path):
+              api=f'https://api.github.com/repos/{repo}/contents/{path}'
+              req=urllib.request.Request(api,headers=headers)
+              with urllib.request.urlopen(req) as r: return api,json.load(r)
+
+          def put(api, sha, content, message):
+              payload=json.dumps({'message':message,'content':base64.b64encode(content.encode()).decode(),'sha':sha}).encode()
+              req=urllib.request.Request(api,data=payload,headers={**headers,'Content-Type':'application/json'},method='PUT')
+              with urllib.request.urlopen(req) as r: return json.load(r)
+
+          api,d=get('index.html')
           s=base64.b64decode(d['content']).decode()
-          if 'href="midterm.html"' not in s:
-              marker='  <div class="navgroup">Assignments</div>'
-              insert='  <div class="navgroup">Midterm</div>\n  <a class="navbtn" href="midterm.html" style="text-decoration:none"><span class="dot" style="background:var(--am)"></span>Exam definitions<span class="num">MID</span></a>\n\n'
-              if marker not in s: raise SystemExit('sidebar marker missing')
-              s=s.replace(marker,insert+marker,1)
-          s=s.replace('Everything here comes from the Week 1–4 slides and Worksheets 1–2. Nothing extra.','Everything here is organized around the posted midterm material: Weeks 1, 2, 3, 4 and 6, plus Worksheets 1–2.')
-          s=s.replace('<div class="stat s-blue"><div class="n">4</div><div class="l">Topics</div></div>','<div class="stat s-blue"><div class="n">5</div><div class="l">Topics</div></div>',1)
-          w4='<p><b>Week 4:</b> Trees, Binary Trees, Binary Search Trees (BST). Traversal. Insertion and deletion. Balancing: DSW and AVL. Splay trees. Heaps and heapsort. Expression trees.</p>'
-          w6='<p><b>Week 6:</b> Multiway trees. B-Trees, B*, B**, B+, Prefix B+ and Bit Trees. Tries.</p>'
-          if w6 not in s and w4 in s: s=s.replace(w4,w4+'\n    '+w6,1)
-          cta='<p style="margin-top:15px"><a class="btn b-yel" href="midterm.html" style="display:inline-block;text-decoration:none">MIDTERM · EXAM DEFINITIONS →</a></p>'
-          if cta not in s and w6 in s: s=s.replace(w6,w6+'\n    '+cta,1)
-          s=s.replace('<li><b>Read a level</b> (Week 1 → 4). Each one explains every topic in simple words, with code.</li>','<li><b>Read a level</b> (Weeks 1, 2, 3, 4 and 6). Each one explains every topic in simple words, with code.</li>',1)
-          payload=json.dumps({'message':'Integrate Midterm into ALGO console sidebar','content':base64.b64encode(s.encode()).decode(),'sha':d['sha']}).encode()
-          req=urllib.request.Request(api,data=payload,headers={**headers,'Content-Type':'application/json'},method='PUT')
-          with urllib.request.urlopen(req) as r: print(json.load(r)['commit']['sha'])
+
+          old='<a class="navbtn" href="midterm.html" style="text-decoration:none"><span class="dot" style="background:var(--am)"></span>Exam definitions<span class="num">MID</span></a>'
+          new='<button class="navbtn" data-page="midterm" onclick="go(\'midterm\')"><span class="dot" style="background:var(--am)"></span>Exam definitions<span class="num">MID</span></button>'
+          s=s.replace(old,new,1)
+
+          oldcta='<p style="margin-top:15px"><a class="btn b-yel" href="midterm.html" style="display:inline-block;text-decoration:none">MIDTERM · EXAM DEFINITIONS →</a></p>'
+          newcta='<p style="margin-top:15px"><button class="btn b-yel" onclick="go(\'midterm\')">MIDTERM · EXAM DEFINITIONS →</button></p>'
+          s=s.replace(oldcta,newcta,1)
+
+          if 'id="page-midterm"' not in s:
+              marker='<!-- ===== CHEAT ===== -->'
+              section='''<!-- ===== MIDTERM ===== -->
+<section class="page" id="page-midterm">
+  <div class="lvlchip c-red">Midterm · Exam Definition Bank</div>
+  <h1>Midterm — Exam Definitions</h1>
+  <p class="sub">Weeks 1, 2, 3, 4 and 6 — short formal definitions written for exam answers.</p>
+  <div class="box notes"><span class="tag">★ Exam technique</span>Write the one-sentence definition first. Add one key property or tiny example only after the definition.</div>
+  <div class="card" style="padding:0;overflow:hidden">
+    <iframe src="midterm.html" title="ALGO Midterm Exam Definitions" style="display:block;width:100%;height:78vh;min-height:720px;border:0;background:var(--bg)"></iframe>
+  </div>
+</section>
+
+'''
+              if marker not in s: raise SystemExit('cheat marker missing')
+              s=s.replace(marker,section+marker,1)
+
+          put(api,d['sha'],s,'Make Midterm an internal ALGO console tab')
+          print('index patched')
+
+          # Disable this one-time workflow so future content pushes do not re-run it.
+          wapi,wd=get('.github/workflows/sidebar-patch.yml')
+          w=base64.b64decode(wd['content']).decode()
+          w=w.replace('on: [push]','on: [workflow_dispatch]',1)
+          put(wapi,wd['sha'],w,'Disable one-time Midterm patch workflow')
+          print('workflow disabled')
           PY
