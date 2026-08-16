@@ -1,0 +1,157 @@
+name: Native Midterm integration
+
+on:
+  push:
+    paths:
+      - '.github/workflows/native-midterm.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  integrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Midterm as a native ALGO console section
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          index_path = Path('index.html')
+          midterm_path = Path('midterm.html')
+          s = index_path.read_text(encoding='utf-8')
+          m = midterm_path.read_text(encoding='utf-8')
+
+          # 1) Sidebar: make Midterm behave exactly like the other console tabs.
+          s = re.sub(
+              r'<a class="navbtn" href="midterm\.html" style="text-decoration:none"><span class="dot" style="background:var\(--am\)"></span>Exam definitions<span class="num">MID</span></a>',
+              '<button class="navbtn" data-page="midterm" onclick="go(\'midterm\')"><span class="dot" style="background:var(--am)"></span>Exam definitions<span class="num">MID</span></button>',
+              s,
+              count=1
+          )
+
+          # 2) Home CTA: internal navigation, no page redirect.
+          s = re.sub(
+              r'<p style="margin-top:15px"><a class="btn b-yel" href="midterm\.html" style="display:inline-block;text-decoration:none">MIDTERM · EXAM DEFINITIONS →</a></p>',
+              '<p style="margin-top:15px"><button class="btn b-yel" onclick="go(\'midterm\')">MIDTERM · EXAM DEFINITIONS →</button></p>',
+              s,
+              count=1
+          )
+
+          # Remove an older generated native section if this workflow is rerun.
+          s = re.sub(
+              r'\n<!-- ===== MIDTERM NATIVE ===== -->.*?<!-- ===== END MIDTERM NATIVE ===== -->\n',
+              '\n',
+              s,
+              flags=re.S
+          )
+
+          week_meta = {
+              'w1': ('Week 1', 'Computational Complexity', 'c-blue', 's-blue'),
+              'w2': ('Week 2', 'Arrays & Linked Lists', 'c-red', 's-red'),
+              'w3': ('Week 3', 'Stacks, Queues & Priority Queues', '', 's-yel'),
+              'w4': ('Week 4', 'Trees, BST, AVL & Heaps', 'c-green', 's-grn'),
+              'w6': ('Week 6', 'B-Trees & Tries', 'c-blue', 's-blue'),
+          }
+
+          pieces = []
+          for wid in ['w1','w2','w3','w4','w6']:
+              sec_match = re.search(r'<section class="week" id="'+wid+r'">(.*?)</section>', m, re.S)
+              if not sec_match:
+                  raise SystemExit(f'Could not find {wid} in midterm.html')
+              body = sec_match.group(1)
+              rows = []
+              pattern = re.compile(
+                  r'<div class="def(?P<classes>[^"]*)">\s*'
+                  r'<div class="term">(?P<term>.*?)</div>\s*'
+                  r'<div class="answer">(?P<answer>.*?)</div>\s*'
+                  r'(?:<div class="memory">(?P<memory>.*?)</div>\s*)?'
+                  r'</div>',
+                  re.S
+              )
+              for d in pattern.finditer(body):
+                  term = d.group('term').strip()
+                  answer = d.group('answer').strip()
+                  memory = (d.group('memory') or '').strip()
+                  star = 'star' in d.group('classes')
+                  label = ('★ ' if star else '') + term
+                  extra = f'<div class="small" style="margin-top:5px">{memory}</div>' if memory else ''
+                  rows.append(f'<tr><td style="width:34%"><b>{label}</b></td><td>{answer}{extra}</td></tr>')
+
+              if not rows:
+                  raise SystemExit(f'No definition rows parsed for {wid}')
+
+              week_label, title, chip_class, sq_class = week_meta[wid]
+              pieces.append(f'''<div class="card" id="mid-{wid}" style="scroll-margin-top:70px">
+    <h2><span class="sq {sq_class}"></span>{week_label} — {title}</h2>
+    <table class="simple">
+      <tr><th>Term</th><th>Best exam definition</th></tr>
+      {''.join(rows)}
+    </table>
+  </div>''')
+
+          # Extra high-value rules that are easier to memorize as compact tables.
+          extras = '''
+  <div class="card">
+    <h2><span class="sq s-yel"></span>Fast exam rules</h2>
+    <table class="simple">
+      <tr><th>Rule</th><th>Write / remember</th></tr>
+      <tr><td><b>Complexity</b></td><td>Drop constants and lower-order terms. One loop O(n), nested loops O(n²), repeated halving O(log n), direct access O(1).</td></tr>
+      <tr><td><b>BST</b></td><td>LEFT &lt; NODE &lt; RIGHT. In-order traversal gives sorted order.</td></tr>
+      <tr><td><b>AVL balance</b></td><td>BF = height(left) − height(right). Legal values: −1, 0, +1.</td></tr>
+      <tr><td><b>AVL rotations</b></td><td>LL → right rotation · RR → left rotation · LR and RL → double rotation.</td></tr>
+      <tr><td><b>Expression tree</b></td><td>Pre-order = prefix/Polish · In-order = infix · Post-order = postfix/Reverse Polish.</td></tr>
+      <tr><td><b>B-tree order m</b></td><td>Maximum pointers = m · Maximum keys = m − 1 · all leaves are at the same level.</td></tr>
+      <tr><td><b>B-tree split</b></td><td>The median key moves UP to the parent.</td></tr>
+      <tr><td><b>B+ tree</b></td><td>Actual data is in leaves; internal nodes are indexes; leaves are linked.</td></tr>
+    </table>
+  </div>
+
+  <div class="box notes">
+    <span class="tag">★ Exam technique</span>
+    If the question says <b>Define X</b>, write the one-sentence definition first. Add one key property or a tiny example only after the definition. Do not answer a definition question with only an example.
+  </div>'''
+
+          native = f'''
+<!-- ===== MIDTERM NATIVE ===== -->
+<section class="page" id="page-midterm">
+  <div class="lvlchip c-red">Midterm · Exam Definition Bank</div>
+  <h1>Midterm — Best Definitions to Write</h1>
+  <p class="sub">Short, formal answers for Weeks 1, 2, 3, 4 and 6. The ★ terms are the highest-priority definitions to memorize.</p>
+
+  <div class="chiprow">
+    <button class="chip" onclick="document.getElementById('mid-w1').scrollIntoView({{behavior:'smooth'}})">Week 1</button>
+    <button class="chip" onclick="document.getElementById('mid-w2').scrollIntoView({{behavior:'smooth'}})">Week 2</button>
+    <button class="chip" onclick="document.getElementById('mid-w3').scrollIntoView({{behavior:'smooth'}})">Week 3</button>
+    <button class="chip" onclick="document.getElementById('mid-w4').scrollIntoView({{behavior:'smooth'}})">Week 4</button>
+    <button class="chip" onclick="document.getElementById('mid-w6').scrollIntoView({{behavior:'smooth'}})">Week 6</button>
+  </div>
+
+  {''.join(pieces)}
+  {extras}
+</section>
+<!-- ===== END MIDTERM NATIVE ===== -->
+'''
+
+          marker = '<!-- ===== CHEAT ===== -->'
+          if marker not in s:
+              raise SystemExit('CHEAT marker not found')
+          s = s.replace(marker, native + '\n' + marker, 1)
+
+          index_path.write_text(s, encoding='utf-8')
+          PY
+
+      - name: Commit native Midterm section
+        run: |
+          if git diff --quiet -- index.html; then
+            echo "No changes required"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Make Midterm a native ALGO console section"
+          git push
