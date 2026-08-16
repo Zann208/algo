@@ -1,0 +1,38 @@
+name: ALGO sidebar patch
+on: [push]
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Patch index through GitHub API
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          python3 - <<'PY'
+          import os, json, base64, urllib.request
+          repo=os.environ['REPO']; token=os.environ['GH_TOKEN']
+          api=f'https://api.github.com/repos/{repo}/contents/index.html'
+          headers={'Authorization':f'Bearer {token}','Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          req=urllib.request.Request(api,headers=headers)
+          with urllib.request.urlopen(req) as r: d=json.load(r)
+          s=base64.b64decode(d['content']).decode()
+          if 'href="midterm.html"' not in s:
+              marker='  <div class="navgroup">Assignments</div>'
+              insert='  <div class="navgroup">Midterm</div>\n  <a class="navbtn" href="midterm.html" style="text-decoration:none"><span class="dot" style="background:var(--am)"></span>Exam definitions<span class="num">MID</span></a>\n\n'
+              if marker not in s: raise SystemExit('sidebar marker missing')
+              s=s.replace(marker,insert+marker,1)
+          s=s.replace('Everything here comes from the Week 1–4 slides and Worksheets 1–2. Nothing extra.','Everything here is organized around the posted midterm material: Weeks 1, 2, 3, 4 and 6, plus Worksheets 1–2.')
+          s=s.replace('<div class="stat s-blue"><div class="n">4</div><div class="l">Topics</div></div>','<div class="stat s-blue"><div class="n">5</div><div class="l">Topics</div></div>',1)
+          w4='<p><b>Week 4:</b> Trees, Binary Trees, Binary Search Trees (BST). Traversal. Insertion and deletion. Balancing: DSW and AVL. Splay trees. Heaps and heapsort. Expression trees.</p>'
+          w6='<p><b>Week 6:</b> Multiway trees. B-Trees, B*, B**, B+, Prefix B+ and Bit Trees. Tries.</p>'
+          if w6 not in s and w4 in s: s=s.replace(w4,w4+'\n    '+w6,1)
+          cta='<p style="margin-top:15px"><a class="btn b-yel" href="midterm.html" style="display:inline-block;text-decoration:none">MIDTERM · EXAM DEFINITIONS →</a></p>'
+          if cta not in s and w6 in s: s=s.replace(w6,w6+'\n    '+cta,1)
+          s=s.replace('<li><b>Read a level</b> (Week 1 → 4). Each one explains every topic in simple words, with code.</li>','<li><b>Read a level</b> (Weeks 1, 2, 3, 4 and 6). Each one explains every topic in simple words, with code.</li>',1)
+          payload=json.dumps({'message':'Integrate Midterm into ALGO console sidebar','content':base64.b64encode(s.encode()).decode(),'sha':d['sha']}).encode()
+          req=urllib.request.Request(api,data=payload,headers={**headers,'Content-Type':'application/json'},method='PUT')
+          with urllib.request.urlopen(req) as r: print(json.load(r)['commit']['sha'])
+          PY
