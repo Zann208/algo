@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Midterm Definitions // ALGO 269202</title>
+<meta name="theme-color" content="#0a0d14">
+<style>
+:root{--bg:#0a0d14;--panel:#121724;--panel2:#171d2e;--ink:#e8ecf6;--dim:#96a3bd;--faint:#63718c;--am:#f0b429;--cy:#38bdf8;--rd:#f87171;--gr:#34d399;--vi:#a78bfa;--line:#1e2637;--line2:#2b3550;--mono:"SF Mono",ui-monospace,Menlo,Consolas,monospace;--sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth;background:var(--bg)}body{background:var(--bg);color:var(--ink);font:16px/1.65 var(--sans);-webkit-font-smoothing:antialiased}a{color:var(--am);text-decoration:none}a:hover{text-decoration:underline}
+.top{position:sticky;top:0;z-index:20;background:rgba(10,13,20,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:11px 18px;display:flex;gap:12px;align-items:center}.brand{font:700 13px var(--mono);letter-spacing:.2px}.brand span{color:var(--am)}.back{margin-left:auto;border:1px solid var(--line2);border-radius:8px;padding:6px 10px;font:700 11px var(--mono);color:var(--dim)}
+.wrap{max-width:980px;margin:0 auto;padding:38px 22px 90px}.eyebrow{font:700 10px var(--mono);letter-spacing:1.7px;text-transform:uppercase;color:var(--am);margin-bottom:10px}h1{font-size:clamp(29px,5vw,44px);line-height:1.1;letter-spacing:-1px}.sub{color:var(--dim);font-size:17px;max-width:760px;margin-top:12px}.scope{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}.pill{font:700 11px var(--mono);border:1px solid var(--line2);border-radius:999px;padding:6px 11px;background:var(--panel)}
+.jump{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:9px;margin:28px 0 34px}.jump a{display:block;background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:12px 14px;color:var(--ink);font-weight:700}.jump small{display:block;color:var(--faint);font:10px var(--mono);margin-top:2px}
+.week{margin-top:48px;scroll-margin-top:76px}.weekhead{display:flex;align-items:center;gap:10px;margin-bottom:13px}.badge{font:800 10px var(--mono);letter-spacing:1.2px;text-transform:uppercase;padding:5px 9px;border:1px solid;border-radius:999px}.w1{color:var(--cy)}.w2{color:var(--rd)}.w3{color:var(--am)}.w4{color:var(--gr)}.w6{color:var(--vi)}h2{font-size:25px;letter-spacing:-.4px}.intro{color:var(--dim);margin-bottom:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}.def{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:17px 18px;position:relative}.def.star{border-color:#5b4720}.def.star:before{content:"★ EXAM";position:absolute;top:10px;right:12px;color:var(--am);font:800 9px var(--mono);letter-spacing:1px}.term{font-weight:800;font-size:16px;margin-bottom:7px;padding-right:58px}.answer{color:var(--ink)}.answer:before{content:"Exam answer";display:block;color:var(--faint);font:700 9px var(--mono);text-transform:uppercase;letter-spacing:1.1px;margin-bottom:4px}.memory{margin-top:9px;color:var(--dim);font-size:13px;border-top:1px solid var(--line);padding-top:8px}.memory b{color:var(--am)}code{font:12px var(--mono);background:var(--panel2);border:1px solid var(--line);padding:1px 5px;border-radius:5px;color:var(--am)}
+.table{width:100%;border-collapse:collapse;margin-top:12px;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}.table th,.table td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}.table th{font:700 10px var(--mono);text-transform:uppercase;letter-spacing:1px;color:var(--faint)}.table tr:last-child td{border-bottom:0}.note{margin-top:18px;border:1px solid #4a3c1d;background:#15130d;border-radius:11px;padding:14px 16px;color:#d9d1bd}.note b{color:var(--am)}
+.footer{margin-top:58px;padding-top:22px;border-top:1px solid var(--line);color:var(--faint);font-size:13px}
+@media(max-width:620px){.wrap{padding:28px 15px 70px}.grid{grid-template-columns:1fr}.top{padding:10px 12px}.back{font-size:10px}}
+</style>
+</head>
+<body>
+<div class="top"><div class="brand">ALGO<span>://269202</span> · MIDTERM</div><a class="back" href="./">← STUDY HUB</a></div>
+<main class="wrap">
+<div class="eyebrow">Midterm Exam · Definition Bank</div>
+<h1>Best definitions to write on the exam</h1>
+<p class="sub">Short, clear, formal answers for the current midterm scope. Memorize the sentence under <b>Exam answer</b>; use the memory hint only to help you remember it.</p>
+<div class="scope"><span class="pill">Week 1</span><span class="pill">Week 2</span><span class="pill">Week 3</span><span class="pill">Week 4</span><span class="pill">Week 6</span></div>
+<nav class="jump"><a href="#w1">Complexity<small>WEEK 1</small></a><a href="#w2">Arrays & Lists<small>WEEK 2</small></a><a href="#w3">Stacks & Queues<small>WEEK 3</small></a><a href="#w4">Trees & Heaps<small>WEEK 4</small></a><a href="#w6">B-Trees & Tries<small>WEEK 6</small></a></nav>
+
+<section class="week" id="w1"><div class="weekhead"><span class="badge w1">Week 1</span><h2>Computational Complexity</h2></div><p class="intro">How algorithm cost grows as input size grows.</p><div class="grid">
+<div class="def star"><div class="term">Computational Complexity</div><div class="answer">Computational complexity measures the resources an algorithm requires as the input size increases.</div><div class="memory"><b>Remember:</b> resources = mainly time and space.</div></div>
+<div class="def"><div class="term">Input Size (n)</div><div class="answer"><code>n</code> represents the size or number of elements in the input data.</div></div>
+<div class="def star"><div class="term">Time Complexity</div><div class="answer">Time complexity describes how the number of operations performed by an algorithm grows as the input size <code>n</code> grows.</div></div>
+<div class="def"><div class="term">Space Complexity</div><div class="answer">Space complexity describes how much memory an algorithm requires as the input size increases.</div></div>
+<div class="def star"><div class="term">Asymptotic Complexity</div><div class="answer">Asymptotic complexity describes the growth of an algorithm for very large input sizes while ignoring constants and lower-order terms.</div><div class="memory"><b>Example:</b> <code>n² + 100n + 1000 → n²</code>.</div></div>
+<div class="def star"><div class="term">Big O — O</div><div class="answer">Big O gives an upper bound on the asymptotic growth of an algorithm.</div><div class="memory"><b>Memory:</b> O = at most / no faster than.</div></div>
+<div class="def star"><div class="term">Big Omega — Ω</div><div class="answer">Big Omega gives a lower bound on the asymptotic growth of an algorithm.</div><div class="memory"><b>Memory:</b> Ω = at least.</div></div>
+<div class="def star"><div class="term">Big Theta — Θ</div><div class="answer">Big Theta gives a tight bound, meaning the upper and lower asymptotic bounds have the same growth rate.</div><div class="memory"><b>Memory:</b> Θ = exact asymptotic order.</div></div>
+<div class="def"><div class="term">Constant Time — O(1)</div><div class="answer">Constant time means the number of operations does not depend on the input size.</div></div>
+<div class="def"><div class="term">Logarithmic Time — O(log n)</div><div class="answer">Logarithmic time occurs when each step reduces the remaining problem by a constant factor.</div></div>
+<div class="def"><div class="term">Linear Time — O(n)</div><div class="answer">Linear time means the number of operations grows directly with the input size.</div></div>
+<div class="def"><div class="term">Quadratic Time — O(n²)</div><div class="answer">Quadratic time means the number of operations grows approximately as the square of the input size.</div></div>
+</div></section>
+
+<section class="week" id="w2"><div class="weekhead"><span class="badge w2">Week 2</span><h2>Arrays & Linked Lists</h2></div><p class="intro">Linear data structures and how they use memory.</p><div class="grid">
+<div class="def star"><div class="term">Array</div><div class="answer">An array is a collection of elements stored in consecutive memory locations and accessed using an index.</div><div class="memory"><b>Key fact:</b> direct index access is O(1).</div></div>
+<div class="def"><div class="term">Index</div><div class="answer">An index is a position number used to access an element in an array.</div></div>
+<div class="def"><div class="term">One-Dimensional Array</div><div class="answer">A one-dimensional array stores elements in a single sequence and uses one index.</div></div>
+<div class="def"><div class="term">Multidimensional Array</div><div class="answer">A multidimensional array uses two or more indices to organize data into multiple dimensions such as rows and columns.</div></div>
+<div class="def"><div class="term">Row-Major Order</div><div class="answer">Row-major order stores all elements of one row consecutively before storing the next row.</div><div class="memory"><b>Course fact:</b> C/C++ uses row-major order.</div></div>
+<div class="def"><div class="term">Column-Major Order</div><div class="answer">Column-major order stores all elements of one column consecutively before storing the next column.</div></div>
+<div class="def"><div class="term">Static Array</div><div class="answer">A static array has a fixed size determined at compilation time.</div></div>
+<div class="def"><div class="term">Dynamic Array</div><div class="answer">A dynamic array has memory allocated at run time, so its size can be chosen while the program is running.</div></div>
+<div class="def"><div class="term">Jagged Array</div><div class="answer">A jagged array is an array of arrays whose rows can have different lengths.</div></div>
+<div class="def star"><div class="term">Linked List</div><div class="answer">A linked list is a collection of nodes connected using pointers.</div><div class="memory"><b>Difference:</b> nodes do not need to be adjacent in memory.</div></div>
+<div class="def star"><div class="term">Node</div><div class="answer">A node is an element of a linked list that stores data and one or more pointers to other nodes.</div></div>
+<div class="def"><div class="term">Head</div><div class="answer">The head is a pointer to the first node of a linked list.</div></div>
+<div class="def"><div class="term">Tail</div><div class="answer">The tail is a pointer to the last node of a linked list.</div></div>
+<div class="def star"><div class="term">Singly Linked List</div><div class="answer">A singly linked list is a linked list in which each node stores data and a pointer to the next node.</div><div class="memory"><b>Last node:</b> next points to NULL.</div></div>
+<div class="def star"><div class="term">Doubly Linked List</div><div class="answer">A doubly linked list is a linked list in which each node has pointers to both the next and previous nodes.</div></div>
+<div class="def star"><div class="term">Circular Linked List</div><div class="answer">A circular linked list is a linked list in which the last node points back to the first node instead of pointing to NULL.</div></div>
+<div class="def"><div class="term">Circular Array / Ring Buffer</div><div class="answer">A circular array is an array that logically connects the end back to the beginning so unused positions can be reused.</div></div>
+<div class="def"><div class="term">Sparse Table</div><div class="answer">A sparse table is a table in which most possible positions contain no useful data.</div></div>
+</div>
+<table class="table"><tr><th>Structure</th><th>Main exam idea</th></tr><tr><td><b>Array</b></td><td>Fast random access O(1), compact memory, but middle insertion/deletion may require shifting.</td></tr><tr><td><b>Linked list</b></td><td>Dynamic size and easy pointer-based insertion/deletion, but no direct random access and extra pointer memory.</td></tr></table>
+</section>
+
+<section class="week" id="w3"><div class="weekhead"><span class="badge w3">Week 3</span><h2>Stacks, Queues & Priority Queues</h2></div><div class="grid">
+<div class="def star"><div class="term">Stack</div><div class="answer">A stack is a linear data structure that follows the Last In, First Out (LIFO) principle.</div><div class="memory"><b>Memory:</b> last item inserted is the first removed.</div></div>
+<div class="def"><div class="term">Push</div><div class="answer">Push inserts a new element onto the top of a stack.</div></div>
+<div class="def"><div class="term">Pop</div><div class="answer">Pop removes the element from the top of a stack.</div></div>
+<div class="def"><div class="term">Top / Peek</div><div class="answer">Top or peek returns the top element of a stack without removing it.</div></div>
+<div class="def star"><div class="term">LIFO</div><div class="answer">LIFO means Last In, First Out: the most recently inserted element is removed first.</div></div>
+<div class="def star"><div class="term">Queue</div><div class="answer">A queue is a linear data structure that follows the First In, First Out (FIFO) principle.</div></div>
+<div class="def"><div class="term">Enqueue</div><div class="answer">Enqueue inserts an element at the rear of a queue.</div></div>
+<div class="def"><div class="term">Dequeue</div><div class="answer">Dequeue removes an element from the front of a queue.</div></div>
+<div class="def star"><div class="term">FIFO</div><div class="answer">FIFO means First In, First Out: the element inserted first is removed first.</div></div>
+<div class="def star"><div class="term">Priority Queue</div><div class="answer">A priority queue is a queue in which elements are removed according to priority rather than only their arrival order.</div></div>
+<div class="def star"><div class="term">Heap</div><div class="answer">A heap is a complete binary tree that satisfies a heap-order property between every parent and its children.</div></div>
+<div class="def"><div class="term">Max Heap</div><div class="answer">A max heap is a heap in which every parent is greater than or equal to its children.</div><div class="memory"><b>Therefore:</b> the largest value is at the root.</div></div>
+<div class="def"><div class="term">Min Heap</div><div class="answer">A min heap is a heap in which every parent is less than or equal to its children.</div><div class="memory"><b>Therefore:</b> the smallest value is at the root.</div></div>
+</div></section>
+
+<section class="week" id="w4"><div class="weekhead"><span class="badge w4">Week 4</span><h2>Trees, BST, AVL & Heaps</h2></div><div class="grid">
+<div class="def star"><div class="term">Tree</div><div class="answer">A tree is a hierarchical data structure consisting of nodes connected by edges.</div></div>
+<div class="def"><div class="term">Root</div><div class="answer">The root is the top node of a tree and has no parent.</div></div>
+<div class="def"><div class="term">Parent</div><div class="answer">A parent is a node that has one or more child nodes.</div></div>
+<div class="def"><div class="term">Child</div><div class="answer">A child is a node directly connected below another node.</div></div>
+<div class="def"><div class="term">Leaf</div><div class="answer">A leaf is a node that has no children.</div></div>
+<div class="def"><div class="term">Path</div><div class="answer">A path is a sequence of connected nodes from one node to another.</div></div>
+<div class="def"><div class="term">Level</div><div class="answer">The level of a node is its path length from the root plus one.</div><div class="memory"><b>Course convention:</b> root is level 1.</div></div>
+<div class="def"><div class="term">Height</div><div class="answer">The height of a tree is the length of the longest path from the root to a leaf.</div><div class="memory"><b>Course convention:</b> count edges/arcs, so a single-node tree has height 0.</div></div>
+<div class="def star"><div class="term">Binary Tree</div><div class="answer">A binary tree is a tree in which each node has at most two children.</div></div>
+<div class="def star"><div class="term">Binary Search Tree (BST)</div><div class="answer">A Binary Search Tree is a binary tree in which all values in the left subtree are smaller than the node and all values in the right subtree are greater.</div><div class="memory"><b>Memory:</b> LEFT &lt; NODE &lt; RIGHT.</div></div>
+<div class="def star"><div class="term">Tree Traversal</div><div class="answer">Tree traversal is the process of visiting every node in a tree in a particular order.</div></div>
+<div class="def star"><div class="term">Pre-order Traversal (VLR)</div><div class="answer">Pre-order traversal visits the node first, then the left subtree, then the right subtree.</div></div>
+<div class="def star"><div class="term">In-order Traversal (LVR)</div><div class="answer">In-order traversal visits the left subtree, then the node, then the right subtree.</div><div class="memory"><b>Important:</b> in-order traversal of a BST gives sorted order.</div></div>
+<div class="def star"><div class="term">Post-order Traversal (LRV)</div><div class="answer">Post-order traversal visits the left subtree, then the right subtree, and finally the node.</div></div>
+<div class="def"><div class="term">Breadth-First Traversal</div><div class="answer">Breadth-first traversal visits nodes level by level.</div><div class="memory"><b>Usually uses:</b> a queue.</div></div>
+<div class="def"><div class="term">Depth-First Traversal</div><div class="answer">Depth-first traversal follows a branch as deeply as possible before returning to explore other branches.</div></div>
+<div class="def"><div class="term">Deletion by Copying</div><div class="answer">Deletion by copying replaces the deleted node's value with its predecessor or successor and then removes that easier node.</div></div>
+<div class="def"><div class="term">Deletion by Merging</div><div class="answer">Deletion by merging removes a node by joining its left and right subtrees while maintaining BST order.</div></div>
+<div class="def star"><div class="term">Tree Rotation</div><div class="answer">A rotation is a local rearrangement of nodes used to change the shape of a tree while preserving BST order.</div></div>
+<div class="def"><div class="term">DSW Algorithm</div><div class="answer">The Day-Stout-Warren algorithm balances a BST by first converting it into a right-leaning backbone and then using rotations to form a balanced tree.</div><div class="memory"><b>Complexity:</b> O(n).</div></div>
+<div class="def star"><div class="term">AVL Tree</div><div class="answer">An AVL tree is a self-balancing Binary Search Tree in which the height difference between the left and right subtrees of every node is at most one.</div></div>
+<div class="def star"><div class="term">Balance Factor</div><div class="answer">The balance factor of a node is the height of its left subtree minus the height of its right subtree.</div><div class="memory"><b>Valid:</b> −1, 0, +1. <b>Formula:</b> BF = height(left) − height(right).</div></div>
+<div class="def"><div class="term">Splay Tree</div><div class="answer">A splay tree is a self-adjusting Binary Search Tree that moves recently accessed nodes toward the root using rotations.</div></div>
+<div class="def"><div class="term">Heapsort</div><div class="answer">Heapsort is a sorting algorithm that builds a heap and repeatedly removes the root to place elements into sorted order.</div></div>
+<div class="def"><div class="term">Expression Tree</div><div class="answer">An expression tree is a binary tree used to represent an arithmetic expression, where operators are internal nodes and operands are usually leaves.</div></div>
+</div>
+<table class="table"><tr><th>AVL imbalance</th><th>Fix</th></tr><tr><td>LL</td><td>Right rotation</td></tr><tr><td>RR</td><td>Left rotation</td></tr><tr><td>LR</td><td>Double rotation</td></tr><tr><td>RL</td><td>Double rotation</td></tr></table>
+<table class="table"><tr><th>Expression notation</th><th>Traversal</th></tr><tr><td>Prefix</td><td>Pre-order (VLR)</td></tr><tr><td>Infix</td><td>In-order (LVR)</td></tr><tr><td>Postfix</td><td>Post-order (LRV)</td></tr></table>
+</section>
+
+<section class="week" id="w6"><div class="weekhead"><span class="badge w6">Week 6</span><h2>B-Trees & Tries</h2></div><p class="intro">Multiway search structures designed especially for large data and disk access.</p><div class="grid">
+<div class="def star"><div class="term">Multiway Tree</div><div class="answer">A multiway tree is a tree in which a node can contain multiple keys and have more than two children.</div><div class="memory"><b>Rule:</b> a node with k keys can have k + 1 child pointers.</div></div>
+<div class="def star"><div class="term">B-Tree</div><div class="answer">A B-tree is a balanced multiway search tree designed to reduce disk accesses by storing multiple keys in each node.</div><div class="memory"><b>Important:</b> all leaves are at the same level.</div></div>
+<div class="def star"><div class="term">Order (m) of a B-Tree</div><div class="answer">The order <code>m</code> of a B-tree is the maximum number of child pointers a node can contain.</div><div class="memory"><b>Therefore:</b> maximum children = m; maximum keys = m − 1.</div></div>
+<div class="def"><div class="term">B-Tree Insertion</div><div class="answer">B-tree insertion places the new key in the correct leaf and splits a node if it overflows, promoting a median key to the parent.</div></div>
+<div class="def star"><div class="term">B-Tree Split</div><div class="answer">A B-tree split divides an overflowing node and promotes its median key to the parent.</div><div class="memory"><b>Memory:</b> median goes UP.</div></div>
+<div class="def"><div class="term">B* Tree</div><div class="answer">A B* tree is a variation of the B-tree that keeps nodes more densely filled by redistributing keys before splitting nodes.</div><div class="memory"><b>Course figure:</b> at least about 2/3 full.</div></div>
+<div class="def"><div class="term">B** Tree</div><div class="answer">A B** tree is a B-tree variation that maintains nodes at approximately three-quarters full.</div></div>
+<div class="def star"><div class="term">B+ Tree</div><div class="answer">A B+ tree is a B-tree variation in which actual records are stored in the leaf nodes while internal nodes are used as indexes.</div><div class="memory"><b>Important:</b> leaf nodes are linked, which supports efficient ordered traversal.</div></div>
+<div class="def"><div class="term">Prefix B+ Tree</div><div class="answer">A Prefix B+ tree stores only enough of each key in internal index nodes to distinguish between branches.</div></div>
+<div class="def"><div class="term">Bit Tree</div><div class="answer">A bit tree uses distinguishing bits from keys to determine which branch should be followed during a search.</div></div>
+<div class="def star"><div class="term">Trie</div><div class="answer">A trie is a tree that searches for keys by using successive parts of the key, such as one character or bit at each level.</div><div class="memory"><b>Idea:</b> keys with the same prefix share part of the path.</div></div>
+</div></section>
+
+<div class="note"><b>Best exam technique:</b> if the question says <i>Define X</i>, write the one-sentence definition first. Then add one key property or tiny example only if you have time. Do not replace a definition with only an example.</div>
+<div class="footer">269202 Algorithms for iSNE · Midterm scope currently organized as Weeks 1, 2, 3, 4 and 6 · <a href="./">Return to study hub</a></div>
+</main>
+</body></html>
