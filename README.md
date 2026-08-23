@@ -1,37 +1,35 @@
 # ALGO — Algorithms Study Console
 
-Offline, single-file study console for **269202 Algorithms for iSNE** at Chiang Mai University.
+Study console for **269202 Algorithms for iSNE** at Chiang Mai University.
 
 **→ [Live](https://zann208.github.io/algo/)** · part of [my semester consoles](https://zann208.github.io/study)
 
-One HTML file. No framework, no build step, no dependencies, no network calls.
+Vanilla HTML/CSS/JavaScript with no framework or external runtime dependencies.
 
 ## What's inside
 
 | Section | What it does |
 |---|---|
-| **Topics** | Four weeks of material rewritten in plain language, with commented C++ for every idea |
-| **Worksheets** | Both assignments worked through step by step |
-| **Flashcards** | 54 cards, filterable by week |
-| **Quiz** | 32 questions, each wrong answer explained in one line |
-| **Code practice** | 15 fill-in-the-blank C++ exercises in the same format as the exam |
-| **Cheat sheet** | Every complexity, structure and rotation rule in one page |
+| **Topics** | Weeks 1, 2, 3, 4 and 6 rewritten in plain language, with commented C++ and diagrams |
+| **Assignments** | Assignments 1–3 worked through step by step: BST, AVL and Splay Tree operations |
+| **Tree Mastery** | Learn + visual labs + assignment-mode drills + exam questions for all Week 4 and Week 6 tree structures |
+| **Flashcards** | Filterable recall practice by week |
+| **Quiz** | Immediate feedback with explanations |
+| **Code practice** | Fill-in-the-blank C++ exercises in the same style as course exercises |
+| **Cheat sheet** | Complexity, structure and rotation rules in one reference page |
 
-Covers computational complexity (Big O, Ω, Θ), arrays and linked lists (singly, doubly, circular) and sparse tables, stacks and queues including the circular array, then trees: BSTs, traversal, insertion and deletion, balancing with DSW and AVL, splay trees, heaps and heapsort, and expression trees.
+Current midterm-preparation scope covers computational complexity; arrays and linked lists; stacks, queues and priority queues; then the full tree material: tree fundamentals, BSTs, traversal, insertion/deletion, DSW, AVL, splay trees, heaps/heapsort, expression trees, multiway trees, B-Trees, B*, B**, B+, Prefix B+, Bit Trees and Tries.
 
-## Notable bits
+## Tree practice
 
-- A small **C++ syntax highlighter** written from scratch, so code samples are readable without pulling in a library.
-- **Tree diagrams drawn as SVG at runtime** from a compact text description, with nodes highlighted to show what a rotation or traversal is doing.
-- Fill-in-the-blank exercises that grade each blank individually and reveal the answer key on request.
+- Assignment 1: BST construction and deletion.
+- Assignment 2: AVL height, balance factor and rotations.
+- Assignment 3: Splay Tree accesses 1 → 11 → 4, with step-by-step bottom-up splaying.
+- Tree Mastery includes a BST builder/traversal lab, AVL rotation trainer, B-Tree order trainer, Splay access walkthrough, assignment-style drills and persistent mastery tracking.
 
 ## Tech
 
-Vanilla HTML · CSS custom properties for theming · plain JavaScript · SVG · localStorage. Light and dark themes, works offline.
-
-```bash
-git clone https://github.com/Zann208/algo.git && open algo/index.html
-```
+Vanilla HTML · CSS custom properties · plain JavaScript · SVG · localStorage. Light and dark themes.
 
 ## Note on content
 
