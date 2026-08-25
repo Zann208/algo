@@ -1,25 +1,3022 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ALGO // 269202 Algorithms Console</title>
 <meta name="theme-color" content="#0a0d14">
-<style>html,body{margin:0;min-height:100%;background:#0a0d14;color:#e8ecf6;font:14px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}#boot{min-height:100vh;display:grid;place-items:center;color:#63718c;letter-spacing:.08em}a{color:#f0b429}</style>
+<style>
+:root{
+  --bg:#0a0d14; --bg2:#0e1220; --panel:#121724; --panel2:#171d2e; --panel3:#1c2438;
+  --ink:#e8ecf6; --dim:#96a3bd; --faint:#63718c;
+  --am:#f0b429; --am2:#fbbf24; --gr:#34d399; --cy:#38bdf8; --vi:#a78bfa; --rd:#f87171;
+  --line:#1e2637; --line2:#2b3550; --tline:#465878;
+  --mono:"SF Mono",ui-monospace,"JetBrains Mono",Menlo,Consolas,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --rail:252px;
+}
+html:not(.dark){
+  --bg:#f7f9fc; --bg2:#eef2f8; --panel:#ffffff; --panel2:#f5f8fc; --panel3:#eef3fa;
+  --ink:#111827; --dim:#4b5768; --faint:#7b8798;
+  --am:#b45309; --am2:#92400e; --gr:#047857; --cy:#0369a1; --vi:#6d28d9; --rd:#b91c1c;
+  --line:#e2e8f2; --line2:#cbd5e4; --tline:#9aa9c0;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--bg);scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.68;-webkit-font-smoothing:antialiased}
+a{color:var(--am);text-decoration:none}
+a:hover{text-decoration:underline}
+:focus-visible{outline:2px solid var(--am);outline-offset:2px;border-radius:4px}
+
+/* ---------- TOP BAR ---------- */
+#top{position:fixed;top:0;left:0;right:0;height:54px;z-index:60;background:color-mix(in srgb,var(--bg) 90%,transparent);
+  backdrop-filter:blur(14px);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:0 16px}
+.brand{display:flex;align-items:center;gap:10px;flex:0 0 auto}
+.bmark{width:28px;height:28px;border-radius:8px;background:linear-gradient(140deg,var(--am),#e07a1f);
+  display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-weight:800;font-size:12px;color:#1a1205;flex:0 0 auto}
+.btext{line-height:1.15}
+.btext b{display:block;font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:-.2px}
+.btext span{display:block;font-family:var(--mono);font-size:9.5px;color:var(--faint);letter-spacing:1px}
+#burger{display:none;border:1px solid var(--line);background:var(--panel);color:var(--dim);border-radius:7px;
+  padding:6px 10px;font-size:15px;cursor:pointer;font-family:var(--mono)}
+.tspace{flex:1}
+.tbtn{border:1px solid var(--line);background:var(--panel);color:var(--dim);font-family:var(--mono);font-size:11px;
+  font-weight:700;padding:7px 11px;border-radius:7px;cursor:pointer;letter-spacing:.4px;white-space:nowrap;transition:.13s}
+.tbtn:hover{color:var(--am);border-color:var(--am)}
+
+
+.brand{display:flex;align-items:center;gap:9px;border:1px solid transparent;background:none;cursor:pointer;
+  padding:4px 8px 4px 5px;border-radius:9px;transition:.13s;font-family:inherit;color:inherit}
+.brand:hover{border-color:var(--line2);background:var(--panel)}
+.brand:hover .bcaret{color:var(--am)}
+.bmark{width:28px;height:28px;border-radius:8px;border:1px solid var(--line2);background:var(--panel2);
+  display:flex;align-items:center;justify-content:center;flex:0 0 auto;color:var(--dim)}
+.btext{line-height:1.2;text-align:left}
+.btext b{display:block;font-family:var(--mono);font-size:12.5px;font-weight:700;letter-spacing:-.2px;color:var(--ink)}
+.btext b i{font-style:normal;color:var(--faint);font-weight:600}
+.btext span{display:block;font-family:var(--mono);font-size:8px;letter-spacing:1.6px;color:var(--faint);text-transform:uppercase;margin-top:1px}
+.btext span em{font-style:normal;color:var(--am);animation:neon 2.2s ease-in-out infinite}
+@keyframes neon{0%,68%,100%{text-shadow:none;opacity:.75}76%{text-shadow:0 0 4px var(--am),0 0 11px var(--am);opacity:1}84%{opacity:.9}}
+@media (prefers-reduced-motion: reduce){.btext span em{animation:none;opacity:1}}
+.bcaret{font-family:var(--mono);font-size:9px;color:var(--faint);transition:.13s}
+#csPop{right:auto;left:0}
+@media(max-width:620px){.btext{display:none}}
+
+/* ---------- SIDEBAR ---------- */
+#side{position:fixed;top:54px;left:0;bottom:0;width:var(--rail);z-index:50;background:var(--bg);
+  border-right:1px solid var(--line);padding:16px 10px 30px;overflow-y:auto}
+#side::-webkit-scrollbar{width:7px}
+#side::-webkit-scrollbar-thumb{background:var(--line2);border-radius:9px}
+.navgroup{font-family:var(--mono);font-size:9.5px;letter-spacing:1.3px;text-transform:uppercase;color:var(--faint);
+  padding:15px 12px 6px;font-weight:700}
+.navgroup:first-child{padding-top:2px}
+.navbtn{display:flex;align-items:center;gap:9px;width:100%;text-align:left;border:0;background:none;
+  font-family:var(--sans);font-size:14px;color:var(--dim);padding:8px 12px;border-radius:8px;cursor:pointer;transition:.12s}
+.navbtn:hover{background:var(--panel2);color:var(--ink)}
+.navbtn.on{background:var(--panel2);color:var(--ink);font-weight:600;box-shadow:inset 2px 0 0 var(--am)}
+.navbtn .dot{width:7px;height:7px;border-radius:50%;flex:0 0 auto;opacity:.85}
+.navbtn .num{font-family:var(--mono);font-size:10px;color:var(--faint);margin-left:auto}
+#scrim{position:fixed;inset:0;background:rgba(5,8,14,.6);z-index:45;display:none}
+#scrim.show{display:block}
+
+/* ---------- MAIN ---------- */
+main{margin-left:var(--rail);padding:54px 0 0}
+.wrap{max-width:900px;margin:0 auto;padding:34px 26px 90px}
+.page{display:none}
+.page.on{display:block;animation:fade .25s ease}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+h1{font-size:clamp(25px,3.6vw,34px);font-weight:750;letter-spacing:-.7px;line-height:1.18}
+h2{font-size:19.5px;font-weight:700;letter-spacing:-.2px;display:flex;align-items:center;gap:9px;margin-bottom:9px}
+h3{font-size:15.5px;font-weight:700;margin:16px 0 6px;color:var(--ink)}
+p{margin-bottom:11px}
+p:last-child{margin-bottom:0}
+ul,ol{margin:8px 0 11px 20px}
+li{margin-bottom:6px}
+li::marker{color:var(--am)}
+b{font-weight:650}
+.sub{color:var(--dim);font-size:16.5px;margin-top:9px;max-width:660px}
+.small{font-size:13.8px;color:var(--dim)}
+.center{text-align:center}
+.divider{height:1px;background:var(--line);margin:26px 0;border:0}
+
+/* section badge (was lvlchip) */
+.lvlchip{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10px;font-weight:700;
+  letter-spacing:1.3px;text-transform:uppercase;color:var(--am);background:color-mix(in srgb,var(--am) 12%,transparent);
+  border:1px solid color-mix(in srgb,var(--am) 32%,transparent);border-radius:20px;padding:5px 12px;margin-bottom:14px}
+.lvlchip.c-blue{color:var(--cy);background:color-mix(in srgb,var(--cy) 12%,transparent);border-color:color-mix(in srgb,var(--cy) 32%,transparent)}
+.lvlchip.c-red{color:var(--rd);background:color-mix(in srgb,var(--rd) 12%,transparent);border-color:color-mix(in srgb,var(--rd) 32%,transparent)}
+.lvlchip.c-green{color:var(--gr);background:color-mix(in srgb,var(--gr) 12%,transparent);border-color:color-mix(in srgb,var(--gr) 32%,transparent)}
+
+/* ---------- CARDS ---------- */
+.card{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:22px 24px;margin-top:18px;position:relative}
+.card::before{content:"";position:absolute;top:-1px;left:22px;width:34px;height:2px;background:var(--am);border-radius:2px}
+html:not(.dark) .card{box-shadow:0 1px 3px rgba(15,23,42,.05)}
+
+/* heading markers (was coloured squares) */
+.sq{width:8px;height:8px;border-radius:2px;background:var(--am);flex:0 0 auto;transform:rotate(45deg)}
+.sq.s-yel{background:var(--am2)} .sq.s-red{background:var(--rd)}
+.sq.s-grn{background:var(--gr)} .sq.s-blue{background:var(--cy)}
+
+/* ---------- CODE ---------- */
+.code{background:#070a12;border:1px solid var(--line2);border-radius:10px;padding:26px 15px 14px;margin:12px 0;
+  font-family:var(--mono);font-size:12.9px;line-height:1.72;overflow-x:auto;white-space:pre;color:#cfdcf3;position:relative}
+html:not(.dark) .code{background:#0d1220;color:#cfdcf3}
+.code::before{content:"C++";position:absolute;top:6px;left:13px;font-size:9px;letter-spacing:1.4px;color:#4a5c7a;font-weight:700}
+.tok-c{color:#5d7290;font-style:italic}
+.tok-s{color:#7fd6a2}
+.tok-p{color:#c39bf5}
+.tok-k{color:#ffb454}
+.tok-t{color:#5cc9f5}
+.tok-n{color:#f78c6c}
+code{font-family:var(--mono);font-size:.9em;background:var(--panel3);border:1px solid var(--line);
+  padding:1.5px 6px;border-radius:5px;color:var(--am)}
+.code code{background:none;border:0;padding:0;color:inherit}
+
+/* ---------- TABLES ---------- */
+.simple{width:100%;border-collapse:collapse;font-size:14.2px;margin:12px 0}
+.simple th{text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:1.1px;text-transform:uppercase;
+  color:var(--faint);font-weight:700;padding:9px 11px;border-bottom:1px solid var(--line2)}
+.simple td{padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+.simple tr:last-child td{border-bottom:0}
+.simple tbody tr:hover,.simple tr:hover{background:var(--panel2)}
+
+/* ---------- CALLOUTS ---------- */
+.box{border-radius:10px;padding:13px 16px;margin:13px 0;font-size:14.6px;border:1px solid}
+.box b:first-child{display:block;font-family:var(--mono);font-size:10px;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:5px}
+.box.notes{background:color-mix(in srgb,var(--cy) 8%,var(--panel));border-color:color-mix(in srgb,var(--cy) 26%,transparent)}
+.box.notes b:first-child{color:var(--cy)}
+.box.mistakes{background:color-mix(in srgb,var(--rd) 8%,var(--panel));border-color:color-mix(in srgb,var(--rd) 26%,transparent)}
+.box.mistakes b:first-child{color:var(--rd)}
+.box.idea{background:color-mix(in srgb,var(--gr) 8%,var(--panel));border-color:color-mix(in srgb,var(--gr) 26%,transparent)}
+.box.idea b:first-child{color:var(--gr)}
+.tag{display:inline-block;font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.9px;text-transform:uppercase;
+  color:var(--faint);border:1px solid var(--line2);border-radius:5px;padding:2px 7px;margin-right:5px}
+
+/* ---------- HERO + STATS ---------- */
+.hero{margin-bottom:6px}
+.hero .p1{font-family:var(--mono);font-size:10.5px;letter-spacing:1.6px;text-transform:uppercase;color:var(--am);margin-bottom:11px;font-weight:700}
+.hero h1{margin-bottom:12px}
+.hero p{color:var(--dim);font-size:16.5px;max-width:680px}
+.statrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));gap:10px;margin-top:22px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:14px 16px}
+.stat .n{font-family:var(--mono);font-size:23px;font-weight:800;color:var(--am);line-height:1.15}
+.stat .l{font-family:var(--mono);font-size:9.5px;letter-spacing:1.1px;text-transform:uppercase;color:var(--faint);margin-top:3px}
+.stat.s-blue .n{color:var(--cy)} .stat.s-red .n{color:var(--rd)}
+.stat.s-yel .n{color:var(--am2)} .stat.s-grn .n{color:var(--gr)}
+
+/* ---------- CHIPS / BUTTONS ---------- */
+.chiprow{display:flex;gap:7px;flex-wrap:wrap;margin:16px 0 6px}
+.chip{border:1px solid var(--line);background:var(--panel);color:var(--dim);font-family:var(--mono);font-size:11.5px;
+  font-weight:700;padding:6px 13px;border-radius:20px;cursor:pointer;letter-spacing:.4px;transition:.13s}
+.chip:hover{border-color:var(--am);color:var(--am)}
+.chip.on{background:var(--am);border-color:var(--am);color:#181206}
+.btnrow{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}
+.btn{border:1px solid var(--line2);background:var(--panel2);color:var(--ink);font-family:var(--mono);font-size:13px;
+  font-weight:700;padding:9px 17px;border-radius:9px;cursor:pointer;transition:.13s;letter-spacing:.3px}
+.btn:hover{border-color:var(--am);color:var(--am)}
+.btn.b-blue{background:color-mix(in srgb,var(--cy) 14%,var(--panel));color:var(--cy);border-color:color-mix(in srgb,var(--cy) 40%,transparent)}
+.btn.b-yel{background:color-mix(in srgb,var(--am) 14%,var(--panel));color:var(--am);border-color:color-mix(in srgb,var(--am) 40%,transparent)}
+.btn.b-grn{background:color-mix(in srgb,var(--gr) 14%,var(--panel));color:var(--gr);border-color:color-mix(in srgb,var(--gr) 40%,transparent)}
+.btn.b-red{background:color-mix(in srgb,var(--rd) 14%,var(--panel));color:var(--rd);border-color:color-mix(in srgb,var(--rd) 40%,transparent)}
+
+/* ---------- FLASHCARDS ---------- */
+.fc-stage{margin-top:18px}
+.fc{perspective:1400px;cursor:pointer;min-height:250px}
+.fc-in{position:relative;width:100%;min-height:250px;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.4,.2,.2,1)}
+.fc.flip .fc-in{transform:rotateX(180deg)}
+.fc-face{position:absolute;inset:0;backface-visibility:hidden;background:var(--panel);border:1px solid var(--line2);
+  border-radius:13px;display:flex;align-items:center;justify-content:center;padding:44px 32px;text-align:center;
+  font-size:18.5px;line-height:1.6;font-weight:600}
+.fc-back{transform:rotateX(180deg);background:var(--panel2);border-color:color-mix(in srgb,var(--am) 45%,transparent)}
+.fc-back{font-size:16.5px;font-weight:500}
+.fc-face .side{position:absolute;top:13px;left:17px;font-family:var(--mono);font-size:10px;font-weight:800;
+  letter-spacing:1.4px;color:var(--faint)}
+.fc-back .side{color:var(--am)}
+.fc-face .wk{position:absolute;top:13px;right:17px;font-family:var(--mono);font-size:10px;color:var(--am);
+  background:color-mix(in srgb,var(--am) 12%,transparent);border-radius:5px;padding:2px 8px}
+.fc-hint{text-align:center;font-family:var(--mono);font-size:11px;color:var(--faint);margin-top:12px;letter-spacing:.5px}
+.fc-count{text-align:center;font-family:var(--mono);font-size:12.5px;color:var(--dim);margin-top:5px}
+
+/* ---------- QUIZ ---------- */
+.q-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;
+  font-family:var(--mono);font-size:11.5px;color:var(--faint);letter-spacing:.5px}
+.q-score{color:var(--am);font-weight:700}
+.q-text{font-size:17.5px;font-weight:650;line-height:1.55;margin-bottom:14px}
+.opt{display:block;width:100%;text-align:left;border:1px solid var(--line);background:var(--panel2);color:var(--ink);
+  border-radius:10px;padding:12px 16px;margin-bottom:9px;font-family:var(--sans);font-size:15px;cursor:pointer;transition:.13s}
+.opt:hover:not(:disabled){border-color:var(--am);transform:translateX(2px)}
+.opt:disabled{cursor:default}
+.opt.is-right{border-color:var(--gr);background:color-mix(in srgb,var(--gr) 13%,var(--panel));color:var(--gr);font-weight:650}
+.opt.is-wrong{border-color:var(--rd);background:color-mix(in srgb,var(--rd) 12%,var(--panel));color:var(--rd);font-weight:650}
+.q-why{margin-top:13px;background:var(--panel2);border-left:2px solid var(--am);border-radius:0 9px 9px 0;
+  padding:12px 15px;font-size:14.6px;line-height:1.62}
+.q-end{text-align:center;padding:14px 0}
+.bigscore{font-family:var(--mono);font-size:38px;font-weight:800;color:var(--am);line-height:1.1}
+.verdict{font-family:var(--mono);font-size:12px;letter-spacing:1.2px;text-transform:uppercase;color:var(--dim);margin-top:7px}
+
+/* ---------- CODE PRACTICE ---------- */
+.pr-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:11px}
+.pill{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.9px;text-transform:uppercase;
+  border:1px solid var(--line2);border-radius:5px;padding:3px 8px;color:var(--faint)}
+.pill.easy{color:var(--gr);border-color:color-mix(in srgb,var(--gr) 40%,transparent)}
+.pill.med{color:var(--am);border-color:color-mix(in srgb,var(--am) 40%,transparent)}
+.pill.hard{color:var(--rd);border-color:color-mix(in srgb,var(--rd) 40%,transparent)}
+.blank{display:inline-block;min-width:74px;background:var(--panel3);border:1px solid var(--line2);border-bottom:2px solid var(--am);
+  border-radius:5px;color:var(--ink);font-family:var(--mono);font-size:12.6px;padding:2px 7px;margin:0 2px;text-align:center}
+.blank:focus{outline:none;border-color:var(--am);background:var(--panel)}
+.blank.ok{border-color:var(--gr);border-bottom-color:var(--gr);color:var(--gr);background:color-mix(in srgb,var(--gr) 12%,transparent)}
+.blank.bad{border-color:var(--rd);border-bottom-color:var(--rd);color:var(--rd);background:color-mix(in srgb,var(--rd) 12%,transparent)}
+.pr-result{margin-top:13px;font-family:var(--mono);font-size:13px;font-weight:700;padding:11px 15px;border-radius:9px;letter-spacing:.3px}
+.pr-result.ok{background:color-mix(in srgb,var(--gr) 13%,var(--panel));color:var(--gr)}
+.pr-result.bad{background:color-mix(in srgb,var(--rd) 12%,var(--panel));color:var(--rd)}
+.msg{font-size:14px;margin-top:8px;color:var(--dim)}
+.key{font-family:var(--mono);font-size:12.6px;color:var(--gr)}
+.lbl{font-family:var(--mono);font-size:10px;letter-spacing:1.1px;text-transform:uppercase;color:var(--faint);margin-bottom:5px;display:block}
+.cl{color:var(--dim)}
+.tl{font-weight:650}
+
+/* ---------- TREE DIAGRAMS ---------- */
+.treebox{background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:16px;margin:13px 0;overflow-x:auto}
+.tcap{font-family:var(--mono);font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:var(--faint);margin-bottom:9px}
+.treebox svg{display:block;overflow:visible}
+.tln{stroke:var(--tline);stroke-width:1.7;stroke-linecap:round;fill:none}
+.tc{fill:var(--panel);stroke:var(--line2);stroke-width:1.7}
+.tc-hl{fill:color-mix(in srgb,var(--am) 24%,var(--panel));stroke:var(--am);stroke-width:1.9}
+.tc-bad{fill:color-mix(in srgb,var(--rd) 20%,var(--panel));stroke:var(--rd);stroke-width:1.9}
+.tt{fill:var(--ink);font-family:var(--mono);font-size:12px}
+.tt-onhl{fill:var(--am);font-family:var(--mono);font-size:12px;font-weight:700}
+.tb{fill:var(--dim);stroke:none;font-family:var(--mono);font-weight:600}
+.btreebox{background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:16px;margin:13px 0;overflow-x:auto}
+.btreebox svg{display:block;overflow:visible}
+.btl{stroke:var(--tline);stroke-width:1.7;stroke-linecap:round;fill:none}
+.btn{fill:var(--panel);stroke:var(--line2);stroke-width:1.7}
+.btn-hl{fill:color-mix(in srgb,var(--am) 20%,var(--panel));stroke:var(--am);stroke-width:1.9}
+.btn-of{fill:color-mix(in srgb,var(--rd) 18%,var(--panel));stroke:var(--rd);stroke-width:1.9}
+.btn-lf{fill:color-mix(in srgb,var(--cy) 14%,var(--panel));stroke:var(--cy)}
+.btd{stroke:var(--line2);stroke-width:1}
+.btt{fill:var(--ink);font-family:var(--mono);font-weight:600}
+.tb-bad{fill:var(--rd);stroke:none;font-family:var(--mono);font-weight:700}
+
+/* ---------- MINI GRID ---------- */
+.minigrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:9px;margin-top:13px}
+.mini{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.mini .mnum{font-family:var(--mono);font-size:17px;font-weight:800;color:var(--am)}
+.mini .l{font-size:13px;color:var(--dim);margin-top:2px}
+
+/* ---------- COURSE SWITCHER ---------- */
+#csWrap{position:relative;flex:0 0 auto}
+#csPop{position:absolute;top:calc(100% + 9px);right:0;width:min(92vw,330px);background:var(--panel);
+  border:1px solid var(--line2);border-radius:13px;padding:8px;z-index:200;display:none;box-shadow:0 22px 55px rgba(0,0,0,.5)}
+html:not(.dark) #csPop{box-shadow:0 22px 55px rgba(15,23,42,.16)}
+#csPop.on{display:block}
+.cshd{font-family:var(--mono);font-size:9.5px;letter-spacing:1.3px;text-transform:uppercase;color:var(--faint);
+  padding:6px 10px 8px;display:flex;justify-content:space-between}
+.csi{display:flex;align-items:center;gap:11px;border:1px solid transparent;border-radius:10px;padding:10px 11px;
+  cursor:pointer;text-decoration:none;color:var(--ink);transition:.13s}
+.csi:hover{background:var(--panel2);border-color:var(--line2);text-decoration:none}
+.csi.cur{background:var(--panel2);border-color:color-mix(in srgb,var(--am) 45%,transparent)}
+.csmk{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;
+  font-family:var(--mono);font-weight:800;font-size:10.5px;border:1px solid}
+
+.csmk.c0{background:color-mix(in srgb,var(--gr) 14%,transparent);border-color:var(--gr);color:var(--gr)}
+.csi.hub{border-bottom:1px solid var(--line);border-radius:10px 10px 0 0;margin-bottom:4px;padding-bottom:12px}
+.csmk.c1{background:color-mix(in srgb,var(--cy) 14%,transparent);border-color:var(--cy);color:var(--cy)}
+.csmk.c2{background:color-mix(in srgb,var(--vi) 14%,transparent);border-color:var(--vi);color:var(--vi)}
+.csmk.c3{background:color-mix(in srgb,var(--am) 14%,transparent);border-color:var(--am);color:var(--am)}.csmk.c4{color:#a78bfa;border-color:#a78bfa}.csmk.c5{color:#34d399;border-color:#34d399}
+.cstx{flex:1;min-width:0}
+.cstx b{display:block;font-size:13.6px;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cstx span{display:block;font-family:var(--mono);font-size:10px;color:var(--faint);margin-top:2px}
+.csnow{font-family:var(--mono);font-size:8.5px;letter-spacing:1px;color:var(--am);border:1px solid var(--am);
+  border-radius:4px;padding:2px 5px;flex:0 0 auto}
+.cssoon{font-family:var(--mono);font-size:8.5px;letter-spacing:1px;color:var(--faint);border:1px solid var(--line2);
+  border-radius:4px;padding:2px 5px;flex:0 0 auto}
+.csft{border-top:1px solid var(--line);margin-top:6px;padding:9px 11px 3px;display:flex;justify-content:space-between;
+  font-family:var(--mono);font-size:10px;color:var(--faint)}
+.csft a{color:var(--faint)}
+.csft a:hover{color:var(--am)}
+
+/* ---------- RESPONSIVE ---------- */
+@media(max-width:960px){
+  :root{--rail:0px}
+  #burger{display:block}
+  #side{transform:translateX(-100%);transition:transform .25s;width:262px;box-shadow:0 0 40px rgba(0,0,0,.4)}
+  #side.open{transform:none}
+  main{margin-left:0}
+  .wrap{padding:26px 18px 80px}
+  .btext span{display:none}
+}
+@media(max-width:520px){
+  .fc-face{padding:34px 20px;font-size:16.5px}
+  .code{font-size:12px}
+}
+@media print{
+  #top,#side,#scrim,.chiprow,.btnrow{display:none!important}
+  main{margin:0}.page{display:block!important}
+  body{background:#fff;color:#000}
+}
+</style>
 </head>
 <body>
-<div id="boot">LOADING ALGO…</div>
+
+<header id="top">
+  <button id="burger" onclick="toggleSide()" aria-label="Menu">☰</button>
+  <div id="csWrap">
+    <button class="brand" id="logoBtn" title="Switch course" aria-haspopup="true" aria-expanded="false">
+      <span class="bmark"><svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true">
+      <line x1="8" y1="3.4" x2="4.2" y2="8.6" stroke="currentColor" stroke-width="1.1" opacity=".5"/>
+      <line x1="8" y1="3.4" x2="11.8" y2="8.6" stroke="currentColor" stroke-width="1.1" opacity=".5"/>
+      <line x1="4.2" y1="8.6" x2="2.6" y2="13" stroke="currentColor" stroke-width="1.1" opacity=".35"/>
+      <line x1="4.2" y1="8.6" x2="6.4" y2="13" stroke="currentColor" stroke-width="1.1" opacity=".35"/>
+      <circle cx="8" cy="3.4" r="2" fill="#f0b429"/><circle cx="4.2" cy="8.6" r="1.6" fill="#34d399"/>
+      <circle cx="11.8" cy="8.6" r="1.6" fill="#38bdf8"/><circle cx="2.6" cy="13" r="1.2" fill="#63718c"/>
+      <circle cx="6.4" cy="13" r="1.2" fill="#63718c"/></svg></span>
+      <span class="btext"><b>ALGO<i>://269202</i></b><span>by <em>ZANN</em></span></span>
+      <span class="bcaret">▾</span>
+    </button>
+    <div id="csPop" role="menu">
+      <div class="cshd"><span>Semester consoles</span><span>5</span></div>
+      <a class="csi hub" href="https://zann208.github.io/study/" role="menuitem">
+        <span class="csmk c0">ALL</span>
+        <span class="cstx"><b>All courses</b><span>semester overview</span></span>
+        <span class="cssoon">HOME ↗</span></a>
+      <a class="csi" href="https://zann208.github.io/netdes/" role="menuitem">
+        <span class="csmk c1">NET</span>
+        <span class="cstx"><b>Network Design</b><span>261434 · CPE434</span></span>
+        <span class="cssoon">OPEN ↗</span></a>
+      <a class="csi" href="https://zann208.github.io/wnet/" role="menuitem">
+        <span class="csmk c2">WLN</span>
+        <span class="cstx"><b>Wireless Networks</b><span>269430</span></span>
+        <span class="cssoon">OPEN ↗</span></a>
+      <a class="csi cur" href="#" id="csSelf" role="menuitem">
+        <span class="csmk c3">ALG</span>
+        <span class="cstx"><b>Algorithms for iSNE</b><span>269202 · ISNE</span></span>
+        <span class="csnow">HERE</span></a>
+      <a class="csi" href="https://zann208.github.io/privacy/" role="menuitem">
+        <span class="csmk c4">PRV</span>
+        <span class="cstx"><b>Privacy Technologies</b><span>269497 &#183; ISNE</span></span>
+        <span class="cssoon">OPEN &#8599;</span></a>
+      <a class="csi" href="https://zann208.github.io/os/" role="menuitem">
+        <span class="csmk c5">OS</span>
+        <span class="cstx"><b>Operating Systems</b><span>261305</span></span>
+        <span class="cssoon">OPEN &#8599;</span></a>
+      <div class="csft"><span>SEM 1 · 2026</span><a href="https://zann208.github.io" target="_blank" rel="noopener">portfolio ↗</a></div>
+    </div>
+  </div>
+  <div class="tspace"></div>
+  <button class="tbtn" id="themebtn2" onclick="toggleTheme()" title="Theme">◐</button>
+</header>
+
+<div id="scrim" onclick="toggleSide()"></div>
+
+<nav id="side">
+  <div class="navgroup">Overview</div>
+  <button class="navbtn on" data-page="home" onclick="go('home')"><span class="dot" style="background:var(--am)"></span>Course home</button>
+
+  <div class="navgroup">Topics</div>
+  <button class="navbtn" data-page="week1" onclick="go('week1')"><span class="dot" style="background:var(--cy)"></span>Complexity<span class="num">W1</span></button>
+  <button class="navbtn" data-page="week2" onclick="go('week2')"><span class="dot" style="background:var(--rd)"></span>Arrays &amp; lists<span class="num">W2</span></button>
+  <button class="navbtn" data-page="week3" onclick="go('week3')"><span class="dot" style="background:var(--am2)"></span>Stacks &amp; queues<span class="num">W3</span></button>
+  <button class="navbtn" data-page="week4" onclick="go('week4')"><span class="dot" style="background:var(--gr)"></span>Trees &amp; heaps<span class="num">W4</span></button>
+  <button class="navbtn" data-page="week6" onclick="go('week6')"><span class="dot" style="background:var(--vi)"></span>B-Trees &amp; Tries<span class="num">W6</span></button>
+
+  <div class="navgroup">Midterm</div>
+  <button class="navbtn" data-page="midterm" onclick="go('midterm')"><span class="dot" style="background:var(--am)"></span>Exam definitions<span class="num">MID</span></button>
+
+  <div class="navgroup">Assignments</div>
+  <button class="navbtn" data-page="a1" onclick="go('a1')"><span class="dot" style="background:var(--cy)"></span>Worksheet 1</button>
+  <button class="navbtn" data-page="a2" onclick="go('a2')"><span class="dot" style="background:var(--gr)"></span>Worksheet 2</button>
+
+  <div class="navgroup">Practice</div>
+  <button class="navbtn" data-page="cards" onclick="go('cards')"><span class="dot" style="background:var(--am2)"></span>Flashcards</button>
+  <button class="navbtn" data-page="quiz" onclick="go('quiz')"><span class="dot" style="background:var(--rd)"></span>Quiz</button>
+  <button class="navbtn" data-page="practice" onclick="go('practice')"><span class="dot" style="background:var(--gr)"></span>Code practice</button>
+
+  <div class="navgroup">Reference</div>
+  <button class="navbtn" data-page="cheat" onclick="go('cheat')"><span class="dot" style="background:var(--vi)"></span>Cheat sheet</button>
+</nav>
+
+<main><div class="wrap">
+
+<!-- ===== HOME ===== -->
+<section class="page on" id="page-home">
+<div class="hero">
+    <div class="p1">269202 · Algorithms for iSNE</div>
+    <h1>Algorithms — study console</h1>
+    <p>Your study base for <b style="color:var(--am)">269202 Algorithms for iSNE</b> (Dr. Ken Cosh).
+    Everything here is organized around the posted midterm material: Weeks 1, 2, 3, 4 and 6, plus Worksheets 1–2.</p>
+  </div>
+
+  <div class="statrow">
+    <div class="stat s-blue"><div class="n">5</div><div class="l">Topics</div></div>
+    <div class="stat s-red"><div class="n">2</div><div class="l">Worksheets</div></div>
+    <div class="stat s-yel"><div class="n">40%</div><div class="l">Midterm weight</div></div>
+    <div class="stat s-grn"><div class="n">80%</div><div class="l">Attendance needed</div></div>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq"></span>What the exam covers (so far)</h2>
+    <p><b>Week 1:</b> Computational complexity. Big O, Big Ω (Omega), Big Θ (Theta). Asymptotic complexity.</p>
+    <p><b>Week 2:</b> Arrays. Linked lists (singly, doubly, circular). Sparse tables.</p>
+    <p><b>Week 3:</b> Stacks. Queues. Priority queues. Heaps as priority queues.</p>
+    <p><b>Week 4:</b> Trees, Binary Trees, Binary Search Trees (BST). Traversal. Insertion and deletion. Balancing: DSW and AVL. Splay trees. Heaps and heapsort. Expression trees.</p>
+    <p><b>Week 6:</b> Multiway trees. B-Trees, B*, B**, B+, Prefix B+ and Bit Trees. Tries.</p>
+    <p style="margin-top:15px"><button class="btn b-yel" onclick="go('midterm')">MIDTERM · EXAM DEFINITIONS →</button></p>
+    <p class="small">Marks (from the syllabus): assignments 10% · midterm 40% · final 50%. You need 80% attendance to sit the exams.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-grn"></span>How to use this</h2>
+    <ol>
+      <li><b>Read a level</b> (Weeks 1, 2, 3, 4 and 6). Each one explains every topic in simple words, with code.</li>
+      <li><b>Check the yellow Notes box</b> on each level. That is your exam cheat-sheet.</li>
+      <li><b>Flip the Flashcards</b> until the answers feel easy.</li>
+      <li><b>Take the Quiz.</b> Wrong answers show a one-line reason, so you learn as you go.</li>
+      <li><b>Play Code Practice.</b> This matches your professor's exam style: real code with missing lines that <i>you</i> must type. Do these until you get all green.</li>
+    </ol>
+  </div>
+
+</section>
+
+<!-- ===== WEEK1 ===== -->
+<section class="page" id="page-week1">
+<div class="lvlchip c-blue">Week 1</div>
+  <h1>Complexity Analysis</h1>
+  <p class="sub">One big question this week: <b>how do we measure if an algorithm is good?</b></p>
+
+  <div class="card">
+    <h2><span class="sq"></span>What is computational complexity?</h2>
+    <p><b>What it is:</b> a measure of how much <b>effort</b> an algorithm needs — how much it <b>costs</b> to run.</p>
+    <p><b>Why we use it:</b> many algorithms can solve the same problem. We want to pick the cheapest one.</p>
+    <p><b>The two costs:</b></p>
+    <ul>
+      <li><b>Time</b> — how long it takes. <b>This is the most significant one for us.</b></li>
+      <li><b>Space</b> — how much memory it uses.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-red"></span>Why not just time it in seconds?</h2>
+    <p>Because real time is <b>unfair</b>. It depends on things that have nothing to do with the algorithm:</p>
+    <ul>
+      <li><b>The machine</b> — the same program runs faster on a home PC than on the lab PCs.</li>
+      <li><b>The language</b> — a compiled C++ program is much faster than the same program in Basic.</li>
+    </ul>
+    <p>So to compare in real time, everything would have to run on the <b>same machine</b>. Instead, we use <b>logical units</b>: we describe the relationship between</p>
+    <ul>
+      <li><b>n</b> = the size of the data (the file), and</li>
+      <li><b>t</b> = the time taken to process it.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-yel"></span>Time / size relationships</h2>
+    <h3>Linear: t = c·n</h3>
+    <p>Time grows at the same rate as the data. If the data <b>doubles</b>, the time <b>doubles</b> too.</p>
+    <p class="small">Tiny example: if 10 items take 10 steps, then 20 items take 20 steps.</p>
+    <h3>Logarithmic: t = log₂ n</h3>
+    <p>Doubling the data adds just <b>one</b> time unit. This is very fast.</p>
+    <p class="small">Tiny example: log₂ 8 = 3 steps. Double the data to 16 → log₂ 16 = 4 steps. Twice the data, only +1 step.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-grn"></span>Asymptotic complexity</h2>
+    <p><b>What it is:</b> real cost formulas are messy. We only care what happens when <b>n gets large</b>. So we <b>drop every term that stops mattering</b>. What is left is the asymptotic complexity.</p>
+    <p><b>The slide example:</b></p>
+    <p class="center" style="font-size:20px"><b>F(n) = n² + 100n + log₁₀n + 1000</b></p>
+    <table class="simple">
+      <tr><th>n</th><th>F(n)</th><th>n² part</th><th>100n part</th><th>1000 part</th></tr>
+      <tr><td>1</td><td>1,101</td><td>1 <span class="small">(0.1%)</span></td><td>100 <span class="small">(9.1%)</span></td><td><b>1,000 (90.8%)</b></td></tr>
+      <tr><td>10</td><td>2,101</td><td>100 <span class="small">(4.8%)</span></td><td><b>1,000 (47.6%)</b></td><td><b>1,000 (47.6%)</b></td></tr>
+      <tr><td>100</td><td>21,002</td><td><b>10,000 (47.6%)</b></td><td><b>10,000 (47.6%)</b></td><td>1,000 <span class="small">(4.8%)</span></td></tr>
+      <tr><td>1,000</td><td>1,101,003</td><td><b>1,000,000 (90.8%)</b></td><td>100,000 <span class="small">(9.1%)</span></td><td>1,000 <span class="small">(0.09%)</span></td></tr>
+      <tr><td>100,000</td><td>10,010,001,005</td><td><b>10,000,000,000 (99.9%)</b></td><td>10,000,000 <span class="small">(0.1%)</span></td><td>1,000 <span class="small">(~0%)</span></td></tr>
+    </table>
+    <p>Look at the pattern: for <b>small n</b> the constant 1000 is the biggest part (90.8%!). But as n grows, <b>n² takes over</b> — at n = 100,000 it is 99.9% of the whole value. So for large n, only n² matters:</p>
+    <p class="center" style="font-size:20px"><b>F(n) ≈ n² &nbsp;→&nbsp; O(n²)</b></p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq"></span>Big O, Big Ω, Big Θ</h2>
+    <p>Three symbols for describing growth. They <b>simplify complexity equations</b>:</p>
+    <ul>
+      <li><b>Big O (Big Oh)</b> — an <b>upper bound</b>. "It grows <b>no faster</b> than this." The one we use most.</li>
+      <li><b>Big Ω (Big Omega)</b> — a <b>lower bound</b>. "It grows <b>at least</b> this fast."</li>
+      <li><b>Big Θ (Big Theta)</b> — a <b>tight bound</b>. Upper and lower at the same time: "it grows <b>exactly</b> like this."</li>
+    </ul>
+    <h3>How to simplify</h3>
+    <ul>
+      <li>Drop constant factors: O(2n) → <b>O(n)</b>. O(½n²) → <b>O(n²)</b>.</li>
+      <li>Drop smaller terms: O(n² + 100n + 1000) → <b>O(n²)</b>.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-yel"></span>Example code — spot the complexity</h2>
+    <p>Each block below is a growth rate you must recognize on sight.</p>
+    <pre class="code" data-code="w1_main"></pre>
+  </div>
+
+  <div class="box notes">
+    <span class="tag">★ Notes — remember for the exam</span>
+    <ul>
+      <li>Computational complexity = how much <b>effort / cost</b> an algorithm needs. Time + space. <b>Time is the most significant.</b></li>
+      <li>Don't compare in seconds: speed depends on the <b>machine</b> and the <b>language</b>. Use logical units: <b>n</b> (data size) vs <b>t</b> (time).</li>
+      <li><b>Linear</b> t = c·n: double the data → double the time.</li>
+      <li><b>Logarithmic</b> t = log₂n: double the data → just <b>+1</b> time unit.</li>
+      <li><b>Asymptotic complexity</b>: for large n, drop the terms that stop mattering.</li>
+      <li>F(n) = n² + 100n + log₁₀n + 1000 → <b>O(n²)</b>.</li>
+      <li><b>Big O</b> = upper bound (at most) · <b>Big Ω</b> = lower bound (at least) · <b>Big Θ</b> = tight (both).</li>
+      <li>Know the loop shapes: one loop = O(n) · loop-in-loop = O(n²) · halving loop = O(log n) · direct access = O(1).</li>
+    </ul>
+  </div>
+
+  <div class="box mistakes">
+    <span class="tag">⚠ Common mistakes</span>
+    <ul>
+      <li><b>Judging with small n.</b> At n = 1, the 1000 term looks the biggest. Complexity is about <b>large</b> n — n² wins in the end.</li>
+      <li><b>Keeping the constants.</b> O(2n) is not a thing on the exam — write O(n).</li>
+      <li><b>Comparing programs run on different computers</b> (or written in different languages). That's timing the machine, not the algorithm.</li>
+      <li><b>Thinking log is slow.</b> O(log n) is one of the fastest: 1,000,000 items ≈ only 20 steps.</li>
+      <li><b>Mixing up the symbols.</b> O = at most, Ω = at least, Θ = exactly.</li>
+    </ul>
+  </div>
+
+</section>
+
+<!-- ===== WEEK2 ===== -->
+<section class="page" id="page-week2">
+<div class="lvlchip c-red">Week 2</div>
+  <h1>Arrays &amp; Linked Lists</h1>
+  <p class="sub">Two ways to store data in a line — and when each one wins. Plus sparse tables.</p>
+
+  <div class="card">
+    <h2><span class="sq"></span>Arrays — the simplest structure</h2>
+    <p><b>What it is:</b> a collection of elements sitting <b>next to each other</b> in memory. Each element has an <b>index</b> (a number key).</p>
+    <p><b>Why it's fast:</b> finding an element is just math. If an int array starts at memory address 1000, and each int is 4 bytes:</p>
+    <p class="center" style="font-size:19px"><b>address of a[i] = 1000 + 4 · i</b></p>
+    <p class="small">Tiny example: a[5] lives at 1000 + 4·5 = <b>1020</b>. One calculation → O(1) access. No searching.</p>
+    <h3>Three ways to index</h3>
+    <ul>
+      <li><b>Zero-based</b> — first element is a[0]. <b>This is C++.</b></li>
+      <li><b>One-based</b> — first element is a[1].</li>
+      <li><b>N-based</b> — start anywhere, even letters: <code>Country[th] = "Thailand"</code>.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-yel"></span>Dimensions &amp; memory order</h2>
+    <p>A <b>single dimension</b> array has 1 index: <code>a[4]</code>. A <b>multidimensional</b> array has more: <code>a[2][3]</code>.</p>
+    <p>A 2D array is still stored in one flat row of memory. There are two orders:</p>
+    <table class="simple">
+      <tr><th>Order</th><th>The matrix 1 2 3 / 4 5 6 / 7 8 9 is stored as</th><th>Used by</th></tr>
+      <tr><td><b>Row-major</b></td><td>1, 2, 3, 4, 5, 6, 7, 8, 9</td><td><b>C / C++</b>, Pascal, Python, SAS</td></tr>
+      <tr><td><b>Column-major</b></td><td>1, 4, 7, 2, 5, 8, 3, 6, 9</td><td>Fortran, MATLAB, OpenGL</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-red"></span>Static vs dynamic arrays</h2>
+    <ul>
+      <li><b>Static</b>: memory given at <b>COMPILATION TIME</b>. Size is fixed forever. <code>int a[10];</code></li>
+      <li><b>Dynamic</b>: memory given at <b>RUN TIME</b>. Size can be chosen while running. <code>int* a = new int[10];</code></li>
+    </ul>
+    <p>Dynamic memory must be given back: <code>delete [] a;</code></p>
+    <pre class="code" data-code="w2_dyn"></pre>
+    <p>A <b>jagged array</b> is an array of arrays where each row has a <b>different size</b>:</p>
+    <pre class="code" data-code="w2_jag"></pre>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-grn"></span>Array performance, benefits, limits</h2>
+    <table class="simple">
+      <tr><th>Operation</th><th>Cost</th></tr>
+      <tr><td>Get / set one element by index</td><td><b>O(1)</b> constant</td></tr>
+      <tr><td>Walk over all elements in order</td><td><b>O(n)</b> linear</td></tr>
+      <tr><td>Insert / delete in the <b>middle</b></td><td><b>O(n)</b> — everything after it must <b>shift</b></td></tr>
+      <tr><td>Insert at the <b>end</b></td><td><b>Amortised O(1)</b></td></tr>
+    </table>
+    <p><b>Benefits:</b> good locality of reference (temporal + spatial → data caching works well), compact (low memory), and random access.</p>
+    <p><b>The limit:</b> elements are locked in place, evenly spaced. Inserting inside means <b>shifting</b> other data. The fix for that → a <b>linked</b> structure.</p>
+  </div>
+
+  <hr class="divider">
+
+  <div class="card">
+    <h2><span class="sq"></span>Singly linked lists</h2>
+    <p><b>What it is:</b> a chain of <b>nodes</b>. Each node holds some data (<code>info</code>) and a <b>pointer</b> to the next node. A pointer <code>head</code> points to the first node. The last node points to <b>NULL (0)</b> to say "I am the end."</p>
+    <p><b>Why:</b> no fixed size, and inserting/removing does not shift anything — we just re-aim pointers.</p>
+    <pre class="code" data-code="w2_node"></pre>
+    <p>Building a small list by hand:</p>
+    <pre class="code" data-code="w2_build"></pre>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-yel"></span>Insertion: head_insert &amp; tail_insert</h2>
+    <p>Two basic choices, also called <code>push_front()</code> and <code>push_back()</code>.</p>
+    <h3>head_insert — new node becomes the first node</h3>
+    <ol>
+      <li>Make the new node: <code>Node* tmp = new Node(x);</code></li>
+      <li>Point it at the old first node: <code>tmp-&gt;next = head;</code></li>
+      <li>Move head to it: <code>head = tmp;</code></li>
+    </ol>
+    <h3>tail_insert — new node becomes the last node</h3>
+    <p>Keep a second pointer <code>tail</code> aimed at the last node. Then: make the node, set <code>tail-&gt;next = tmp;</code>, move <code>tail = tmp;</code>. Same idea as head_insert, just at the other end.</p>
+    <p class="small">Inserting in the <b>middle</b>: walk to the spot first, then re-aim two pointers. Compare with an array: no shifting needed!</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-red"></span>Deletion — where the traps live</h2>
+    <h3>Delete from the head</h3>
+    <p>Trap: if you run <code>delete head;</code> first, you lose your only way into the list! The safe 3 steps:</p>
+    <ol>
+      <li><code>Node* tmp = head;</code> — remember the old first node.</li>
+      <li><code>head = head-&gt;next;</code> — move head to the 2nd node.</li>
+      <li><code>delete tmp;</code> — now it is safe to free the old node.</li>
+    </ol>
+    <h3>Delete from the tail</h3>
+    <p>Problem: the tail's <b>predecessor</b> (the node before it) must become the new tail, but a singly linked list has no backwards pointers. So we must <b>walk from the start</b> to find the second-to-last node:</p>
+    <pre class="code" data-code="w2_deltail"></pre>
+    <h3>Always check the special cases</h3>
+    <ul>
+      <li><b>Empty list</b> — deleting from it would crash. Test <code>isEmpty()</code> first.</li>
+      <li><b>One-node list</b> — after deleting, <b>both</b> head and tail must become NULL.</li>
+    </ul>
+    <h3>Efficiency</h3>
+    <ul>
+      <li>Best case: <code>deleteHead()</code> = <b>O(1)</b>.</li>
+      <li>Worst case: <code>deleteTail()</code> = <b>O(n)</b> (walk the whole list).</li>
+      <li>Average: between 1 and n → n/2 → <b>O(n)</b>. Search (<code>isInList()</code>) is the same: best O(1), worst and average O(n).</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-grn"></span>Doubly linked lists</h2>
+    <p><b>What:</b> each node has <b>two</b> pointers — <code>next</code> and <code>prev</code>. You can walk both directions.</p>
+    <pre class="code" data-code="w2_dllnode"></pre>
+    <p><b>Why:</b> the whole point is the tail. <code>tail = tail-&gt;prev;</code> finds the predecessor instantly, so <b>deleting the tail becomes O(1)</b> — no walking.</p>
+    <p><b>The cost:</b> insertion and deletion must fix <b>more pointers</b> (easy to get wrong), and each node needs extra memory. Same special cases: empty list, one-node list.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq"></span>Circular linked lists &amp; circular arrays</h2>
+    <p><b>Circular linked list:</b> the last node points back to the first — no NULL, no real start or end. Just one <code>current</code> pointer into the ring.</p>
+    <p><b>Why:</b> perfect for <b>taking fair turns</b>:</p>
+    <ul>
+      <li>Processors sharing one resource — each gets its turn as <code>current</code> moves around.</li>
+      <li>A multiplayer board game (poker) — <code>current</code> tracks whose turn it is.</li>
+    </ul>
+    <p><b>Circular array (ring buffer):</b> the same turn-taking idea with an array. It is stored as a normal array plus two variables: the index of the <b>first</b> and <b>last</b> element. When we reach the end of the array, we wrap around and reuse the free cells at the start.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-yel"></span>Arrays vs linked lists — who wins?</h2>
+    <p>Both store <b>linear</b> data. Neither is "better" — it depends on the job.</p>
+    <table class="simple">
+      <tr><th></th><th>Linked list wins</th><th>Array wins</th></tr>
+      <tr><td><b>Size</b></td><td>Dynamic — no upper limit needed</td><td>—</td></tr>
+      <tr><td><b>Insert / delete</b></td><td>Easy anywhere — just re-aim pointers</td><td>—</td></tr>
+      <tr><td><b>Random access</b></td><td>—</td><td>Jump straight to any index, O(1)</td></tr>
+      <tr><td><b>Memory</b></td><td>—</td><td>No extra space for pointers</td></tr>
+      <tr><td><b>Cache locality</b></td><td>—</td><td>Elements sit together → caching works</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-red"></span>Sparse tables — the CMU grades story</h2>
+    <p><b>What it is:</b> a table that is <b>mostly empty</b>. Storing it as a full 2D array wastes huge space.</p>
+    <p><b>The slide example:</b> store a grade for every CMU student in every course.</p>
+    <ul>
+      <li>~25,000 students × ~1,000 courses × 1 byte per grade = <b>25,000,000 bytes</b>.</li>
+      <li>But students take about 7 courses each: 25,000 × 7 = <b>175,000 bytes of real data</b>.</li>
+      <li>175,000 ÷ 25,000,000 = 0.007 → <b>99.3% of the table is empty!</b></li>
+    </ul>
+    <h3>Fix 1: two arrays</h3>
+    <p><code>ClassesTaken</code> (classes for each student) and <code>StudentsInClasses</code> (students in each class). Assuming max 8 classes each and max 200 students per class, 3 bytes per entry: 600,000 + 600,000 = <b>1,200,000 bytes — under 5%</b> of the original.</p>
+    <p><b>But:</b> what if a student takes more than 8 classes? Or a class has more than 200 students? Fixed limits are guesses.</p>
+    <h3>Fix 2: linked lists</h3>
+    <p>Use two arrays <b>of linked lists</b> (one list per student, one per class). No limits to guess, and even more space saved.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-grn"></span>Example code — a working singly linked list</h2>
+    <pre class="code" data-code="w2_main"></pre>
+  </div>
+
+  <div class="box notes">
+    <span class="tag">★ Notes — remember for the exam</span>
+    <ul>
+      <li>Array address math: start + (element size × index). Base 1000, 4-byte ints → a[i] at <b>1000 + 4i</b>.</li>
+      <li>C++ arrays are <b>zero-based</b> and stored in <b>row-major</b> order.</li>
+      <li>Static = size fixed at <b>compile time</b>. Dynamic = made with <code>new</code> at <b>run time</b>, freed with <code>delete []</code>.</li>
+      <li>Array costs: access <b>O(1)</b>, iterate <b>O(n)</b>, middle insert/delete <b>O(n)</b> (shifting), insert at end <b>amortised O(1)</b>.</li>
+      <li>Delete head (singly): <b>tmp = head → head = head-&gt;next → delete tmp</b>. Order matters!</li>
+      <li>Find the node before the tail: <code>while (tmp-&gt;next-&gt;next != 0) tmp = tmp-&gt;next;</code></li>
+      <li>Doubly linked list: <code>tail = tail-&gt;prev</code> makes tail delete <b>O(1)</b>.</li>
+      <li>Circular list = fair turns (processors, poker). Circular array = normal array + first &amp; last indexes.</li>
+      <li>Sparse table = mostly empty (99.3% in the CMU example). Replace with 2 arrays (&lt;5% space) or better, linked lists.</li>
+    </ul>
+  </div>
+
+  <div class="box mistakes">
+    <span class="tag">⚠ Common mistakes</span>
+    <ul>
+      <li><b>Deleting the head node before moving head.</b> <code>delete head;</code> first = the rest of the list is lost forever.</li>
+      <li><b>Wrong delete for arrays.</b> <code>new int[10]</code> must be freed with <code>delete [] a;</code> — not <code>delete a;</code>. Forgetting it = memory leak.</li>
+      <li><b>Off-by-one in the tail walk.</b> You need the node <b>before</b> the last → the test is <code>tmp-&gt;next-&gt;next != 0</code>, not <code>tmp-&gt;next != 0</code>.</li>
+      <li><b>Forgetting the special cases:</b> empty list and one-node list break naive code (head and tail must both move).</li>
+      <li><b>Saying "linked lists are always better."</b> Arrays win at random access, memory use, and cache locality.</li>
+      <li><b>Row/column-major mix-up.</b> C++ is row-major: 1,2,3,4,5,6,7,8,9 — not 1,4,7,…</li>
+    </ul>
+  </div>
+
+</section>
+
+<!-- ===== WEEK3 ===== -->
+<section class="page" id="page-week3">
+<div class="lvlchip">Week 3</div>
+  <h1>Stacks &amp; Queues</h1>
+  <p class="sub">Two rules for waiting in line: last-in-first-out, and first-in-first-out. Then lines with VIPs.</p>
+
+  <div class="card">
+    <h2><span class="sq"></span>Stacks — LIFO</h2>
+    <p><b>What it is:</b> a linear structure you can only touch at <b>one end</b> — the <b>top</b>. New data goes on the top. Data also comes off the top.</p>
+    <p><b>Picture it:</b> a stack of trays in the canteen. You take the tray that was put there <b>last</b>. That rule is called <b>LIFO — Last In, First Out</b>.</p>
+    <h3>The 5 key operations</h3>
+    <ul>
+      <li><code>clear()</code> — empty the stack.</li>
+      <li><code>isEmpty()</code> — is it empty?</li>
+      <li><code>push(el)</code> — put <code>el</code> on the top.</li>
+      <li><code>pop()</code> — take the top element off (and give it back).</li>
+      <li><code>topEl()</code> — <b>look at</b> the top element <b>without removing it</b>.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-yel"></span>Stack use: matching delimiters</h2>
+    <p>A compiler must check that <code>( )</code>, <code>[ ]</code>, <code>{ }</code>, <code>/* */</code> are matched correctly. The rule:</p>
+    <ul>
+      <li>See an <b>opener</b> → <b>push</b> it.</li>
+      <li>See a <b>closer</b> → <b>pop</b>; it must match. (Pop from empty = error.)</li>
+      <li>At the end, the stack must be <b>empty</b>.</li>
+    </ul>
+    <p><b>Case A (from the slide) — success:</b> <code>while(m&lt;(n[8] + o)) {p=7; /*initialise p*/ r=6;}</code></p>
+    <table class="simple">
+      <tr><th>Step</th><th>Stack after</th></tr>
+      <tr><td>push (</td><td>(</td></tr>
+      <tr><td>push (</td><td>( (</td></tr>
+      <tr><td>push [</td><td>( ( [</td></tr>
+      <tr><td>pop [ — matches ]</td><td>( (</td></tr>
+      <tr><td>pop ( — matches )</td><td>(</td></tr>
+      <tr><td>pop ( — matches )</td><td><i>empty</i></td></tr>
+      <tr><td>push {</td><td>{</td></tr>
+      <tr><td>push /*</td><td>{ /*</td></tr>
+      <tr><td>pop /* — matches */</td><td>{</td></tr>
+      <tr><td>pop { — matches }</td><td><i>empty</i> ✔ success</td></tr>
+    </table>
+    <p><b>Case B — error:</b> <code>a = b + ( c − d ) * ( e − f ))</code> — the final <code>)</code> arrives when the stack is already <b>empty</b>. Nothing to pop → error.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-red"></span>Implementing a stack: vector or linked list?</h2>
+    <p>Both work. Here is the vector version from the slides:</p>
+    <pre class="code" data-code="w3_stack"></pre>
+    <p class="small">The linked-list version is the same idea, but stores elements in a <code>list&lt;T&gt;</code> instead of a <code>vector&lt;T&gt;</code>.</p>
+    <h3>Comparison (exam favourite)</h3>
+    <ul>
+      <li>The linked list <b>matches the stack more closely</b> — no unused "capacity". In the vector version, capacity can be larger than the size.</li>
+      <li>Push and pop are <b>O(1)</b> in <b>both</b>.</li>
+      <li><b>But:</b> pushing to a <b>full</b> vector forces it to allocate new memory and <b>copy everything</b> across — <b>O(n)</b> for that one push.</li>
+    </ul>
+    <h3>The STL stack (Standard Template Library)</h3>
+    <p>Key members: <code>empty()</code>, <code>pop()</code>, <code>push(el)</code>, <code>size()</code>, <code>top()</code>.</p>
+    <p><b>Careful:</b> STL <code>pop()</code> is <code>void</code> — it removes the top element but does <b>not return it</b>. Read it with <code>top()</code> first.</p>
+  </div>
+
+  <hr class="divider">
+
+  <div class="card">
+    <h2><span class="sq s-grn"></span>Queues — FIFO</h2>
+    <p><b>What it is:</b> a waiting line that uses <b>both ends</b>: data is added at one end and taken from the other. Like a queue in a bank. The rule is <b>FIFO — First In, First Out</b>.</p>
+    <h3>The 5 key operations</h3>
+    <ul>
+      <li><code>clear()</code> — empty the queue.</li>
+      <li><code>isEmpty()</code> — is it empty?</li>
+      <li><code>enqueue(el)</code> — add <code>el</code> to the <b>end</b> of the line.</li>
+      <li><code>dequeue()</code> — take the <b>first</b> element out.</li>
+      <li><code>firstEl()</code> — look at the first element without removing it.</li>
+    </ul>
+    <p><b>Why:</b> simulating real queues — e.g. how many bank staff keep service good, or how many toll kiosks to open.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq"></span>Queue in an array → the circular array</h2>
+    <p><b>The problem:</b> in a plain array, every dequeue frees a cell at the <b>front</b> — and that space is never used again. The queue slides down the array and runs out of room.</p>
+    <p><b>The fix:</b> a <b>circular array</b>. It's really a normal one-dimensional array plus two index variables, <code>first</code> and <code>last</code>. When we hit the end of the array, we <b>wrap around</b> and reuse the free cells at the start. The "circle" is just how we picture it.</p>
+    <p>The extra work is in <code>enqueue()</code> / <code>dequeue()</code>: check if we are at the last cell, and make sure we never overwrite the first element.</p>
+    <pre class="code" data-code="w3_aq"></pre>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-yel"></span>Better queue: the doubly linked list</h2>
+    <p>With a doubly linked list, adding at one end and removing at the other are <b>both O(1)</b> — we hold pointers to both ends and can step from them directly.</p>
+    <p>With a <b>singly</b> linked list, one of the two ends needs an <b>O(n)</b> walk to reach its neighbour. That's why doubly wins here.</p>
+    <p class="small">The STL queue's key members: <code>back()</code>, <code>empty()</code>, <code>front()</code>, <code>pop()</code>, <code>push(el)</code>, <code>size()</code>.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-red"></span>Priority queues</h2>
+    <p><b>Why:</b> real queues are rarely fair. A police car reaches the toll — it goes first. In a <b>priority queue</b>, elements leave based on their <b>priority</b> and their current position, not just arrival order.</p>
+    <h3>Ways to build one</h3>
+    <table class="simple">
+      <tr><th>Implementation</th><th>enqueue</th><th>dequeue</th></tr>
+      <tr><td>Linked list, kept <b>sorted</b> (search for the right spot when adding)</td><td><b>O(n)</b></td><td>O(1)</td></tr>
+      <tr><td>Linked list, <b>unsorted</b> (search for the best when removing)</td><td>O(1)</td><td><b>O(n)</b></td></tr>
+      <tr><td><b>Two lists</b>: unordered low-priority + ordered high-priority</td><td colspan="2">around <b>O(√n)</b>, depends on list sizes</td></tr>
+      <tr><td><b>Heap</b> — the better way</td><td colspan="2">follows the tree height (short!)</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-grn"></span>Heaps — a first look</h2>
+    <p><b>What it is:</b> a kind of <b>binary tree</b> where:</p>
+    <ul>
+      <li>every node's value is <b>greater than or equal to</b> the values in its children, and</li>
+      <li>the tree is <b>perfectly balanced</b> — the last-level leaves are pushed to the <b>leftmost</b> positions.</li>
+    </ul>
+    <p><b>As a priority queue:</b> the value = the priority, so the <b>root is always the highest priority</b>.</p>
+    <h3>Enqueue (add)</h3>
+    <ol>
+      <li>Add the new element at the <b>bottom</b> of the heap, as a leaf.</li>
+      <li>Let it climb <b>up</b>: swap it with its parent while it has higher priority.</li>
+    </ol>
+    <h3>Dequeue (remove the best)</h3>
+    <ol>
+      <li>Remove the <b>root</b> — the highest priority.</li>
+      <li>Move the <b>last</b> node into the root's place.</li>
+      <li>Let it sink <b>down</b>: swap with its bigger child until it fits.</li>
+    </ol>
+    <p class="small">Each move follows one path up or down the tree — and the tree is short (that's the balance). Compare that with the O(n) linked-list searches above. Much more on heaps in Week 4.</p>
+  </div>
+
+  <div class="box notes">
+    <span class="tag">★ Notes — remember for the exam</span>
+    <ul>
+      <li><b>Stack = LIFO</b> (Last In, First Out) — one end only. <b>Queue = FIFO</b> (First In, First Out) — both ends.</li>
+      <li>Stack ops: <b>clear, isEmpty, push, pop, topEl</b>. Queue ops: <b>clear, isEmpty, enqueue, dequeue, firstEl</b>.</li>
+      <li>Delimiter matching: opener → push, closer → pop-and-match, end → stack empty.</li>
+      <li>Vector vs list stack: both O(1) push/pop, but a <b>full vector</b> push = O(n) (re-allocate + copy).</li>
+      <li>STL <code>pop()</code> removes but does <b>not</b> return the element.</li>
+      <li>Circular array: <code>isEmpty: first == -1</code> · <code>isFull: first == 0 &amp;&amp; last == size-1 || first == last+1</code> (wrapped around and caught up).</li>
+      <li>Queue on a <b>doubly</b> linked list: enqueue and dequeue both <b>O(1)</b>.</li>
+      <li>Priority queue: sorted list O(n) enqueue · unsorted list O(n) dequeue · two lists ≈ O(√n) · heap = best.</li>
+      <li>Heap: node ≥ children, perfectly balanced, leaves leftmost. Add at bottom + climb up. Remove root, last node sinks down.</li>
+    </ul>
+  </div>
+
+  <div class="box mistakes">
+    <span class="tag">⚠ Common mistakes</span>
+    <ul>
+      <li><b>Popping an empty stack / dequeuing an empty queue.</b> Always check <code>isEmpty()</code> first — the slides literally say "CRASH?".</li>
+      <li><b>Expecting STL <code>pop()</code> to return the value.</b> It doesn't. <code>top()</code> then <code>pop()</code>.</li>
+      <li><b>Mixing the ends up.</b> Enqueue at the <b>back</b>, dequeue at the <b>front</b>. A stack does both at the <b>top</b>.</li>
+      <li><b>Circular array without the isFull check</b> — you wrap around and overwrite the first element.</li>
+      <li><b>Heap direction confusion.</b> A <b>new</b> element climbs <b>up</b>. The node moved to the root after a dequeue sinks <b>down</b>.</li>
+      <li><b>Thinking a heap is fully sorted.</b> Only the parent ≥ child rule holds — left and right children have no order between them.</li>
+    </ul>
+  </div>
+
+</section>
+
+<!-- ===== WEEK4 ===== -->
+<section class="page" id="page-week4">
+<div class="lvlchip c-green">Week 4</div>
+  <h1>Binary Trees</h1>
+  <p class="sub">From lines to hierarchies: trees, Binary Search Trees, traversal, deletion, balancing (DSW &amp; AVL), splay trees, heaps.</p>
+
+  <div class="card">
+    <h2><span class="sq"></span>Trees — the words you must know</h2>
+    <p><b>Why trees:</b> lists are one-dimensional. Much real data is a <b>hierarchy</b>: family trees, the grammar of a sentence, the taxonomy of organisms. Trees store hierarchies.</p>
+    <p>Picture an upside-down tree: <b>root</b> at the top, branches going down, <b>leaves</b> at the bottom. A tree is <b>nodes</b> connected by <b>arcs</b>.</p>
+    <ul>
+      <li><b>Root</b> — the only node with <b>no parent</b>.</li>
+      <li><b>Leaf</b> — a node with <b>no children</b>.</li>
+      <li><b>Path</b> — for each node there is a <b>unique path</b> from the root to it. The <b>length</b> of the path = the number of <b>arcs</b> in it.</li>
+      <li><b>Level</b> of a node = path length <b>+ 1</b> (the root is level 1).</li>
+      <li><b>Height</b> of the tree = the highest path length (counted in arcs).</li>
+    </ul>
+    <p class="small">A tree can be empty. A tree can be one single node — then that node is both the root and a leaf.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-yel"></span>Binary trees &amp; Binary Search Trees</h2>
+    <p><b>Binary tree:</b> every node has <b>at most 2 children</b> (0, 1, or 2). Think of how If–Else splits into two paths.</p>
+    <p><b>Complete binary tree:</b> every non-terminal (internal) node has 2 branches. Useful fact: if every nonterminal node has exactly 2 nonempty children, then</p>
+    <p class="center" style="font-size:19px"><b>m = k + 1</b> &nbsp;<span class="small">(leaves m are one more than nonterminal nodes k)</span></p>
+    <p><b>Binary Search Tree (BST)</b>, also called an <b>ordered binary tree</b>, adds one rule. For each node holding value v:</p>
+    <ul>
+      <li>everything in its <b>left subtree is less than v</b>, and</li>
+      <li>everything in its <b>right subtree is greater than v</b>.</li>
+    </ul>
+    <p class="small">Like the game "guess my number between 1 and 10" — each guess cuts the field in half.</p>
+    <div class="treebox" data-tree="t_bst"></div>
+    <p class="tcap">A Binary Search Tree. Left of 5: all smaller. Right of 5: all bigger.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-red"></span>Implementing a binary tree</h2>
+    <p><b>Why not an array?</b> Deleting a node leaves empty cells, and inserting can push related nodes far apart. Inconvenient — so we use nodes and pointers.</p>
+    <p>Dr. Cosh's two-class design: <b>BSTNode</b> (one node: a key + left/right pointers) and <b>BST</b> (owns the root, does the work). BSTNode's members are public so the BST class can reach them.</p>
+    <pre class="code" data-code="w4_classes"></pre>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-grn"></span>Searching a BST</h2>
+    <p><b>How it works:</b> start at the root. Searching for el:</p>
+    <ul>
+      <li>el <b>equals</b> the node → found, stop.</li>
+      <li>el is <b>lower</b> → follow the <b>left</b> pointer.</li>
+      <li>el is <b>higher</b> → follow the <b>right</b> pointer.</li>
+      <li>You reach <b>NULL</b> → el is not in the tree.</li>
+    </ul>
+    <pre class="code" data-code="w4_search"></pre>
+    <h3>How fast?</h3>
+    <ul>
+      <li><b>Worst case: O(n)</b> — the tree is shaped like a linked list (every node one child).</li>
+      <li><b>Average case: IPL ÷ n.</b> IPL = <b>Internal Path Length</b> = the sum of the path lengths of <b>all</b> nodes. So the average depends on the tree's shape.</li>
+      <li><b>Best shape: a complete tree.</b> 10,000 nodes: worst shape needs up to 10,000 tests — balanced needs only <b>14</b>, because the height is lg(10,001) ≈ 13.3 → 14.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq"></span>Tree traversal — visiting every node once</h2>
+    <p><b>What:</b> visit each node <b>exactly once</b>. With n nodes there are n! possible orders — only a few are practical. Two families:</p>
+    <h3>1 · Breadth-first — level by level</h3>
+    <p>Top-down, left-to-right (or any of the 4 direction combos). <b>Implemented with a queue:</b> enqueue the root; then repeat: dequeue a node, visit it, enqueue its children.</p>
+    <h3>2 · Depth-first — dive deep, then come back</h3>
+    <p>Built from three moves: <b>V</b> = Visit the node, <b>L</b> = traverse the Left subtree, <b>R</b> = traverse the Right subtree.</p>
+    <table class="simple">
+      <tr><th>Order</th><th>Name</th><th>On the tree above</th></tr>
+      <tr><td><b>VLR</b></td><td><b>Pre-order</b></td><td>5, 3, 2, 1, 4, 8, 6, 7, 9</td></tr>
+      <tr><td><b>LVR</b></td><td><b>In-order</b></td><td>1, 2, 3, 4, 5, 6, 7, 8, 9 — <b>sorted!</b></td></tr>
+      <tr><td><b>LRV</b></td><td><b>Post-order</b></td><td>1, 2, 4, 3, 7, 6, 9, 8, 5</td></tr>
+      <tr><td>—</td><td>Breadth-first (top-down, L→R)</td><td>5, 3, 8, 2, 4, 6, 9, 1, 7</td></tr>
+    </table>
+    <p class="small">(VRL, RVL, RLV also exist — the mirror versions.) <b>In-order on a BST gives the values in sorted order</b> — that's how you turn a BST into a sorted array.</p>
+    <pre class="code" data-code="w4_trav"></pre>
+    <p>These functions call themselves <b>twice</b> — Dr. Cosh calls this <b>double recursion</b>.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-yel"></span>Traversal without recursion</h2>
+    <p>Recursion quietly uses the <b>runtime stack</b>. Alternatives:</p>
+    <h3>Iterative pre-order — bring your own stack</h3>
+    <pre class="code" data-code="w4_iter"></pre>
+    <p class="small">Push <b>right before left</b>, so the left child pops out first. Is it better? No — no double recursion, but it needs its own stack and up to 4 calls per loop. The real worry is <b>space</b>, not time (all traversals are O(n) time).</p>
+    <h3>Threaded trees — hide the stack inside the tree</h3>
+    <p>Add extra pointers (<b>threads</b>) to each node pointing to its <b>predecessor / successor</b> in the traversal. Either keep 4 pointers per node, or overload left/right to sometimes mean predecessor/successor — but then an extra data member must say which meaning is in use.</p>
+    <h3>Morris's algorithm — reshape instead of remembering</h3>
+    <p>Transform the tree while walking so no stack is needed: a tree with no left children is trivial to traverse (just go right). So LVR becomes VR.</p>
+    <pre class="code" data-code="w4_morris"></pre>
+    <p class="small">Moved nodes keep their left pointers, so the original shape is restored. Time still depends on the loops (about 5–10% saving in tests on 5,000 random trees) — the clear win is <b>space</b>.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-red"></span>Insertion &amp; Deletion</h2>
+    <h3>Insertion — find a dead end</h3>
+    <p>Follow the search rule: bigger → right, smaller → left. When you hit an <b>empty child spot</b>, put the new node there. Simple — but over time this can make the tree very <b>unbalanced</b>.</p>
+    <h3>Deletion — three cases, easy to hard</h3>
+    <ol>
+      <li><b>A leaf (no children):</b> just delete it. Its parent points to NULL.</li>
+      <li><b>One child:</b> delete it. The parent adopts the grandchild (points to the deleted node's child).</li>
+      <li><b>Two children:</b> now it's interesting. Two strategies: <b>merging</b> or <b>copying</b>.</li>
+    </ol>
+    <h3>Deletion by Merging</h3>
+    <p>Cutting out the node leaves 2 subtrees. Every value in the left subtree is lower than every value in the right subtree. So:</p>
+    <ul>
+      <li>The <b>root of the left subtree</b> replaces the deleted node.</li>
+      <li>The <b>rightmost node of the left subtree</b> becomes the <b>parent of the right subtree</b>.</li>
+    </ul>
+    <div class="minigrid">
+      <div class="mini"><span class="mnum">Before</span><div class="treebox" data-tree="t_bst" data-small="1"></div><div class="tcap">Delete node 5 (the root)</div></div>
+      <div class="mini"><span class="mnum">After merging</span><div class="treebox" data-tree="t_merge" data-small="1"></div><div class="tcap">3 takes the top; 4 (rightmost of left tree) adopts the right tree</div></div>
+    </div>
+    <p class="small">The tree may gain height (like here) or lose it — merging can produce a very unbalanced tree. Not inefficient, but not perfect.</p>
+    <h3>Deletion by Copying</h3>
+    <p>Key insight: the <b>rightmost node of the left subtree</b> is the deleted node's immediate <b>predecessor</b> (and the leftmost node of the right subtree is its <b>successor</b>). So:</p>
+    <ul>
+      <li><b>Copy</b> the predecessor's (or successor's) value into the deleted node's spot.</li>
+      <li>Then delete that node instead — it's always an easy case (0 or 1 child).</li>
+    </ul>
+    <div class="minigrid">
+      <div class="mini"><span class="mnum">Before</span><div class="treebox" data-tree="t_bst" data-small="1"></div><div class="tcap">Delete node 5 (the root)</div></div>
+      <div class="mini"><span class="mnum">After copying</span><div class="treebox" data-tree="t_copy" data-small="1"></div><div class="tcap">4 (the predecessor) is copied up into 5's place</div></div>
+    </div>
+    <p class="small">Height does not grow, but always using the predecessor makes the left side bushy — so we can <b>alternate</b> between predecessor and successor.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-grn"></span>Balancing a tree</h2>
+    <p><b>Why bother:</b> 10,000 nodes. Linked-list shape → up to 10,000 tests to find something. Balanced → <b>14</b> tests. Same data!</p>
+    <h3>Method 1: rebuild from a sorted array</h3>
+    <p>Put all the data in a <b>sorted array</b> (an in-order traversal gives you that). Then: the <b>middle element becomes the root</b>; the middle of the left half becomes one child, the middle of the right half the other; recurse.</p>
+    <pre class="code" data-code="w4_balance"></pre>
+    <p class="small">Weakness: needs extra space for the array, and all values must be in it first.</p>
+    <h3>Rotation — the tool behind everything else</h3>
+    <p>A <b>child rotates around its parent</b> (right rotation lifts the left child; left rotation lifts the right child). One thing to burn into memory:</p>
+    <p class="center" style="font-size:19px">🔑 <b>The middle subtree switches parents.</b></p>
+    <p class="small">When child Ch rotates up around parent Par, the subtree <b>between them</b> (Ch's inner child) lets go of Ch and becomes Par's child. Nothing else changes.</p>
+    <h3>Method 2: the DSW algorithm (Day, Stout &amp; Warren)</h3>
+    <p>Devised by <b>Day</b>, improved by <b>Stout and Warren</b>. Two phases, built entirely from rotations:</p>
+    <ol>
+      <li><b>Stretch:</b> turn the tree into a <b>backbone</b> — a linked-list-like tree leaning right. (While a node has a left child, rotate that child up around it.)</li>
+      <li><b>Balance:</b> rotate <b>every other node</b> around its parent, going down the right branch. Repeat until the tree is perfectly balanced.</li>
+    </ol>
+    <p class="small">DSW rebalances the <b>whole</b> tree in <b>O(n)</b>. Good when you only balance once in a while (the cost is amortised) — e.g. after many insertions and deletions.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq"></span>AVL trees — stay balanced as you go</h2>
+    <p>Named after <b>Adel'son-Vel'ski and Landis</b>. Instead of rebalancing the whole tree now and then (DSW), an AVL tree checks balance on <b>every insertion or deletion</b> and fixes problems locally with rotations.</p>
+    <p>Every node has a <b>balance factor</b>:</p>
+    <p class="center" style="font-size:19px"><b>Balance = Height(left subtree) − Height(right subtree)</b></p>
+    <p>It must stay at <b>+1, 0, or −1</b>. (Height of an empty subtree counts as −1.) If an insert pushes some node's balance to <b>+2 or −2</b>, we rotate. An AVL tree may not look as perfectly even as a DSW result — that's fine, only the balance factors matter.</p>
+    <h3>The 4 out-of-balance situations → 4 rotations</h3>
+    <p>Name the case by <b>where the new key landed</b>, relative to the unbalanced node:</p>
+    <table class="simple">
+      <tr><th>Insertion into…</th><th>Case</th><th>The fix</th></tr>
+      <tr><td>Left subtree of the Left child</td><td><b>LL</b></td><td>One <b>right</b> rotation</td></tr>
+      <tr><td>Right subtree of the Right child</td><td><b>RR</b></td><td>One <b>left</b> rotation</td></tr>
+      <tr><td>Right subtree of the Left child</td><td><b>LR</b></td><td><b>Double:</b> rotate the child left, then rotate right</td></tr>
+      <tr><td>Left subtree of the Right child</td><td><b>RL</b></td><td><b>Double:</b> rotate the child right, then rotate left</td></tr>
+    </table>
+
+    <h3>LL — insert 2 (slide example)</h3>
+    <div class="minigrid">
+      <div class="mini"><span class="mnum">Insert 2</span><div class="treebox" data-tree="avl_ll_bad" data-small="1" data-bf="1"></div><div class="tcap">2 goes left-left under 4 → node 4 hits +2</div></div>
+      <div class="mini"><span class="mnum">Right rotation</span><div class="treebox" data-tree="avl_ll_fix" data-small="1" data-bf="1"></div><div class="tcap">3 rotates up around 4. All factors legal again</div></div>
+    </div>
+
+    <h3>RR — insert 8 (slide example)</h3>
+    <div class="minigrid">
+      <div class="mini"><span class="mnum">Insert 8</span><div class="treebox" data-tree="avl_rr_bad" data-small="1" data-bf="1"></div><div class="tcap">8 goes right-right under 6 → node 6 hits −2</div></div>
+      <div class="mini"><span class="mnum">Left rotation</span><div class="treebox" data-tree="avl_rr_fix" data-small="1" data-bf="1"></div><div class="tcap">7 rotates up around 6</div></div>
+    </div>
+
+    <h3>LR — insert 3 (slide example, double rotation)</h3>
+    <div class="minigrid">
+      <div class="mini"><span class="mnum">Insert 3</span><div class="treebox" data-tree="avl_lr_bad" data-small="1" data-bf="1"></div><div class="tcap">3 goes left then RIGHT under 4 → node 4 hits +2</div></div>
+      <div class="mini"><span class="mnum">Double rotation</span><div class="treebox" data-tree="avl_lr_fix" data-small="1" data-bf="1"></div><div class="tcap">Rotate 3 left around 2, then right around 4</div></div>
+    </div>
+
+    <h3>RL — insert 7 (slide example, double rotation)</h3>
+    <div class="minigrid">
+      <div class="mini"><span class="mnum">Insert 7</span><div class="treebox" data-tree="avl_rl_bad" data-small="1" data-bf="1"></div><div class="tcap">7 goes right then LEFT under 6 → node 6 hits −2</div></div>
+      <div class="mini"><span class="mnum">Double rotation</span><div class="treebox" data-tree="avl_rl_fix" data-small="1" data-bf="1"></div><div class="tcap">Rotate 7 right around 8, then left around 6</div></div>
+    </div>
+
+    <h3>The "further issue" — imbalance higher up</h3>
+    <p>Insert 9 into the tree above: every node on the way stays legal <b>except 5</b>, higher up, which hits −2. Fix it at that node: 9 sits right-right relative to 5 → RR-style rotation (7 rotates up around 5).</p>
+    <div class="minigrid">
+      <div class="mini"><span class="mnum">Insert 9</span><div class="treebox" data-tree="avl_rrr_bad" data-small="1" data-bf="1"></div><div class="tcap">Unbalanced at 5 (−2), not at 8</div></div>
+      <div class="mini"><span class="mnum">After rebalance</span><div class="treebox" data-tree="avl_rrr_fix" data-small="1" data-bf="1"></div><div class="tcap">7 rotates up around 5 — the slide's "RRR rebalance"</div></div>
+    </div>
+    <p class="small"><b>Deletion</b> can also unbalance an AVL tree — also fixed by rotations, but it's more time-consuming: every node between the deleted one and the root must be checked (and possibly rotated).</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-yel"></span>Self-adjusting trees &amp; splay trees</h2>
+    <p><b>The idea:</b> balancing assumes every node is equally popular. But some nodes are searched <b>much more often</b>. If the popular ones sit near the top, searching gets faster — even in a tree that isn't perfectly balanced.</p>
+    <p>Simple strategies: <b>single rotation</b> (rotate the accessed node around its parent) or <b>move to root</b>.</p>
+    <h3>Splay trees</h3>
+    <p>A special self-organizing BST: every access reorganizes the tree so recently used elements are easy to reach. Insertion, deletion and search all run in <b>O(log n) amortized</b> time. Every operation ends with <b>splaying</b> — moving the accessed node up. Three cases:</p>
+    <ol>
+      <li><b>Parent is the root:</b> rotate the node around its parent. Done.</li>
+      <li><b>Homogeneous</b> (node and parent are both left children, or both right children): rotate the <b>parent around the grandparent first</b>, then the node around the parent.</li>
+      <li><b>Heterogeneous</b> (one left, one right): rotate the <b>node around its parent first</b>, then around the grandparent.</li>
+    </ol>
+    <p><b>The verdict (exam-worthy):</b> in theory, self-organizing trees compete well. In experiments, <b>AVL almost always wins</b> — and sometimes even plain BSTs do. Lesson: complexity analysis and amortized analysis aren't always the full story.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-red"></span>Heaps &amp; Heapsort</h2>
+    <p><b>(Max) heap:</b> a binary tree where each node ≥ its children, perfectly balanced, last-level leaves leftmost. A <b>min heap</b> is the reverse — smallest on top.</p>
+    <p><b>As a priority queue</b> (from Week 3): enqueue = add at the bottom, climb up. Dequeue = take the root, move the last node up top, let it sink down. Each is one short path — compare that with O(n) list searches.</p>
+    <h3>Heapsort</h3>
+    <p>Selection sort scans the whole remaining data to find the max each round — O(n²). A heap hands you the max for free (the root). So:</p>
+    <ol>
+      <li>Turn the data into a <b>heap</b>.</li>
+      <li><b>Pop the root</b> (the biggest) — move it to its final position.</li>
+      <li>Fix the heap with the remaining nodes. Repeat.</li>
+    </ol>
+    <p class="small">If the data lives in an array, no second array is needed — sort in place by <b>swapping</b> positions.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-grn"></span>Expression trees &amp; Polish notation</h2>
+    <p>What is <b>2 − 3 * 4 + 5</b>? It depends how you group it! Each grouping is a different <b>expression tree</b> (operators inside, numbers at the leaves):</p>
+    <div class="minigrid">
+      <div class="mini"><span class="mnum">= −5 ✔</span><div class="treebox" data-tree="expr_m5" data-small="1"></div><div class="tcap">(2 − (3·4)) + 5 — normal math rules</div></div>
+      <div class="mini"><span class="mnum">= −9</span><div class="treebox" data-tree="expr_m9" data-small="1"></div><div class="tcap">(2 − 3) · (4 + 5)</div></div>
+      <div class="mini"><span class="mnum">= −15</span><div class="treebox" data-tree="expr_m15" data-small="1"></div><div class="tcap">2 − ((3·4) + 5)</div></div>
+    </div>
+    <p>Now traverse the correct (−5) tree in the three depth-first orders:</p>
+    <table class="simple">
+      <tr><th>Traversal</th><th>Result</th><th>This notation is called</th></tr>
+      <tr><td><b>In-order (LVR)</b></td><td>2 − 3 * 4 + 5</td><td>Infix — normal notation</td></tr>
+      <tr><td><b>Pre-order (VLR)</b></td><td>+ − 2 * 3 4 5</td><td><b>Polish notation</b> (prefix)</td></tr>
+      <tr><td><b>Post-order (LRV)</b></td><td>2 3 4 * − 5 +</td><td>Reverse Polish (postfix)</td></tr>
+    </table>
+    <p class="small">Notice: the in-order reading is the same for all three trees — that's exactly why infix needs parentheses, and prefix/postfix don't.</p>
+  </div>
+
+  <div class="box notes">
+    <span class="tag">★ Notes — remember for the exam</span>
+    <ul>
+      <li>Path length = arcs. Level = path length + 1. Height = longest path length. Empty subtree height = −1.</li>
+      <li><b>BST rule:</b> left &lt; node &lt; right. <b>In-order (LVR) of a BST = sorted order.</b></li>
+      <li>Complete binary tree fact: <b>m = k + 1</b> (leaves vs nonterminal nodes).</li>
+      <li>Traversals: <b>VLR</b> pre-order · <b>LVR</b> in-order · <b>LRV</b> post-order (V = Visit, L = Left, R = Right). Breadth-first uses a <b>queue</b>; iterative pre-order uses a <b>stack</b> (push right first!).</li>
+      <li>Search: worst O(n) (list shape) · average IPL/n · balanced ≈ height ≈ lg n (10,000 nodes → 14 tests).</li>
+      <li>Delete: leaf → cut · one child → parent adopts grandchild · two children → <b>merging</b> (left root up; rightmost of left adopts right tree) or <b>copying</b> (copy predecessor/successor value up, delete that easy node).</li>
+      <li>Balance from sorted array: middle = root, recurse halves.</li>
+      <li><b>DSW:</b> phase 1 stretch to a backbone, phase 2 rotate every other node. O(n), whole tree.</li>
+      <li><b>AVL:</b> Balance = h(left) − h(right) ∈ {−1, 0, +1}. LL→right rotation, RR→left rotation, LR &amp; RL→double rotation. Fix at the <b>lowest</b> unbalanced node. Rotation key: <b>the middle subtree switches parents</b>.</li>
+      <li><b>Splay cases:</b> parent-is-root → one rotation · homogeneous → grandparent first · heterogeneous → parent first. In experiments <b>AVL beats splay</b> almost always.</li>
+      <li>Heapsort: build heap → pop root → re-heap → repeat. In place with swaps.</li>
+      <li>Expression trees: pre-order = Polish (prefix) · post-order = Reverse Polish (postfix) · in-order = infix.</li>
+    </ul>
+  </div>
+
+  <div class="box mistakes">
+    <span class="tag">⚠ Common mistakes</span>
+    <ul>
+      <li><b>Balance factor backwards.</b> On our slides it's <b>left − right</b>: +2 means the LEFT side is too tall (LL or LR case), −2 means the RIGHT side (RR or RL).</li>
+      <li><b>Rotating at the wrong node.</b> Fix the <b>lowest</b> node that hit ±2, and classify LL/RR/LR/RL by where the new key sits <b>relative to that node</b> — not relative to the root.</li>
+      <li><b>Doing one rotation for LR / RL.</b> Those are <b>double</b> rotations. One rotation just moves the problem around.</li>
+      <li><b>Losing the middle subtree in a rotation.</b> The child's inner subtree <b>must switch parents</b> — this is the #1 lost-marks spot when drawing rotations.</li>
+      <li><b>Merging vs copying confusion.</b> Merging restructures (left root takes over — height can grow). Copying just copies <b>one value</b> up and deletes an easy node (height does not grow).</li>
+      <li><b>Wrong letter order.</b> In-order is L<b>V</b>R — visit <b>between</b> the subtrees. The letters ARE the definition.</li>
+      <li><b>Calling a heap a BST.</b> A heap only promises parent ≥ children. Left vs right have no order.</li>
+      <li><b>Height off by one.</b> Height counts <b>arcs</b>: a single-node tree has height 0.</li>
+    </ul>
+  </div>
+
+</section>
+
+
+<!-- ===== WEEK 6 ===== -->
+<section class="page" id="page-week6">
+<div class="lvlchip c-green">Week 6</div>
+  <h1>B-Trees &amp; Tries</h1>
+  <p class="sub">What changes when the data is too big for RAM: multiway trees, the B-tree family (B, B*, B+, Prefix B+, Bit), and tries.</p>
+
+  <div class="card">
+    <h2><span class="sq"></span>Why binary trees stop working</h2>
+    <p><b>Last week we assumed everything was in RAM.</b> Now suppose the data is too big and lives on a hard disk. Reaching a piece of disk memory costs:</p>
+    <p class="center" style="font-size:19px"><b>seek time + rotation time + transfer time</b></p>
+    <p><b>Seek time is the killer.</b> It depends on the disk head <b>physically moving</b> to the right position — mechanical, not electronic.</p>
+    <ul>
+      <li>Seek time is measured in <b>milliseconds</b>.</li>
+      <li>CPU work is measured in <b>microseconds</b> — <b>at least 1,000× faster</b>.</li>
+    </ul>
+    <div class="box idea"><span class="tag">ℹ The key inversion</span> processing is essentially <b>free</b> compared with a disk access. So it is worth doing <b>extra CPU work</b> if that removes even one seek. This single fact is why every structure in this week exists.</div>
+    <p>A binary tree is the worst possible shape here: each node holds one key, so descending 5 levels can mean <b>5 separate disk seeks</b>. It was spread across blocks with no thought for how the disk reads.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-yel"></span>Multiway trees — fatter nodes, fewer levels</h2>
+    <p>A <b>multiway tree</b> differs from a binary tree in a few key ways:</p>
+    <ul>
+      <li>Each node has <b>m children</b>.</li>
+      <li>Each node has <b>m−1 keys</b>.</li>
+      <li>The keys are in <b>ascending order</b>.</li>
+      <li>The keys in the first <b>i</b> children are <b>smaller</b> than the i-th key.</li>
+      <li>The keys in the last <b>m−i</b> children are <b>larger</b> than the i-th key.</li>
+    </ul>
+    <div class="btreebox" data-btree="bt_multi"></div>
+    <p class="tcap">A multiway tree. Count them: a node with k keys always has k+1 pointers.</p>
+    <p class="small">This one still suffers from <b>malaise</b> — it is unbalanced, so finding 32 takes longer than finding 21. Fat nodes alone are not enough; we also need every leaf on the same level. That is what a B-tree adds.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-grn"></span>B-Trees — one node = one disk block</h2>
+    <p><b>The idea in one line:</b> make each node exactly the size of a disk <b>block</b>, so one seek brings back as many keys as possible.</p>
+    <p>How many keys fit in a node depends on the size of each key and the size of the block, and block size depends on the system.</p>
+    <p><b>A B-Tree of order m has these properties:</b></p>
+    <ul>
+      <li>The <b>root</b> has at least <b>2 subtrees</b>, unless it is a leaf.</li>
+      <li>Each <b>nonroot, nonleaf</b> node holds <b>k−1 keys</b> and <b>k pointers</b>, where <b>⌈m/2⌉ ≤ k ≤ m</b>.</li>
+      <li>Each <b>leaf</b> holds <b>k−1 keys</b>, where <b>⌈m/2⌉ ≤ k ≤ m</b>.</li>
+      <li><b>All leaves are on the same level.</b></li>
+    </ul>
+    <div class="box idea"><span class="tag">ℹ What those bounds actually mean</span> a B-tree is always <b>at least half full</b>. A node only splits when it fills an entire block — so space is never badly wasted, and the height stays low.</div>
+    <p class="small">Nice consequence: the root — and maybe the whole first level — can be kept in RAM, so a search of a big tree may cost only one or two real disk accesses.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq"></span>Implementing and searching</h2>
+    <p>The node carries its keys and pointers inline, plus a count of how many keys are actually in use:</p>
+    <pre class="code" data-code="w6_node"></pre>
+    <p><b>Searching is just a binary-tree search with a wider fan-out.</b> Start at the root and pick the branch whose range contains the search value:</p>
+    <pre class="code" data-code="w6_search"></pre>
+    <p class="small">Within a node you scan the keys in RAM, which is free. Following a pointer is what costs a seek — so the wider the node, the cheaper the search.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-yel"></span>Inserting — the tree grows upward</h2>
+    <p><b>The challenge:</b> in a B-tree all leaves must be on the same level. Not even a balanced binary tree demands that.</p>
+    <p>So the direction of construction flips. Binary trees are built <b>top down</b> — the root is placed and nodes divide around it. A B-tree is built <b>bottom up</b> — leaves are positioned and rearranged, and the root is decided last.</p>
+    <p><b>The algorithm:</b></p>
+    <ul>
+      <li>Search the tree to find the leaf the key belongs in.</li>
+      <li>If there is room (fewer than <b>m−1</b> keys already), just insert it. Done.</li>
+      <li>Otherwise the node must <b>split</b>. Choose the <b>median</b>: lower keys form the left node, higher keys form the right node.</li>
+      <li>The <b>median moves up to the parent</b> — which may itself now be full, so it may split too.</li>
+      <li>Repeat upward until something has room, or the root is reached.</li>
+    </ul>
+
+    <h3>Worked example — insert 33, order 5</h3>
+    <p class="small">Order 5 means at most 4 keys per node. Watch the highlighted node.</p>
+    <div class="btreebox" data-btree="bt_i0"></div>
+    <p class="tcap">1 — the target leaf already holds 4 keys. It is full.</p>
+    <div class="btreebox" data-btree="bt_i1"></div>
+    <p class="tcap">2 — inserting 33 gives it 5 keys. Overflow.</p>
+    <div class="btreebox" data-btree="bt_i2"></div>
+    <p class="tcap">3 — split at the median 32. Left keeps 25 30, right takes 33 35, and <b>32 moves up into the parent</b>. The parent had room, so it stops here.</p>
+    <div class="box notes"><span class="tag">★ Read the pointer count</span> the parent went from 2 keys / 3 pointers to 3 keys / 4 pointers. The rule holds at every step.</div>
+
+    <h3>When the root itself is full</h3>
+    <p>This is the <b>only</b> case where a B-tree gains height.</p>
+    <div class="btreebox" data-btree="bt_r0"></div>
+    <p class="tcap">A full root receives a promoted median and overflows.</p>
+    <div class="btreebox" data-btree="bt_r1"></div>
+    <p class="tcap">It splits in two and a <b>new root</b> is created above them. The tree is one level taller — and every leaf is still on the same level.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-red"></span>Deleting</h2>
+    <p>Deletion asks two questions first:</p>
+    <ul>
+      <li><b>Is the key in a leaf?</b> If so, will the leaf still be at least half full afterwards?</li>
+      <li><b>Is it in an internal node?</b> Then which value becomes the new separator?</li>
+    </ul>
+    <p><b>Leaf nodes</b> can simply be deleted, which may leave the leaf with too few keys. Then the tree must be rebalanced: pick a sibling leaf and <b>redistribute</b> the keys. If a neighbour has enough to share, the median becomes the new separator key and the rest are shared out. If that leaves the parent short of keys, the fix <b>iterates upward</b> toward the root.</p>
+    <p><b>Internal nodes</b> cannot just be removed — they separate two subtrees. Promote one of:</p>
+    <ul>
+      <li>the <b>largest value in the left subtree</b>, or</li>
+      <li>the <b>smallest value in the right subtree</b>.</li>
+    </ul>
+    <p class="small">Either choice reduces the problem to deleting from a leaf or from another internal node — both of which we have now defined. Same trick as deleting from a BST.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-grn"></span>B*-Trees — delay the split</h2>
+    <p>Every node is a block, and every block costs a seek. <b>B*-Trees</b> reduce accesses further by keeping nodes fuller:</p>
+    <ul>
+      <li>A B-tree must be <b>at least half full</b>.</li>
+      <li>A <b>B*-Tree must be two-thirds full</b>.</li>
+    </ul>
+    <p><b>How it achieves that:</b> it delays splitting by splitting <b>2 nodes into 3</b>, rather than 1 node into 2.</p>
+    <ul>
+      <li><b>Overflow first.</b> If a leaf fills up but its sibling has room, the surplus <b>overflows into the sibling</b> instead of splitting.</li>
+      <li><b>Split only when both are full.</b> Then the two full nodes become three, each about two-thirds full.</li>
+    </ul>
+    <p class="small">A <b>B**-Tree</b> pushes the same idea again: required to be <b>75% full</b>.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq"></span>B+Trees — all data in the leaves</h2>
+    <p><b>The problem being solved:</b> in-order traversal. On a binary tree, in-order gives you the values in ascending order cheaply. On a B-tree it is awkward — leaves can be read a block at a time, but internal nodes give you only <b>one value per visit</b>, and you keep bouncing between levels.</p>
+    <p><b>The fix:</b> in a B+Tree the internal nodes are <b>pure index</b> — signposts only.</p>
+    <ul>
+      <li>Values stored in index nodes are <b>repeated in the leaves</b>.</li>
+      <li><b>All data lives in the leaves</b>; indexes only point to the right leaf.</li>
+      <li>Leaves are <b>chained with forward pointers</b>, so an in-order traversal reads leaves straight through and never touches an internal node.</li>
+    </ul>
+    <div class="btreebox" data-btree="bplus"></div>
+    <p class="tcap">A B+Tree. The index keys 20 and 30 <b>reappear</b> in the leaves — that is the giveaway.</p>
+    <p><b>Insert:</b> when a leaf splits, the promoted value becomes <b>both</b> a value in the leaf and an index in the parent.<br>
+    <b>Delete:</b> removing a value from a leaf does <b>not</b> require removing the matching index — it is still a perfectly good signpost. If a leaf gets too small it merges with a sibling and the indexes are updated.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-yel"></span>Prefix B+Trees and Bit Trees — shrink the index</h2>
+    <p>That last point is the doorway. If an index key does not have to <b>be</b> a stored value, it only has to <b>separate</b> them. So store the shortest thing that still separates.</p>
+    <p><b>Prefix B+Tree:</b> the index holds only a <b>prefix</b> of the key — <b>BF</b> instead of <b>BF90</b>, like the guide word at the top of a dictionary page.</p>
+    <ul>
+      <li>Shorter prefix → <b>more keys per index node</b>.</li>
+      <li>More keys → <b>more children</b> per node.</li>
+      <li>More children → <b>fewer levels</b> → fewer seeks.</li>
+    </ul>
+    <p class="small">If every key in a region starts <b>AB12XY…</b>, storing "AB" at every level between the leaves and the root is pure waste. Keep only the distinguishing part.</p>
+    <p><b>Bit Tree:</b> take it to the extreme. Store the <b>D-bit</b> — the single <b>distinction bit</b>, the first bit position where two values differ:</p>
+    <pre class="code" data-code="w6_dbit"></pre>
+    <p class="small">Especially valuable when the tree stores complicated objects: you never store the object in the index, only enough to steer the search to the right leaf.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-grn"></span>Tries</h2>
+    <p>Only a <b>portion of the key</b> is ever needed to search. But finding the right prefix is awkward, and maintaining prefixes is complicated.</p>
+    <p><b>A tree that navigates using parts of the key itself is called a "trie."</b></p>
+    <p class="small">The name comes from re<b>trie</b>val. Instead of comparing whole keys at each node, you consume the key one piece at a time — one character, or one bit — and that piece chooses the branch. The path from the root <i>spells</i> the key.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-red"></span>Exam traps</h2>
+    <ul>
+      <li><b>Keys vs pointers.</b> A node with <b>k keys has k+1 pointers</b>. Order m means m pointers and <b>m−1 keys</b> — not m keys.</li>
+      <li><b>"Order 5" is the pointer count.</b> So a node holds at most <b>4</b> keys and splits on the 5th.</li>
+      <li><b>Half full, not half empty.</b> B-tree ≥ ½ · B*-Tree ≥ ⅔ · B**-Tree ≥ ¾.</li>
+      <li><b>Splitting promotes the median</b>, and the median goes <b>up</b>, not into either half.</li>
+      <li><b>Height only grows at the root.</b> Every other split is absorbed by a parent.</li>
+      <li><b>B+ ≠ B.</b> In a B+Tree every value is in a leaf and index values are <b>repeated</b>. In a plain B-tree a value appears exactly once, wherever it sits.</li>
+      <li><b>Why any of this exists:</b> seek time. If a question asks "why not just use an AVL tree", the answer is milliseconds vs microseconds.</li>
+    </ul>
+  </div>
+
+</section>
+
+<!-- ===== A1 ===== -->
+<section class="page" id="page-a1">
+<div class="lvlchip c-blue">Assignment · Worksheet 1</div>
+  <h1>Assignment 1 — BST</h1>
+  <p class="sub">Build a Binary Search Tree (BST) step by step, then survive three deletions.</p>
+
+  <div class="card">
+    <h2><span class="sq"></span>What the worksheet asks (plain words)</h2>
+    <p><b>Part 1:</b> Start with an empty tree. Do these operations, in order, then draw the tree:</p>
+    <p><code>Insert 10, 5, 29, 4, 8, 28, 3, 6, 15</code> — then — <code>Delete 3, Delete 28</code></p>
+    <p><b>Part 2:</b> From that result, <code>Delete 10</code> and draw the tree again.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-yel"></span>The plan before drawing</h2>
+    <ul>
+      <li><b>Insert rule:</b> start at the root. Smaller → go left, bigger → go right. Insert at the first empty spot.</li>
+      <li><b>Delete a leaf:</b> just remove it.</li>
+      <li><b>Delete a node with 1 child:</b> the parent adopts the child.</li>
+      <li><b>Delete a node with 2 children:</b> <b>deletion by copying</b> — copy the <b>successor</b> (the leftmost node of the right subtree) into its place, then remove that node. <span class="small">(The method used in our class. Alternatives shown at the bottom.)</span></li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-grn"></span>Step by step — the nine insertions</h2>
+    <div class="minigrid">
+      <div class="mini"><span class="mnum">1 · Insert 10</span><div class="treebox" data-tree="a1_s1" data-small="1"></div><div class="tcap">Empty tree → 10 is the root</div></div>
+      <div class="mini"><span class="mnum">2 · Insert 5</span><div class="treebox" data-tree="a1_s2" data-small="1"></div><div class="tcap">5 &lt; 10 → left</div></div>
+      <div class="mini"><span class="mnum">3 · Insert 29</span><div class="treebox" data-tree="a1_s3" data-small="1"></div><div class="tcap">29 &gt; 10 → right</div></div>
+      <div class="mini"><span class="mnum">4 · Insert 4</span><div class="treebox" data-tree="a1_s4" data-small="1"></div><div class="tcap">&lt;10 left, &lt;5 left</div></div>
+      <div class="mini"><span class="mnum">5 · Insert 8</span><div class="treebox" data-tree="a1_s5" data-small="1"></div><div class="tcap">&lt;10 left, &gt;5 right</div></div>
+      <div class="mini"><span class="mnum">6 · Insert 28</span><div class="treebox" data-tree="a1_s6" data-small="1"></div><div class="tcap">&gt;10 right, &lt;29 left</div></div>
+      <div class="mini"><span class="mnum">7 · Insert 3</span><div class="treebox" data-tree="a1_s7" data-small="1"></div><div class="tcap">&lt;10, &lt;5, &lt;4 → left of 4</div></div>
+      <div class="mini"><span class="mnum">8 · Insert 6</span><div class="treebox" data-tree="a1_s8" data-small="1"></div><div class="tcap">&lt;10, &gt;5, &lt;8 → left of 8</div></div>
+      <div class="mini"><span class="mnum">9 · Insert 15</span><div class="treebox" data-tree="a1_s9" data-small="1"></div><div class="tcap">&gt;10, &lt;29, &lt;28 → left of 28</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-red"></span>The two deletions → Answer to Part 1</h2>
+    <div class="minigrid">
+      <div class="mini"><span class="mnum">Delete 3</span><div class="treebox" data-tree="a1_d3" data-small="1"></div><div class="tcap">3 is a leaf → just remove it</div></div>
+      <div class="mini"><span class="mnum">Delete 28</span><div class="treebox" data-tree="a1_ans1" data-small="1"></div><div class="tcap">28 has ONE child (15) → 29 adopts 15</div></div>
+    </div>
+    <div class="box alt">
+      <span class="tag">✔ Answer — Part 1</span>
+      <div class="treebox" data-tree="a1_ans1"></div>
+      <p class="tcap">After all 9 inserts, Delete 3 and Delete 28</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq"></span>Part 2 — Delete 10 (two children!)</h2>
+    <p>10 has two children (5 and 29) → <b>deletion by copying</b>:</p>
+    <ol>
+      <li>Find the <b>successor</b> = leftmost node of the <b>right</b> subtree. Go right to 29, then left as far as possible → <b>15</b>.</li>
+      <li><b>Copy 15</b> into 10's place.</li>
+      <li>Delete the old 15 node — it's a leaf, easy. (29 now has no left child.)</li>
+    </ol>
+    <div class="box alt">
+      <span class="tag">✔ Answer — Part 2</span>
+      <div class="treebox" data-tree="a1_ans2"></div>
+      <p class="tcap">15 replaces 10 at the root</p>
+    </div>
+    <h3>Alternative methods (only if asked for them)</h3>
+    <div class="minigrid">
+      <div class="mini"><span class="mnum">Copying · predecessor</span><div class="treebox" data-tree="a1_alt_pred" data-small="1"></div><div class="tcap">Rightmost of LEFT subtree = 8 copied up; 5 adopts 6</div></div>
+      <div class="mini"><span class="mnum">Deletion by merging</span><div class="treebox" data-tree="a1_alt_merge" data-small="1"></div><div class="tcap">Left root 5 takes over; 8 (rightmost of left tree) adopts the right tree</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-yel"></span>Full solution code</h2>
+    <p>This program builds the worksheet tree, does the deletions, and prints the tree in-order after each part (in-order = sorted, an easy way to check yourself).</p>
+    <pre class="code" data-code="a1_code"></pre>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-grn"></span>Practice — fill in the missing lines</h2>
+    <p>Same code, but the exam-critical lines are gone. Type them, then hit Check.</p>
+    <div id="pr-a1"></div>
+  </div>
+
+</section>
+
+<!-- ===== A2 ===== -->
+<section class="page" id="page-a2">
+<div class="lvlchip c-green">Assignment · Worksheet 2</div>
+  <h1>Assignment 2 — AVL</h1>
+  <p class="sub">Insert into an AVL (Adel'son-Vel'ski and Landis) tree — and rotate whenever a balance factor hits ±2.</p>
+
+  <div class="card">
+    <h2><span class="sq"></span>What the worksheet asks (plain words)</h2>
+    <p>You are given an AVL tree. <b>Part 1:</b> insert 18, keep it balanced, redraw. <b>Part 2:</b> then insert 15, then 14 (continuing from Part 1's result), redraw.</p>
+    <div class="treebox" data-tree="a2_orig" data-bf="1"></div>
+    <p class="tcap">The given tree — balance factors shown beside each node (all legal: −1, 0, +1)</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-yel"></span>The plan before drawing</h2>
+    <ol>
+      <li>Insert like a normal BST (smaller left, bigger right).</li>
+      <li>Recompute <b>balance factors</b> up the path: Balance = Height(left) − Height(right).</li>
+      <li>If a node hits <b>+2 or −2</b>: find the <b>lowest</b> such node, name the case by where the new key landed relative to it (LL / RR / LR / RL), and rotate. Remember: <b>the middle subtree switches parents</b>.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-red"></span>Part 1 — Insert 18</h2>
+    <p>Path: 18 &gt; 10 → right · 18 &gt; 13 → right · 18 &gt; 17 → right → new right child of 17.</p>
+    <div class="minigrid">
+      <div class="mini"><span class="mnum">After insert 18</span><div class="treebox" data-tree="a2_ins18" data-small="1" data-bf="1"></div><div class="tcap">Node 13 hits −2 → unbalanced!</div></div>
+    </div>
+    <p><b>Which case?</b> Relative to 13, the new key went into the <b>Right subtree of the Right child</b> (into 17's right side) → <b>RR</b> → one <b>left rotation</b>: 17 rotates up around 13.</p>
+    <div class="box alt">
+      <span class="tag">✔ Answer — Part 1</span>
+      <div class="treebox" data-tree="a2_ans1" data-bf="1"></div>
+      <p class="tcap">17 took 13's place; 13 became 17's left child. All balance factors legal.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq"></span>Part 2 — Insert 15, then Insert 14</h2>
+    <h3>Insert 15 — no rotation needed</h3>
+    <p>Path: 15 &gt; 10 → right · 15 &lt; 17 → left · 15 &gt; 13 → right → new right child of 13. Check the factors — everyone stays legal:</p>
+    <div class="minigrid">
+      <div class="mini"><span class="mnum">After insert 15</span><div class="treebox" data-tree="a2_ins15" data-small="1" data-bf="1"></div><div class="tcap">13 is −1, 17 is +1, 10 is 0 — all fine ✔</div></div>
+    </div>
+    <h3>Insert 14 — RL case!</h3>
+    <p>Path: 14 &gt; 10 → right · 14 &lt; 17 → left · 14 &gt; 13 → right · 14 &lt; 15 → left → new left child of 15.</p>
+    <div class="minigrid">
+      <div class="mini"><span class="mnum">After insert 14</span><div class="treebox" data-tree="a2_ins14" data-small="1" data-bf="1"></div><div class="tcap">13 hits −2 (17 goes +2 too — always fix the LOWEST one: 13)</div></div>
+      <div class="mini"><span class="mnum">Step 1 of 2</span><div class="treebox" data-tree="a2_rl1" data-small="1" data-bf="1"></div><div class="tcap">Rotate 14 RIGHT around 15…</div></div>
+    </div>
+    <p><b>Which case?</b> Relative to 13: the key went to the <b>Right child (15)</b>, then into its <b>Left subtree</b> → <b>RL</b> → double rotation: first rotate 14 <b>right</b> around 15, then rotate 14 <b>left</b> around 13. 14 ends up as the parent of both.</p>
+    <div class="box alt">
+      <span class="tag">✔ Answer — Part 2 (final tree)</span>
+      <div class="treebox" data-tree="a2_ans2" data-bf="1"></div>
+      <p class="tcap">14 is the parent of 13 and 15. Every balance factor is legal.</p>
+    </div>
+    <div class="box idea">
+      <span class="tag">ℹ Other reading of the question</span>
+      <p>If your teacher meant "start again from the <b>original</b> tree" for Part 2: insert 15 → 13 hits −2, RL case → 15 becomes parent of 13 and 17. Then insert 14 → right child of 13, no rotation. Final tree:</p>
+      <div class="treebox" data-tree="a2_altA" data-bf="1"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-yel"></span>Solution code — rotations you can run</h2>
+    <p>The exam wants drawings, but these little functions ARE the drawings, in code. Note the "middle subtree" line in each rotation.</p>
+    <pre class="code" data-code="a2_code"></pre>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-grn"></span>Practice — fill in the missing lines</h2>
+    <div id="pr-a2"></div>
+  </div>
+
+</section>
+
+<!-- ===== MIDTERM ===== -->
+<section class="page" id="page-midterm">
+  <div class="lvlchip c-red">Midterm · Exam Definition Bank</div>
+  <h1>Midterm — Exam Definitions</h1>
+  <p class="sub">Weeks 1, 2, 3, 4 and 6 — short formal definitions written for exam answers.</p>
+  <div class="box notes"><span class="tag">★ Exam technique</span>Write the one-sentence definition first. Add one key property or tiny example only after the definition.</div>
+  <div class="card" style="padding:0;overflow:hidden">
+    <iframe src="midterm.html" title="ALGO Midterm Exam Definitions" style="display:block;width:100%;height:78vh;min-height:720px;border:0;background:var(--bg)"></iframe>
+  </div>
+</section>
+
+<!-- ===== CHEAT ===== -->
+<section class="page" id="page-cheat">
+<div class="lvlchip c-red">Reference · Read this the night before</div>
+  <h1>Cheat Sheet</h1>
+  <p class="sub">Every short form, every function, every cost — on one page.</p>
+
+  <div class="card">
+    <h2><span class="sq"></span>Short forms ↔ long forms</h2>
+    <table class="simple">
+      <tr><th style="width:130px">Short</th><th>Long form &amp; meaning</th></tr>
+      <tr><td><b>BST</b></td><td><b>Binary Search Tree</b> (ordered binary tree): left subtree &lt; node &lt; right subtree.</td></tr>
+      <tr><td><b>AVL</b></td><td><b>Adel'son-Vel'ski and Landis</b> tree — keeps itself balanced on every insert/delete using rotations.</td></tr>
+      <tr><td><b>BF</b></td><td><b>Balance Factor</b> = Height(left) − Height(right). Legal values: +1, 0, −1.</td></tr>
+      <tr><td><b>DSW</b></td><td><b>Day, Stout &amp; Warren</b> algorithm — stretch the tree to a backbone, then rotate every other node. Rebalances the whole tree in O(n).</td></tr>
+      <tr><td><b>IPL</b></td><td><b>Internal Path Length</b> — the sum of all nodes' path lengths. Average BST search = IPL ÷ n.</td></tr>
+      <tr><td><b>V / L / R</b></td><td><b>Visit / traverse Left / traverse Right</b> — the building blocks of depth-first traversal.</td></tr>
+      <tr><td><b>VLR</b></td><td><b>Pre-order</b> traversal (Visit first). On an expression tree → <b>Polish notation</b> (prefix).</td></tr>
+      <tr><td><b>LVR</b></td><td><b>In-order</b> traversal (Visit in the middle). On a BST → <b>sorted order</b>. On an expression tree → infix.</td></tr>
+      <tr><td><b>LRV</b></td><td><b>Post-order</b> traversal (Visit last). On an expression tree → <b>Reverse Polish</b> (postfix).</td></tr>
+      <tr><td><b>LL / RR / LR / RL</b></td><td><b>Left-Left, Right-Right, Left-Right, Right-Left</b> — the 4 AVL cases, named by where the new key landed. LL → one right rotation. RR → one left rotation. LR and RL → double rotations.</td></tr>
+      <tr><td><b>LIFO</b></td><td><b>Last In, First Out</b> — the stack rule (canteen trays).</td></tr>
+      <tr><td><b>FIFO</b></td><td><b>First In, First Out</b> — the queue rule (bank line).</td></tr>
+      <tr><td><b>STL</b></td><td><b>Standard Template Library</b> — C++'s built-in stack, queue, vector, list.</td></tr>
+      <tr><td><b>Big O</b></td><td><b>Upper bound</b> — grows no faster than this (used most).</td></tr>
+      <tr><td><b>Big Ω</b></td><td><b>Big Omega — lower bound</b> — grows at least this fast.</td></tr>
+      <tr><td><b>Big Θ</b></td><td><b>Big Theta — tight bound</b> — upper and lower at once.</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-yel"></span>The growth ladder &amp; key formulas</h2>
+    <h3>Slowest-growing (best) → fastest-growing (worst)</h3>
+    <table class="simple">
+      <tr><th>Cost</th><th>Name</th><th>Feel</th></tr>
+      <tr><td><b>O(1)</b></td><td>Constant</td><td>Same speed at any size — array access, push, pop.</td></tr>
+      <tr><td><b>O(log n)</b></td><td>Logarithmic</td><td>Double the data → +1 step. Balanced BST search.</td></tr>
+      <tr><td><b>O(√n)</b></td><td>Square root</td><td>The two-list priority queue trick.</td></tr>
+      <tr><td><b>O(n)</b></td><td>Linear</td><td>Touch everything once — list walk, traversal, DSW.</td></tr>
+      <tr><td><b>O(n²)</b></td><td>Quadratic</td><td>Loop in a loop — selection sort.</td></tr>
+    </table>
+    <h3>Formulas to write without thinking</h3>
+    <ul>
+      <li>Array address: <code>address(a[i]) = base + elementSize · i</code> — e.g. base 1000, 4-byte ints: a[i] at <b>1000 + 4i</b>.</li>
+      <li>Complete binary tree: <b>m = k + 1</b> (leaves = nonterminal nodes + 1).</li>
+      <li><b>Path length</b> = arcs from root · <b>Level</b> = path length + 1 · <b>Height</b> = longest path length. Empty subtree height = <b>−1</b>.</li>
+      <li><b>Balance = Height(left) − Height(right)</b> ∈ {−1, 0, +1}; at ±2 → rotate at the <b>lowest</b> bad node.</li>
+      <li>Average BST search = <b>IPL ÷ n</b>. Balanced tree of 10,000 nodes: height = lg(10,001) ≈ 13.3 → <b>14 tests</b>.</li>
+      <li>Sparse table (CMU): 25,000 × 1,000 = 25 MB table, only 0.7% used → <b>99.3% empty</b>; two arrays &lt; 5%; linked lists even less.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-grn"></span>Arrays &amp; linked lists — every operation, every cost</h2>
+    <h3>Array</h3>
+    <table class="simple">
+      <tr><th>Operation</th><th>Cost</th><th>Why</th></tr>
+      <tr><td>Get / set <code>a[i]</code></td><td><b>O(1)</b></td><td>One address calculation.</td></tr>
+      <tr><td>Iterate all elements</td><td><b>O(n)</b></td><td>Touch each once.</td></tr>
+      <tr><td>Insert / delete in the middle</td><td><b>O(n)</b></td><td>Everything after it shifts.</td></tr>
+      <tr><td>Insert at the end</td><td><b>amortised O(1)</b></td><td>Usually free space is waiting.</td></tr>
+    </table>
+    <h3>Singly linked list</h3>
+    <table class="simple">
+      <tr><th>Function</th><th>Cost</th><th>Why</th></tr>
+      <tr><td><code>headInsert / push_front</code></td><td><b>O(1)</b></td><td>3 pointer moves at the front.</td></tr>
+      <tr><td><code>tailInsert / push_back</code></td><td><b>O(1)</b></td><td>If we keep a tail pointer.</td></tr>
+      <tr><td><code>deleteHead()</code></td><td><b>O(1)</b></td><td>tmp → move head → delete tmp.</td></tr>
+      <tr><td><code>deleteTail()</code></td><td><b>O(n)</b></td><td>Must walk to the node before the tail.</td></tr>
+      <tr><td><code>isInList()</code> search</td><td><b>best O(1) · avg O(n) · worst O(n)</b></td><td>Head hit is lucky; otherwise walk.</td></tr>
+    </table>
+    <h3>Doubly linked list</h3>
+    <table class="simple">
+      <tr><th>Function</th><th>Cost</th><th>Why</th></tr>
+      <tr><td><code>deleteTail()</code></td><td><b>O(1)</b></td><td><code>tail = tail-&gt;prev;</code> — the whole point!</td></tr>
+      <tr><td>Insert / delete elsewhere</td><td>same as singly</td><td>Just more pointers to fix carefully.</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq"></span>Stacks, queues &amp; priority queues — every function</h2>
+    <h3>Stack (LIFO)</h3>
+    <table class="simple">
+      <tr><th>Function</th><th>Cost</th><th>Note</th></tr>
+      <tr><td><code>push(el)</code></td><td><b>O(1)</b></td><td>Vector version: O(n) for the one push when full (re-allocate + copy).</td></tr>
+      <tr><td><code>pop()</code></td><td><b>O(1)</b></td><td>Our class returns the element; <b>STL pop() returns nothing</b> — use <code>top()</code> first.</td></tr>
+      <tr><td><code>topEl()</code> / STL <code>top()</code></td><td><b>O(1)</b></td><td>Look without removing.</td></tr>
+      <tr><td><code>isEmpty()</code> / <code>clear()</code></td><td><b>O(1)</b></td><td>STL: <code>empty()</code>, <code>size()</code>.</td></tr>
+    </table>
+    <h3>Queue (FIFO)</h3>
+    <table class="simple">
+      <tr><th>Function</th><th>Cost</th><th>Note</th></tr>
+      <tr><td><code>enqueue(el)</code> (STL <code>push</code>)</td><td><b>O(1)</b></td><td>At the back. Doubly linked list or circular array.</td></tr>
+      <tr><td><code>dequeue()</code> (STL <code>pop</code>)</td><td><b>O(1)</b></td><td>From the front. Singly linked list would cost O(n) at one end!</td></tr>
+      <tr><td><code>firstEl()</code> (STL <code>front()</code>, <code>back()</code>)</td><td><b>O(1)</b></td><td>Look without removing.</td></tr>
+      <tr><td>Circular array tests</td><td><b>O(1)</b></td><td><code>isEmpty: first == -1</code> · <code>isFull: first == 0 &amp;&amp; last == size-1 || first == last+1</code></td></tr>
+    </table>
+    <h3>Priority queue — 4 ways to build it</h3>
+    <table class="simple">
+      <tr><th>Implementation</th><th>enqueue</th><th>dequeue</th></tr>
+      <tr><td>Sorted linked list</td><td><b>O(n)</b></td><td><b>O(1)</b></td></tr>
+      <tr><td>Unsorted linked list</td><td><b>O(1)</b></td><td><b>O(n)</b></td></tr>
+      <tr><td>Two lists (ordered high + unordered low)</td><td colspan="2">≈ <b>O(√n)</b></td></tr>
+      <tr><td><b>Heap</b> (add at bottom → climb up · root out → last node sinks down)</td><td colspan="2">one path of the tree ≈ <b>height (log n)</b></td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-red"></span>Trees — every operation, every cost</h2>
+    <table class="simple">
+      <tr><th>Operation</th><th>Cost</th><th>Remember</th></tr>
+      <tr><td><code>search()</code> in a BST</td><td><b>worst O(n) · avg IPL/n · balanced ≈ lg n</b></td><td>Worst = linked-list-shaped tree.</td></tr>
+      <tr><td><code>insert()</code></td><td>same as search</td><td>Search until a dead end, place the node there.</td></tr>
+      <tr><td>Delete: leaf / one child</td><td>easy</td><td>Cut it / parent adopts the grandchild.</td></tr>
+      <tr><td>Delete: two children</td><td>—</td><td><b>Merging</b>: left root up, rightmost of left adopts right tree (height may grow). <b>Copying</b>: copy predecessor/successor value up (height doesn't grow).</td></tr>
+      <tr><td>All traversals (VLR, LVR, LRV, breadth-first, iterative, Morris)</td><td><b>O(n)</b> time</td><td>They differ in ORDER and SPACE, not time. Breadth-first: queue. Iterative pre-order: stack. Morris: no stack (5–10% faster in tests).</td></tr>
+      <tr><td><code>balance()</code> from a sorted array</td><td>needs extra array</td><td>Middle = root, recurse both halves.</td></tr>
+      <tr><td><b>DSW</b> full rebalance</td><td><b>O(n)</b></td><td>Backbone first, then rotate every other node.</td></tr>
+      <tr><td><b>AVL</b> fix after insert</td><td>local rotations</td><td>1 rotation (LL, RR) or 2 (LR, RL) at the lowest ±2 node. Deletion: check the whole path to the root.</td></tr>
+      <tr><td><b>Splay</b> tree operations</td><td><b>O(log n) amortized</b></td><td>But experiments: AVL almost always wins.</td></tr>
+      <tr><td><b>Heapsort</b></td><td>beats selection sort's <b>O(n²)</b></td><td>Build heap → pop root → re-heap → repeat, in place with swaps.</td></tr>
+    </table>
+    <p class="small">🔑 One line to rule all rotations: <b>the middle subtree switches parents.</b></p>
+  </div>
+
+</section>
+
+<!-- ===== CARDS ===== -->
+<section class="page" id="page-cards">
+<div class="lvlchip">Practice · Flashcards</div>
+  <h1>Flashcards</h1>
+  <p class="sub">Click the card to flip it. Say the answer out loud <i>before</i> you flip — recall beats recognition.</p>
+
+  <div class="chiprow" id="fc-filters">
+    <button class="chip on" data-fw="0" onclick="fcFilter(0,this)">All</button>
+    <button class="chip" data-fw="1" onclick="fcFilter(1,this)">Week 1</button>
+    <button class="chip" data-fw="2" onclick="fcFilter(2,this)">Week 2</button>
+    <button class="chip" data-fw="3" onclick="fcFilter(3,this)">Week 3</button>
+    <button class="chip" data-fw="4" onclick="fcFilter(4,this)">Week 4</button>
+    <button class="chip" data-fw="6" onclick="fcFilter(6,this)">Week 6</button>
+  </div>
+
+  <div class="fc-stage">
+    <div class="fc" id="fc" onclick="fcFlip()">
+      <div class="fc-in" id="fc-in">
+        <div class="fc-face fc-front">
+          <span class="side">Q</span><span class="wk" id="fc-wk-f"></span>
+          <div id="fc-q"></div>
+        </div>
+        <div class="fc-face fc-back">
+          <span class="side">A</span><span class="wk" id="fc-wk-b"></span>
+          <div id="fc-a"></div>
+        </div>
+      </div>
+    </div>
+    <div class="fc-hint">click the card to flip</div>
+    <div class="fc-count" id="fc-count"></div>
+    <div class="btnrow" style="justify-content:center">
+      <button class="btn" onclick="fcMove(-1)">◀ Back</button>
+      <button class="btn b-blue" onclick="fcMove(1)">Next ▶</button>
+      <button class="btn b-yel" onclick="fcShuffle()">⟳ Shuffle</button>
+    </div>
+  </div>
+
+</section>
+
+<!-- ===== QUIZ ===== -->
+<section class="page" id="page-quiz">
+<div class="lvlchip c-red">Practice · Quiz</div>
+  <h1>Quiz</h1>
+  <p class="sub">Pick an answer — you'll see right away if it's correct, and why. </p>
+
+  <div class="chiprow" id="qz-filters">
+    <button class="chip on" onclick="qzStart(0,this)">All weeks</button>
+    <button class="chip" onclick="qzStart(1,this)">Week 1</button>
+    <button class="chip" onclick="qzStart(2,this)">Week 2</button>
+    <button class="chip" onclick="qzStart(3,this)">Week 3</button>
+    <button class="chip" onclick="qzStart(4,this)">Week 4</button>
+    <button class="chip" onclick="qzStart(6,this)">Week 6</button>
+  </div>
+
+  <div class="card" id="qz-card">
+    <div class="q-top">
+      <div class="q-prog" id="qz-prog"></div>
+      <div class="q-score" id="qz-score"></div>
+    </div>
+    <div id="qz-body"></div>
+  </div>
+
+</section>
+
+<!-- ===== PRACTICE ===== -->
+<section class="page" id="page-practice">
+<div class="lvlchip c-green">Boss level · Code Practice</div>
+  <h1>Code Practice</h1>
+  <p class="sub">Exam mode: real programs from our lessons with the important lines missing. Type each missing line into the box, then press <b>Check</b>. Spacing doesn't matter — the logic does.</p>
+
+  <div class="box idea">
+    <span class="tag">ℹ How it works</span>
+    <ul>
+      <li>Green box = your line is right. Red box = wrong, and the correct line appears under it in green.</li>
+      <li>Small typing differences in <b>spaces</b> are ignored. <code>for(int i=0;i&lt;n;i++)</code> = <code>for (int i = 0; i &lt; n; i++)</code>.</li>
+      <li>Start with the Easy one in each week. The Hard ones are closest to exam questions.</li>
+    </ul>
+  </div>
+
+  <div class="chiprow" id="pr-filters">
+    <button class="chip on" onclick="prFilter(0,this)">All</button>
+    <button class="chip" onclick="prFilter(1,this)">Week 1</button>
+    <button class="chip" onclick="prFilter(2,this)">Week 2</button>
+    <button class="chip" onclick="prFilter(3,this)">Week 3</button>
+    <button class="chip" onclick="prFilter(4,this)">Week 4</button>
+  </div>
+
+  <div id="pr-list"></div>
+</section>
+
+</div></main>
+
 <script>
-fetch("./legacy.html?v=20260822")
-.then(function(r){if(!r.ok)throw new Error("HTTP "+r.status);return r.text()})
-.then(function(html){
-  var addon='<script src="./tree-mastery.js?v=20260823b"><\/script>'+
-            '<script src="./assignment3.js?v=20260823b"><\/script>'+
-            '<script src="./tree-mastery-upgrade.js?v=20260823b"><\/script>';
-  if(html.indexOf("</body>")>-1)html=html.replace("</body>",addon+"</body>");else html+=addon;
-  document.open();document.write(html);document.close();
-})
-.catch(function(err){document.getElementById("boot").innerHTML='Could not load the ALGO console. <a href="./legacy.html">Open the base console</a><br><small>'+String(err)+'</small>'});
+
+/* ================= tiny helpers ================= */
+const $ = id => document.getElementById(id);
+const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+/* ================= navigation ================= */
+function go(id){
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
+  $('page-'+id).classList.add('on');
+  document.querySelectorAll('.navbtn').forEach(b => b.classList.toggle('on', b.dataset.page === id));
+  $('side').classList.remove('open');
+  $('scrim').classList.remove('show');
+  window.scrollTo(0,0);
+}
+function toggleSide(){
+  $('side').classList.toggle('open');
+  $('scrim').classList.toggle('show', $('side').classList.contains('open'));
+}
+
+/* ================= light / dark theme ================= */
+function applyTheme(dark){
+  document.documentElement.classList.toggle('dark', dark);
+  const b1 = $('themebtn');  if (b1) b1.textContent = dark ? '☀ Light mode' : '🌙 Dark mode';
+  const b2 = $('themebtn2'); if (b2) b2.textContent = dark ? '☀' : '🌙';
+  try { localStorage.setItem('algoTheme', dark ? 'dark' : 'light'); } catch(e) {}
+}
+function toggleTheme(){
+  applyTheme(!document.documentElement.classList.contains('dark'));
+}
+(function(){
+  let saved = null;
+  try { saved = localStorage.getItem('algoTheme'); } catch(e) {}
+  const prefersDark = (typeof matchMedia === 'function') && matchMedia('(prefers-color-scheme: dark)').matches;
+  applyTheme(saved ? saved === 'dark' : prefersDark);
+})();
+
+/* ================= C++ syntax highlighter ================= */
+function hlCpp(src){
+  const re = /(\/\/[^\n]*|\/\*[\s\S]*?\*\/)|("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*')|(#\w+[^\n]*)|\b(if|else|while|for|return|new|delete|class|struct|public|private|protected|template|const|using|namespace|true|false|break|continue|this|not|and|or)\b|\b(int|void|bool|char|float|double|T|Node|BSTNode|BST|Stack|Queue|ArrayQueue|string|vector|list|size_type)\b|\b(\d+)\b/g;
+  let out = '', last = 0, m;
+  while((m = re.exec(src)) !== null){
+    out += esc(src.slice(last, m.index));
+    const cls = m[1] ? 'tok-c' : m[2] ? 'tok-s' : m[3] ? 'tok-p' : m[4] ? 'tok-k' : m[5] ? 'tok-t' : 'tok-n';
+    out += '<span class="'+cls+'">'+esc(m[0])+'</span>';
+    last = m.index + m[0].length;
+  }
+  return out + esc(src.slice(last));
+}
+
+/* ================= code samples (weeks & assignments) ================= */
+const CODE = {
+
+w6_node:
+`template <class T, int M>
+class BTreeNode {
+public:
+    BTreeNode();
+    BTreeNode(const T&);
+private:
+    bool leaf;
+    int keyTally;              // how many keys are in use
+    T keys[M-1];               // m-1 keys
+    BTreeNode *pointers[M];    // m pointers
+    friend BTree<T,M>;
+};`,
+
+w6_search:
+`BTreeNode *BTreeSearch(keyType K, BTreeNode *node) {
+    if (node != 0) {
+        for (int i = 1; i <= node->keyTally && node->keys[i-1] < K; i++)
+            return BTreeSearch(K, node->pointers[i-1]);
+        else return node;
+    }
+    else return 0;
+}`,
+
+w6_dbit:
+`K = 01001011
+N = 01001110
+        ^ first differing bit - the D-bit is all the index stores`,
+
+
+w1_main:
+`#include <iostream>              // gives us cout
+using namespace std;
+
+int main() {
+    int a[8] = {3, 7, 1, 9, 4, 6, 2, 8};
+    int n = 8;                    // n = size of the data
+
+    // ---- O(1): one direct look-up. Always 1 step. ----
+    cout << a[0] << endl;
+
+    // ---- O(n): the loop body runs n times. ----
+    int sum = 0;
+    for (int i = 0; i < n; i++)   // i goes 0,1,...,n-1
+        sum += a[i];              // one step each time
+
+    // ---- O(n2): a loop INSIDE a loop = n * n steps. ----
+    int pairs = 0;
+    for (int i = 0; i < n; i++)       // n rounds...
+        for (int j = 0; j < n; j++)   // ...n steps in each round
+            pairs++;
+
+    // ---- O(log n): n is cut in half every round. ----
+    int steps = 0;
+    int m = n;
+    while (m > 1) {               // stop when 1 is left
+        m = m / 2;                // halve the size
+        steps++;                  // 8 -> 4 -> 2 -> 1 = 3 steps
+    }
+
+    cout << sum << " " << pairs << " " << steps << endl;
+    return 0;
+}`,
+
+w2_dyn:
+`// ---- dynamic 1D array ----
+int* a = new int[10];        // memory given at RUN time
+a[0] = 7;                    // use it like a normal array
+delete [] a;                 // give the memory back!
+
+// ---- dynamic 2D array = an array of arrays ----
+int** b = new int*[3];       // 3 row pointers
+for (int i = 0; i < 3; i++)
+    b[i] = new int[4];       // each row holds 4 ints
+
+for (int i = 0; i < 3; i++)  // deleting: rows first...
+    delete [] b[i];
+delete [] b;                 // ...then the row pointers`,
+
+w2_jag:
+`int** a = new int*[3];   // 3 rows...
+a[0] = new int[5];       // ...each with a different size
+a[1] = new int[2];
+a[2] = new int[4];`,
+
+w2_node:
+`class Node {
+public:
+    Node() {                     // constructor 1: empty node
+        next = 0;                // points to NULL (0)
+    }
+    Node(int i, Node *in = 0) {  // constructor 2: node with data
+        info = i;                // store the data
+        next = in;               // point to the next node
+    }
+    int info;                    // the data
+    Node *next;                  // pointer to the next node
+};`,
+
+w2_build:
+`Node *p = new Node(1);          // p -> [1|0]
+p->next = new Node(2);          // p -> [1] -> [2|0]
+p->next->next = new Node(3);    // p -> [1] -> [2] -> [3|0]`,
+
+w2_deltail:
+`Node *tmp = head;               // start at the front
+while (tmp->next->next != 0)    // stop at the node BEFORE the tail
+    tmp = tmp->next;            // step forward
+delete tmp->next;               // free the last node
+tmp->next = 0;                  // tmp is the new end of the list
+tail = tmp;                     // move the tail pointer back`,
+
+w2_dllnode:
+`class Node {
+    int data;      // the data
+    Node *prev;    // pointer to the node BEFORE
+    Node *next;    // pointer to the node AFTER
+};`,
+
+w2_main:
+`#include <iostream>
+using namespace std;
+
+class Node {
+public:
+    Node(int i, Node *in = 0) { info = i; next = in; }
+    int info;                       // the data
+    Node *next;                     // pointer to the next node
+};
+
+int main() {
+    Node *head = 0;                 // empty list: head is NULL
+
+    // head_insert 3, then 2, then 1  ->  list is 1 2 3
+    for (int x = 3; x >= 1; x--) {
+        Node *tmp = new Node(x);    // step 1: make the new node
+        tmp->next = head;           // step 2: aim it at the old first node
+        head = tmp;                 // step 3: head moves to the new node
+    }
+
+    // search: is 2 in the list?  (isInList idea)
+    Node *p = head;
+    while (p != 0 && p->info != 2)  // walk until found or NULL
+        p = p->next;
+    cout << (p != 0 ? "found" : "not there") << endl;
+
+    // print the whole list
+    for (p = head; p != 0; p = p->next)
+        cout << p->info << " ";     // 1 2 3
+    cout << endl;
+
+    // delete from the head (safe 3 steps) until empty
+    while (head != 0) {
+        Node *tmp = head;           // 1: remember the old head
+        head = head->next;          // 2: move head forward
+        delete tmp;                 // 3: NOW it is safe to free it
+    }
+    return 0;
+}`,
+
+w3_stack:
+`#include <vector>
+template<class T, int capacity = 30>
+class Stack {
+public:
+    Stack() { pool.reserve(capacity); }     // reserve space up front
+    void clear() { pool.clear(); }          // empty the stack
+    bool isEmpty() const { return pool.empty(); }
+    T& topEl() { return pool.back(); }      // look, don't remove
+    T pop() {
+        T el = pool.back();                 // read the top element
+        pool.pop_back();                    // remove it
+        return el;                          // hand it back
+    }
+    void push(const T& el) { pool.push_back(el); }   // add on top
+private:
+    vector<T> pool;                         // elements live in a vector
+};`,
+
+w3_aq:
+`template<class T, int size = 100>
+class ArrayQueue {
+public:
+    ArrayQueue() { first = last = -1; }     // -1 means "empty"
+    bool isEmpty() { return first == -1; }
+    bool isFull() {
+        return first == 0 && last == size-1   // full with no wrap
+            || first == last + 1;              // full, wrapped around
+    }
+    void enqueue(T el) {
+        if (!isFull())
+            if (last == size-1 || last == -1) {
+                storage[0] = el;            // wrap to cell 0 (or first ever add)
+                last = 0;
+                if (first == -1)
+                    first = 0;              // was empty: first points here too
+            }
+            else storage[++last] = el;      // normal case: one step right
+        else cout << "Full queue" << endl;
+    }
+    T dequeue() {
+        T tmp = storage[first];             // take the FRONT element
+        if (first == last)
+            last = first = -1;              // it was the only one: now empty
+        else if (first == size-1)
+            first = 0;                      // front wraps to cell 0
+        else first++;                       // normal case: front steps right
+        return tmp;
+    }
+private:
+    int first, last;                        // indexes of front and back
+    T storage[size];                        // a normal array underneath
+};`,
+
+w4_classes:
+`template<class T>
+class BSTNode {
+public:
+    BSTNode() { left = right = 0; }          // empty node, no children
+    BSTNode(const T& el, BSTNode *l = 0, BSTNode *r = 0) {
+        key = el; left = l; right = r;       // data + two child pointers
+    }
+    T key;                                   // the value stored here
+    BSTNode *left, *right;                   // the two children
+};                                           // members PUBLIC on purpose:
+                                             // the BST class must reach them
+template<class T>
+class BST {
+public:
+    BST() { root = 0; }                      // empty tree: no root yet
+protected:
+    BSTNode<T>* root;                        // the only way into the tree
+};`,
+
+w4_search:
+`template<class T>
+T* BST<T>::search(BSTNode<T>* p, const T& el) const {
+    while (p != 0)                  // stop if we fall off the tree
+        if (el == p->key)
+            return &p->key;         // found it -> stop searching
+        else if (el < p->key)
+            p = p->left;            // smaller -> follow LEFT pointer
+        else
+            p = p->right;           // bigger -> follow RIGHT pointer
+    return 0;                       // NULL: el is not in the tree
+}`,
+
+w4_trav:
+`template<class T>
+void BST<T>::inorder(BSTNode<T> *p) {    // LVR = in-order
+    if (p != 0) {                        // empty subtree? do nothing
+        inorder(p->left);                // L: whole left subtree first
+        visit(p);                        // V: then this node
+        inorder(p->right);               // R: right subtree last
+    }
+}
+
+template<class T>
+void BST<T>::preorder(BSTNode<T> *p) {   // VLR = pre-order
+    if (p != 0) {
+        visit(p);                        // V comes FIRST...
+        preorder(p->left);               // ...then L
+        preorder(p->right);              // ...then R
+    }
+}
+
+template<class T>
+void BST<T>::postorder(BSTNode<T> *p) {  // LRV = post-order
+    if (p != 0) {
+        postorder(p->left);              // L
+        postorder(p->right);             // R
+        visit(p);                        // V comes LAST
+    }
+}`,
+
+w4_iter:
+`template<class T>
+void BST<T>::iterativePreorder() {
+    Stack<BSTNode<T>*> travStack;         // our own stack
+    BSTNode<T> *p = root;
+    if (p != 0) {
+        travStack.push(p);                // start with the root
+        while (!travStack.empty()) {
+            p = travStack.pop();
+            visit(p);                     // V
+            if (p->right != 0)
+                travStack.push(p->right); // push RIGHT first...
+            if (p->left != 0)
+                travStack.push(p->left);  // ...so LEFT pops out first
+        }
+    }
+}`,
+
+w4_morris:
+`MorrisInOrder()
+    while not finished
+        if node has no left descendant
+            visit it;                 // nothing on the left: V
+            go to the right;          // then R
+        else
+            make this node the right child of the
+                rightmost node in its left descendant;
+            go to this left descendant;`,
+
+w4_balance:
+`template<class T>
+void BST<T>::balance(T data[], int first, int last) {
+    if (first <= last) {                  // still elements to place?
+        int middle = (first + last) / 2;  // find the middle
+        insert(data[middle]);             // middle becomes the (sub)root
+        balance(data, first, middle - 1); // recurse: left half
+        balance(data, middle + 1, last);  // recurse: right half
+    }
+}`,
+
+a1_code:
+`#include <iostream>
+using namespace std;
+
+struct Node {
+    int key;                            // the value
+    Node *left, *right;                 // the two children
+    Node(int k) { key = k; left = right = 0; }
+};
+
+// ---- insert: smaller left, bigger right, first empty spot ----
+Node* insert(Node* p, int x) {
+    if (p == 0) return new Node(x);     // empty spot found: place it here
+    if (x < p->key)
+        p->left = insert(p->left, x);   // smaller -> into the left subtree
+    else
+        p->right = insert(p->right, x); // bigger -> into the right subtree
+    return p;                           // hand this node back unchanged
+}
+
+// ---- remove: the three deletion cases ----
+Node* remove(Node* p, int x) {
+    if (p == 0) return 0;               // not found: nothing to do
+    if (x < p->key)
+        p->left = remove(p->left, x);   // keep searching left
+    else if (x > p->key)
+        p->right = remove(p->right, x); // keep searching right
+    else {                              // this is the node to delete
+        if (p->left == 0 && p->right == 0) {  // CASE 1: a leaf
+            delete p;
+            return 0;                   // parent will point to NULL
+        }
+        if (p->left == 0) {             // CASE 2: only a right child
+            Node* child = p->right;
+            delete p;
+            return child;               // parent adopts the grandchild
+        }
+        if (p->right == 0) {            // CASE 2: only a left child
+            Node* child = p->left;
+            delete p;
+            return child;
+        }
+        // CASE 3: two children -> deletion by copying (successor)
+        Node* s = p->right;             // go right ONCE...
+        while (s->left != 0)
+            s = s->left;                // ...then left as far as possible
+        p->key = s->key;                // copy the successor's value up
+        p->right = remove(p->right, s->key);  // delete the successor node
+    }
+    return p;
+}
+
+void inorder(Node* p) {                 // LVR: prints sorted order
+    if (p != 0) {
+        inorder(p->left);
+        cout << p->key << " ";
+        inorder(p->right);
+    }
+}
+
+int main() {
+    Node* root = 0;
+    int vals[9] = {10, 5, 29, 4, 8, 28, 3, 6, 15};
+    for (int i = 0; i < 9; i++)
+        root = insert(root, vals[i]);   // build the worksheet tree
+
+    root = remove(root, 3);             // Delete 3  (a leaf)
+    root = remove(root, 28);            // Delete 28 (one child)
+    inorder(root); cout << endl;        // Part 1 check: 4 5 6 8 10 15 29
+
+    root = remove(root, 10);            // Delete 10 (two children!)
+    inorder(root); cout << endl;        // Part 2 check: 4 5 6 8 15 29
+    return 0;
+}`,
+
+a2_code:
+`#include <iostream>
+using namespace std;
+
+struct Node {
+    int key;
+    Node *left, *right;
+    Node(int k) { key = k; left = right = 0; }
+};
+
+// height counted in ARCS: empty tree = -1, one node = 0
+int height(Node* p) {
+    if (p == 0) return -1;              // empty subtree
+    int hl = height(p->left);           // height of the left side
+    int hr = height(p->right);          // height of the right side
+    return 1 + (hl > hr ? hl : hr);     // one arc down + taller side
+}
+
+// Balance = Height(left) - Height(right)  ->  must stay -1, 0, +1
+int balanceFactor(Node* p) {
+    return height(p->left) - height(p->right);
+}
+
+// LEFT rotation: the RIGHT child rises.  Fixes an RR case.
+Node* rotateLeft(Node* par) {
+    Node* ch = par->right;      // the child that comes up
+    par->right = ch->left;      // KEY LINE: middle subtree switches parents
+    ch->left = par;             // the old parent drops down-left
+    return ch;                  // ch is the new root of this subtree
+}
+
+// RIGHT rotation: the LEFT child rises.  Fixes an LL case.
+Node* rotateRight(Node* par) {
+    Node* ch = par->left;       // the child that comes up
+    par->left = ch->right;      // KEY LINE: middle subtree switches parents
+    ch->right = par;            // the old parent drops down-right
+    return ch;                  // new root of this subtree
+}
+
+// LR case = rotateLeft(child)  then rotateRight(parent)
+// RL case = rotateRight(child) then rotateLeft(parent)
+
+int main() {
+    // Worksheet Part 1: after INSERT 18, node 13 is unbalanced (RR)
+    Node* n13 = new Node(13);
+    n13->right = new Node(17);
+    n13->right->right = new Node(18);   // the newly inserted key
+    cout << balanceFactor(n13) << endl; // -2  -> must rotate!
+
+    Node* top = rotateLeft(n13);        // RR fix: one left rotation
+    cout << top->key << endl;           // 17 is the new subtree root
+    cout << balanceFactor(top) << endl; // 0  -> balanced again
+    return 0;
+}`
+};
+
+/* ================= tree drawing ================= */
+/* node spec: [value, left, right, flag]  (0 = no child, flag 'h' = highlight) */
+const TREES = {
+  t_bst:      [5,[3,[2,[1],0],[4]],[8,[6,0,[7]],[9]]],
+  t_merge:    [3,[2,[1],0],[4,0,[8,[6,0,[7]],[9]]]],
+  t_copy:     [4,[3,[2,[1],0],0],[8,[6,0,[7]],[9]]],
+  avl_ll_bad: [10,[5,[4,[3,[2,0,0,'h'],0],0],[6]],[13,0,[17]]],
+  avl_ll_fix: [10,[5,[3,[2],[4],'h'],[6]],[13,0,[17]]],
+  avl_rr_bad: [10,[5,[4],[6,0,[7,0,[8,0,0,'h']]]],[13,0,[17]]],
+  avl_rr_fix: [10,[5,[4],[7,[6],[8],'h']],[13,0,[17]]],
+  avl_lr_bad: [10,[5,[4,[2,0,[3,0,0,'h']],0],[6]],[13,0,[17]]],
+  avl_lr_fix: [10,[5,[3,[2],[4],'h'],[6]],[13,0,[17]]],
+  avl_rl_bad: [10,[5,[4],[6,0,[8,[7,0,0,'h'],0]]],[13,0,[17]]],
+  avl_rl_fix: [10,[5,[4],[7,[6],[8],'h']],[13,0,[17]]],
+  avl_rrr_bad:[10,[5,[4],[7,[6],[8,0,[9,0,0,'h']]]],[13,0,[17]]],
+  avl_rrr_fix:[10,[7,[5,[4],[6]],[8,0,[9]],'h'],[13,0,[17]]],
+  expr_m5:    ['+',['-',[2],['*',[3],[4]]],[5]],
+  expr_m9:    ['*',['-',[2],[3]],['+',[4],[5]]],
+  expr_m15:   ['-',[2],['+',['*',[3],[4]],[5]]],
+  a1_s1: [10,0,0,'h'],
+  a1_s2: [10,[5,0,0,'h'],0],
+  a1_s3: [10,[5],[29,0,0,'h']],
+  a1_s4: [10,[5,[4,0,0,'h'],0],[29]],
+  a1_s5: [10,[5,[4],[8,0,0,'h']],[29]],
+  a1_s6: [10,[5,[4],[8]],[29,[28,0,0,'h'],0]],
+  a1_s7: [10,[5,[4,[3,0,0,'h'],0],[8]],[29,[28],0]],
+  a1_s8: [10,[5,[4,[3],0],[8,[6,0,0,'h'],0]],[29,[28],0]],
+  a1_s9: [10,[5,[4,[3],0],[8,[6],0]],[29,[28,[15,0,0,'h'],0],0]],
+  a1_d3:   [10,[5,[4],[8,[6],0]],[29,[28,[15],0],0]],
+  a1_ans1: [10,[5,[4],[8,[6],0]],[29,[15],0]],
+  a1_ans2: [15,[5,[4],[8,[6],0]],[29],'h'],
+  a1_alt_pred:  [8,[5,[4],[6]],[29,[15],0],'h'],
+  a1_alt_merge: [5,[4],[8,[6],[29,[15],0]],'h'],
+  a2_orig:  [10,[5,[4,[3],0],[6]],[13,0,[17]]],
+  a2_ins18: [10,[5,[4,[3],0],[6]],[13,0,[17,0,[18,0,0,'h']]]],
+  a2_ans1:  [10,[5,[4,[3],0],[6]],[17,[13],[18],'h']],
+  a2_ins15: [10,[5,[4,[3],0],[6]],[17,[13,0,[15,0,0,'h']],[18]]],
+  a2_ins14: [10,[5,[4,[3],0],[6]],[17,[13,0,[15,[14,0,0,'h'],0]],[18]]],
+  a2_rl1:   [10,[5,[4,[3],0],[6]],[17,[13,0,[14,0,[15],'h']],[18]]],
+  a2_ans2:  [10,[5,[4,[3],0],[6]],[17,[14,[13],[15],'h'],[18]]],
+  a2_altA:  [10,[5,[4,[3],0],[6]],[15,[13,0,[14,0,0,'h']],[17]]]
+};
+
+function parseTree(a){
+  if (!a) return null;
+  return { v: a[0], l: parseTree(a[1]), r: parseTree(a[2]), f: a[3] || '' };
+}
+function tHeight(n){ return n ? 1 + Math.max(tHeight(n.l), tHeight(n.r)) : -1; }
+
+function drawTree(el){
+  const spec = TREES[el.dataset.tree];
+  if (!spec) return;
+  const root = parseTree(spec);
+  const small = el.dataset.small === '1';
+  const showBf = el.dataset.bf === '1';
+  const gx = small ? 46 : 60, gy = small ? 60 : 74, r = small ? 15.5 : 19.5;
+  const pad = showBf ? 30 : 24;
+  let idx = 0, maxd = 0;
+  (function walk(n, d){
+    if (!n) return;
+    walk(n.l, d+1);
+    n.ix = idx++; n.d = d; maxd = Math.max(maxd, d);
+    walk(n.r, d+1);
+  })(root, 0);
+  const W = pad*2 + idx*gx, H = pad*2 + maxd*gy + 2*r;
+  const X = n => pad + (n.ix + .5) * gx, Y = n => pad + r + n.d * gy;
+  let edges = '', nodes = '';
+  (function draw(n){
+    if (!n) return;
+    for (const c of [n.l, n.r]) if (c)
+      edges += '<line class="tln" x1="'+X(n)+'" y1="'+Y(n)+'" x2="'+X(c)+'" y2="'+Y(c)+'"/>';
+    const bf = tHeight(n.l) - tHeight(n.r);
+    const bad = showBf && Math.abs(bf) > 1;
+    nodes += '<circle class="'+(n.f==='h'?'tc-hl':bad?'tc-bad':'tc')+'" cx="'+X(n)+'" cy="'+Y(n)+'" r="'+r+'"/>';
+    nodes += '<text class="'+(n.f==='h'?'tt-onhl':'tt')+'" x="'+X(n)+'" y="'+(Y(n)+ (small?4.5:5.5))+'" text-anchor="middle" font-size="'+(small?13:15)+'">'+esc(String(n.v))+'</text>';
+    if (showBf)
+      nodes += '<text class="'+(bad?'tb-bad':'tb')+'" x="'+(X(n)+r+2)+'" y="'+(Y(n)-r+3)+'" text-anchor="start" font-size="10.5">'+(bf>0?'+':'')+bf+'</text>';
+    draw(n.l); draw(n.r);
+  })(root);
+  el.innerHTML = '<svg viewBox="0 0 '+W+' '+H+'" width="'+W+'" xmlns="http://www.w3.org/2000/svg">'+edges+nodes+'</svg>';
+}
+
+
+/* ================= B-TREE / MULTIWAY TREE DRAWING ================= */
+/* spec: {k:[keys], c:[children], hl:1 highlight | 2 overflow, lf:1 leaf-of-a-B+tree } */
+const BTREES = {
+  /* an order-5 multiway tree: every node has k keys and k+1 pointers */
+  bt_multi:{k:[10,20,30,40],c:[{k:[3,5]},{k:[13]},{k:[21]},{k:[31,35],c:[{k:[32,33]},{k:[36]},{k:[38]}]},{k:[42]}]},
+
+  /* insert 33 into an order-5 B-tree: overflow, split, median promotes */
+  bt_i0:{k:[20,40],c:[{k:[5,10,15]},{k:[25,30,32,35],hl:1},{k:[45,50]}]},
+  bt_i1:{k:[20,40],c:[{k:[5,10,15]},{k:[25,30,32,33,35],hl:2},{k:[45,50]}]},
+  bt_i2:{k:[20,32,40],hl:1,c:[{k:[5,10,15]},{k:[25,30],hl:1},{k:[33,35],hl:1},{k:[45,50]}]},
+
+  /* the only way a B-tree gains height: the root itself splits */
+  bt_r0:{k:[10,20,30,40],hl:2,c:[{k:[5]},{k:[15]},{k:[25]},{k:[35]},{k:[45]}]},
+  bt_r1:{k:[25],hl:1,c:[{k:[10,20],c:[{k:[5]},{k:[15]},{k:[22]}]},{k:[30,40],c:[{k:[28]},{k:[35]},{k:[45]}]}]},
+
+  /* B+ tree: internal nodes are pure index, every value lives in a leaf */
+  bplus:{k:[20,30],c:[{k:[10,14,16],lf:1},{k:[20,22,24],lf:1},{k:[30,31,32],lf:1}]}
+};
+
+function drawBTree(el){
+  const spec = BTREES[el.dataset.btree];
+  if(!spec) return;
+  const small = el.dataset.small === '1';
+  const KW = small?26:32, KH = small?24:28, GAPX = small?16:20, GAPY = small?52:62, PAD = 14;
+
+  function wide(n){
+    const own = n.k.length*KW;
+    if(!n.c || !n.c.length) return own;
+    return Math.max(own, n.c.reduce((a,c)=>a+wide(c),0) + GAPX*(n.c.length-1));
+  }
+  let maxd = 0;
+  (function dep(n,d){ maxd=Math.max(maxd,d); (n.c||[]).forEach(c=>dep(c,d+1)); })(spec,0);
+  const W = wide(spec) + PAD*2, H = PAD*2 + maxd*GAPY + KH;
+
+  let edges='', nodes='';
+  (function place(n,left,d){
+    const w = wide(n), own = n.k.length*KW;
+    const x = left + (w-own)/2, y = PAD + d*GAPY;
+    if(n.c && n.c.length){
+      const span = n.c.reduce((a,c)=>a+wide(c),0) + GAPX*(n.c.length-1);
+      let cx = left + (w-span)/2;
+      n.c.forEach((c,i)=>{
+        const cw = wide(c);
+        /* pointer i sits on the i-th cell boundary of the parent box */
+        const px = x + Math.min(i, n.k.length)*KW;
+        edges += '<line class="btl" x1="'+px.toFixed(1)+'" y1="'+(y+KH)+'" x2="'+(cx+cw/2).toFixed(1)+'" y2="'+(PAD+(d+1)*GAPY)+'"/>';
+        place(c, cx, d+1);
+        cx += cw + GAPX;
+      });
+    }
+    const cls = n.hl===1?'btn btn-hl':n.hl===2?'btn btn-of':(n.lf?'btn btn-lf':'btn');
+    nodes += '<rect class="'+cls+'" x="'+x.toFixed(1)+'" y="'+y+'" width="'+own+'" height="'+KH+'" rx="5"/>';
+    n.k.forEach((k,i)=>{
+      if(i>0) nodes += '<line class="btd" x1="'+(x+i*KW).toFixed(1)+'" y1="'+y+'" x2="'+(x+i*KW).toFixed(1)+'" y2="'+(y+KH)+'"/>';
+      nodes += '<text class="btt" x="'+(x+i*KW+KW/2).toFixed(1)+'" y="'+(y+KH/2+4.5)+'" text-anchor="middle" font-size="'+(small?11:12.5)+'">'+esc(String(k))+'</text>';
+    });
+  })(spec, PAD, 0);
+
+  el.innerHTML = '<svg viewBox="0 0 '+W+' '+H+'" width="'+W+'" xmlns="http://www.w3.org/2000/svg">'+edges+nodes+'</svg>';
+}
+
+/* ================= FLASHCARDS data ================= */
+/* [week, question, answer] */
+const CARDS = [
+[6,`Why do B-trees exist at all?`,`Because <b>seek time</b> on a disk is mechanical — <b>milliseconds</b>, while CPU work is <b>microseconds</b> (1,000× faster). Processing is essentially free, so it is worth extra CPU work to avoid even one disk access.`],
+[6,`A multiway tree node has m children. How many keys?`,`<b>m − 1</b>. Always one fewer key than pointers.`],
+[6,`A node holds k keys. How many pointers?`,`<b>k + 1</b>.`],
+[6,`What does "a B-tree of order 5" mean?`,`Order = the <b>pointer</b> count. So up to <b>5 pointers</b> and at most <b>4 keys</b> per node — it splits when a 5th key arrives.`],
+[6,`The four properties of a B-tree of order m`,`1. Root has ≥ 2 subtrees (unless it is a leaf).<br>2. Nonroot, nonleaf nodes: k−1 keys, k pointers, ⌈m/2⌉ ≤ k ≤ m.<br>3. Leaves: k−1 keys, same bounds.<br>4. <b>All leaves on the same level.</b>`],
+[6,`How full is a B-tree guaranteed to be?`,`<b>At least half full.</b> A node only splits once it fills an entire block.`],
+[6,`Why is a B-tree node the size of a disk block?`,`So that <b>one seek</b> returns as many keys as possible. The node size is chosen from the key size and the block size.`],
+[6,`Binary trees are built top-down. How is a B-tree built?`,`<b>Bottom up.</b> Leaves are placed and rearranged; the root is decided last. That is the only way to keep every leaf on the same level.`],
+[6,`Insertion: the leaf is full. What happens?`,`<b>Split it.</b> Take the <b>median</b> — lower keys go left, higher keys go right — and the <b>median moves up</b> to the parent. The parent may then split too, and so on upward.`],
+[6,`When does a B-tree gain height?`,`<b>Only when the root splits.</b> Every other split is absorbed by a parent. That is why all leaves stay on one level.`],
+[6,`Deleting an internal node from a B-tree`,`Promote either the <b>largest value in the left subtree</b> or the <b>smallest in the right subtree</b>. That reduces the job to deleting from a leaf or another internal node.`],
+[6,`A leaf drops below half full after a deletion. Fix?`,`<b>Redistribute</b> with a sibling: the median becomes the new separator and the keys are shared out. If that starves the parent, the fix <b>iterates upward</b>.`],
+[6,`How full must a B*-Tree be, and how?`,`<b>Two-thirds.</b> It delays splitting by overflowing into a sibling first, and when both are full it splits <b>2 nodes into 3</b> rather than 1 into 2.`],
+[6,`What is a B**-Tree?`,`The same idea again — required to be <b>75% full</b>.`],
+[6,`What problem do B+Trees solve?`,`<b>In-order traversal.</b> On a plain B-tree internal nodes yield only one value per visit. B+Trees keep <b>all data in the leaves</b> and chain them with forward pointers, so a traversal reads leaves straight through.`],
+[6,`How do you spot a B+Tree?`,`Index values are <b>repeated in the leaves</b>. Internal nodes are signposts only — they store no data of their own.`],
+[6,`Delete a value from a B+Tree leaf — must the index change?`,`<b>No.</b> The index value is still a perfectly good separator even if it no longer exists as data. That observation is what leads to Prefix B+Trees.`],
+[6,`What is a Prefix B+Tree?`,`The index stores only a <b>prefix</b> long enough to separate keys — <b>BF</b> instead of <b>BF90</b>, like a dictionary guide word. Shorter index → more keys per node → more children → fewer levels → fewer seeks.`],
+[6,`What is a Bit Tree / D-bit?`,`The extreme of the prefix idea: store only the <b>distinction bit</b>, the first bit position at which two keys differ. Enough to steer the search, and tiny.`],
+[6,`What is a trie?`,`A tree that navigates using <b>parts of the key itself</b> — one character or bit at a time chooses the branch, so the path from the root spells the key. The name comes from re<b>trie</b>val.`],
+
+[1,`What is <b>computational complexity</b>?`,`A measure of how much <b>effort (cost)</b> an algorithm needs — mainly <b>time</b>, also space.`],
+[1,`Why don't we measure algorithm speed in seconds?`,`Speed depends on the <b>machine</b> and the <b>language</b>. So we compare with logical units instead.`],
+[1,`In complexity, what are <b>n</b> and <b>t</b>?`,`n = the size of the data (the file).<br>t = the time taken, in logical units.`],
+[1,`t = c·n. What happens to t if you double n?`,`It <b>doubles</b>. That is <b>linear</b> growth.`],
+[1,`t = log₂n. What happens to t when you double n?`,`It grows by just <b>1 unit</b>. Logarithmic = very slow growth.`],
+[1,`What is <b>asymptotic complexity</b>?`,`The simplified cost for <b>large n</b> — drop every term that stops mattering as n grows.`],
+[1,`F(n) = n² + 100n + log₁₀n + 1000.<br>What is its complexity?`,`<b>O(n²)</b> — for large n the n² term dominates (99.9% of the value at n = 100,000).`],
+[1,`Which term of F(n) dominates for SMALL n (n = 1)?`,`The constant <b>1000</b> — about 90.8% of the value. That's why small n is misleading!`],
+[1,`Big O vs Big Ω vs Big Θ?`,`<b>O</b> = upper bound (at most).<br><b>Ω</b> = lower bound (at least).<br><b>Θ</b> = tight bound (both at once).`],
+[1,`Simplify O(3n² + 10n + 500).`,`<b>O(n²)</b>. Drop constant factors and smaller terms.`],
+[1,`A loop over n items inside another loop over n items — complexity?`,`<b>O(n²)</b> — n steps for each of n rounds.`],
+
+[2,`Ints start at address 1000, 4 bytes each.<br>Where is a[i]? Where is a[5]?`,`Address = <b>1000 + 4·i</b>.<br>a[5] → 1020. One calculation = O(1) access.`],
+[2,`The three ways of indexing arrays?`,`<b>Zero-based</b> (first is 0 — C++), <b>one-based</b> (first is 1), <b>N-based</b> (start anywhere, e.g. <code>Country[th]</code>).`],
+[2,`Row-major vs column-major — which does C++ use?`,`<b>Row-major</b> (1,2,3,4,5,… row by row). Column-major is Fortran / MATLAB / OpenGL.`],
+[2,`Static vs dynamic arrays — when is memory given?`,`Static: at <b>COMPILATION time</b>, fixed size — <code>int a[10];</code><br>Dynamic: at <b>RUN time</b> — <code>int* a = new int[10];</code>`],
+[2,`How do you free a dynamic array? What if you forget?`,`<code>delete [] a;</code> — forget it and the memory <b>leaks</b>.`],
+[2,`What is a <b>jagged array</b>?`,`An array of arrays where each row can have a <b>different size</b>.`],
+[2,`Array costs: access · iterate · middle insert · end insert?`,`O(1) · O(n) · O(n) (shifting!) · amortised O(1).`],
+[2,`The 3 safe steps to delete the <b>head</b> of a singly linked list?`,`<code>Node* tmp = head;</code><br><code>head = head->next;</code><br><code>delete tmp;</code> — in that order!`],
+[2,`Why is deleting the <b>tail</b> of a singly linked list O(n)?`,`You must walk from the head to find the node BEFORE the tail:<br><code>while (tmp->next->next != 0)</code>`],
+[2,`Why does a doubly linked list fix tail deletion?`,`Each node knows <code>prev</code>, so <code>tail = tail->prev;</code> is <b>O(1)</b> — no walking.`],
+[2,`When is a <b>circular</b> linked list the right tool?`,`Fair turns: processors sharing a resource, or players in a game — a <code>current</code> pointer moves around the ring.`],
+[2,`What is a <b>sparse table</b>, and the fix?`,`A table that is mostly empty (99.3% in the CMU grades example!). Fix: two arrays (&lt;5% of the space) or better, <b>linked lists</b>.`],
+
+[3,`A stack is a ____ structure. A queue is a ____ structure.`,`Stack: <b>LIFO</b> — Last In First Out (one end).<br>Queue: <b>FIFO</b> — First In First Out (both ends).`],
+[3,`The 5 key stack operations?`,`<code>clear()</code>, <code>isEmpty()</code>, <code>push(el)</code>, <code>pop()</code>, <code>topEl()</code> (look without removing).`],
+[3,`The 5 key queue operations?`,`<code>clear()</code>, <code>isEmpty()</code>, <code>enqueue(el)</code> (add at end), <code>dequeue()</code> (take from front), <code>firstEl()</code>.`],
+[3,`The classic stack use from our slides?`,`<b>Matching delimiters</b>: ( ) [ ] { } /* */ — push openers, pop on closers, stack must end empty.`],
+[3,`Vector stack vs linked-list stack — speed?`,`Both push/pop in <b>O(1)</b>. But pushing to a <b>full</b> vector = allocate new memory + copy everything = <b>O(n)</b>.`],
+[3,`In the STL, does stack <code>pop()</code> return the element?`,`<b>No!</b> <code>void pop()</code> only removes. Read with <code>top()</code> first.`],
+[3,`Why does a queue in a plain array waste space?`,`Dequeued cells at the <b>front</b> are never reused. Fix: the <b>circular array</b> — wrap around with <code>first</code> and <code>last</code> indexes.`],
+[3,`Circular array queue: the isEmpty and isFull tests?`,`isEmpty: <code>first == -1</code><br>isFull: <code>first == 0 && last == size-1 || first == last+1</code> (wrapped and caught up).`],
+[3,`Best simple structure for a queue — and why?`,`A <b>doubly linked list</b>: enqueue AND dequeue are O(1). A singly list needs O(n) to reach one of the ends.`],
+[3,`What is a <b>priority queue</b>?`,`Elements leave by <b>priority + position</b>, not just arrival order — like a police car at the toll.`],
+[3,`Priority queue on linked lists — the costs?`,`Sorted list: enqueue O(n), dequeue O(1).<br>Unsorted list: enqueue O(1), dequeue O(n).<br>Two lists (sorted high + unsorted low): ≈ O(√n).`],
+[3,`Define a (max) <b>heap</b>.`,`A binary tree where every node ≥ its children, <b>perfectly balanced</b>, last-level leaves in the <b>leftmost</b> positions.`],
+[3,`Heap as a priority queue: how do enqueue and dequeue work?`,`Enqueue: add at the <b>bottom</b>, climb <b>up</b> (swap with parent).<br>Dequeue: remove the <b>root</b>; the <b>last</b> node goes on top and sinks <b>down</b>.`],
+
+[4,`Path length, level, height — define all three.`,`Path length = number of <b>arcs</b> from the root.<br>Level = path length <b>+ 1</b>.<br>Height = the <b>highest</b> path length.`],
+[4,`The Binary Search Tree (BST) rule?`,`For every node: <b>left subtree &lt; node &lt; right subtree</b>.`],
+[4,`Complete binary tree fact: m = k + 1. Meaning?`,`If every nonterminal node has exactly 2 nonempty children: <b>leaves (m) = nonterminal nodes (k) + 1</b>.`],
+[4,`How do you search a BST?`,`Start at the root. Smaller → <b>left</b>. Bigger → <b>right</b>. Found → stop. Hit NULL → not in the tree.`],
+[4,`Worst and average search cost in a BST?`,`Worst: <b>O(n)</b> — tree shaped like a linked list.<br>Average: <b>IPL ÷ n</b> (IPL = Internal Path Length = sum of all path lengths).`],
+[4,`V, L, R stand for…? Name the three depth-first orders.`,`Visit, Left, Right.<br><b>VLR</b> = pre-order · <b>LVR</b> = in-order · <b>LRV</b> = post-order.`],
+[4,`Which traversal of a BST gives sorted order?`,`<b>In-order (LVR)</b> — that's how you turn a BST into a sorted array.`],
+[4,`Breadth-first uses which helper? Iterative pre-order uses which?`,`Breadth-first: a <b>queue</b>.<br>Iterative pre-order: a <b>stack</b> — push RIGHT first so LEFT pops first.`],
+[4,`What does Dr. Cosh call "double recursion"?`,`A function that calls itself <b>twice</b> — like <code>inorder(p->left)</code> … <code>inorder(p->right)</code>.`],
+[4,`Deleting a node with 0 or 1 child?`,`Leaf: just remove it (parent → NULL).<br>One child: the parent <b>adopts the grandchild</b>.`],
+[4,`<b>Deletion by merging</b> — the rule?`,`The <b>root of the left subtree</b> replaces the deleted node; the <b>rightmost node of the left subtree</b> becomes parent of the right subtree. Height may grow!`],
+[4,`<b>Deletion by copying</b> — the rule?`,`Copy the <b>predecessor</b> (rightmost of left subtree) or <b>successor</b> (leftmost of right subtree) into the spot, then delete that easy node. Height doesn't grow.`],
+[4,`AVL balance factor — formula and allowed values?`,`<b>Balance = Height(left) − Height(right)</b>, must stay <b>+1, 0, −1</b>. (Empty subtree height = −1.)`],
+[4,`Name the 4 AVL cases and their fixes.`,`<b>LL</b> → one right rotation · <b>RR</b> → one left rotation · <b>LR</b> → rotate child left, then right · <b>RL</b> → rotate child right, then left.`],
+[4,`The key mechanic inside EVERY rotation?`,`<b>The middle subtree switches parents</b> — the rising child's inner subtree becomes the old parent's child.`],
+[4,`The DSW (Day, Stout, Warren) algorithm — two phases?`,`1) Stretch the tree into a <b>backbone</b> (right-leaning list).<br>2) Rotate <b>every other node</b> around its parent, repeatedly. Whole tree balanced in O(n).`],
+[4,`Splay tree — the three splaying cases?`,`1) Parent is root → rotate node around parent.<br>2) Homogeneous → rotate parent around grandparent, then node.<br>3) Heterogeneous → rotate node around parent, then around grandparent.`],
+[4,`Expression tree traversals give which notations?`,`Pre-order → <b>Polish</b> (prefix).<br>In-order → infix (normal).<br>Post-order → <b>Reverse Polish</b> (postfix).`]
+];
+
+/* ================= QUIZ data ================= */
+/* [week, question, [4 options], correctIndex, one-line reason] */
+const QUIZ = [
+[6,`Why are B-trees used for data stored on disk?`,
+ [`Seek time is mechanical and ~1,000× slower than CPU work, so extra processing is worth it to avoid an access`,`They use less RAM than binary trees`,`They are easier to program than AVL trees`,`They keep the data sorted, which binary trees cannot`],0,
+ `Seek time is milliseconds, CPU time is microseconds. Processing is essentially free, so the whole design goal is fewer disk accesses.`],
+[6,`In a B-tree, a node holding 4 keys has how many pointers?`,
+ [`4`,`5`,`3`,`8`],1,
+ `Keys k, pointers k+1. Always.`],
+[6,`"A B-tree of order 5" means a node can hold at most…`,
+ [`5 keys`,`4 keys`,`5 levels`,`4 pointers`],1,
+ `Order counts pointers. 5 pointers → 4 keys, and the node splits when a 5th key arrives.`],
+[6,`Which property is unique to B-trees among the trees you have studied?`,
+ [`All leaves are on the same level`,`Each node has at most two children`,`The left subtree is smaller than the node`,`The root is always the largest value`],0,
+ `Not even a balanced binary tree requires every leaf on one level — that requirement is why B-trees are built bottom up.`],
+[6,`A leaf is full and a new key arrives. What happens to the median?`,
+ [`It is discarded`,`It stays in the left node`,`It moves up into the parent`,`It becomes the new root`],2,
+ `Lower keys form the left node, higher keys the right, and the median is promoted. The parent may then split too.`],
+[6,`When does a B-tree get taller?`,
+ [`Every time a leaf splits`,`Only when the root splits`,`When it becomes more than half full`,`Never`],1,
+ `All other splits are absorbed by a parent. Only a root split creates a new level — which is how every leaf stays on the same level.`],
+[6,`A B*-Tree differs from a B-Tree because it…`,
+ [`must be two-thirds full and splits 2 nodes into 3`,`must be half full and splits 1 node into 2`,`stores all data in the leaves`,`uses only a prefix as the index`],0,
+ `It delays splitting by overflowing into a sibling first, so nodes stay fuller and fewer blocks are read.`],
+[6,`In a B+Tree, where does the data live?`,
+ [`Spread evenly through every level`,`In the internal nodes only`,`In the leaves only, with internal nodes acting as index`,`In the root`],2,
+ `Index values are repeated in the leaves. Leaves are chained with forward pointers, so in-order traversal never touches an internal node.`],
+[6,`Why can a Prefix B+Tree search faster?`,
+ [`Shorter index entries → more keys per node → more children → fewer levels`,`It stores the data twice`,`It skips the leaf level entirely`,`It keeps the whole tree in RAM`],0,
+ `The index only has to separate keys, not be a key. Shorter separators mean a shallower tree and fewer seeks.`],
+[6,`A D-bit in a Bit Tree is…`,
+ [`the depth of the tree`,`the first bit position at which two keys differ`,`a flag marking a deleted node`,`the number of dirty blocks`],1,
+ `The minimum information that still distinguishes two values — the extreme end of the prefix idea.`],
+[6,`A trie navigates using…`,
+ [`whole-key comparisons at each node`,`the hash of the key`,`parts of the key itself, one piece at a time`,`the number of children`],2,
+ `Each character or bit chooses a branch, so the path from the root spells the key. The name comes from retrieval.`],
+
+[1,`Computational complexity measures…`,
+ [`How much effort (cost) an algorithm needs — mainly time, also space`,`How many lines of code a program has`,`How expensive the computer was`,`How hard the code is to read`],0,
+ `Complexity = the cost of applying an algorithm. Time and space — time being the most significant.`],
+[1,`Why is real time (seconds) a bad way to compare two algorithms?`,
+ [`Seconds are too small to measure`,`Speed depends on the machine and the language, not just the algorithm`,`C++ has no timer`,`Real time only works for small n`],1,
+ `The same algorithm runs faster on a better PC, and faster in C++ than in Basic — seconds measure the setup.`],
+[1,`t = c·n (linear). If the data size doubles, the time…`,
+ [`stays the same`,`grows by 1 unit`,`doubles`,`quadruples`],2,
+ `Linear means t changes by the same factor as n.`],
+[1,`t = log₂n. If the data size doubles, the time…`,
+ [`doubles`,`grows by exactly 1 unit`,`halves`,`grows by n units`],1,
+ `That's the magic of logarithmic growth: double the data, pay one more step.`],
+[1,`F(n) = n² + 100n + log₁₀n + 1000. For LARGE n, which term matters?`,
+ [`1000`,`log₁₀n`,`100n`,`n²`],3,
+ `At n = 100,000 the n² term is 99.9% of the value — so F(n) is O(n²).`],
+[1,`Simplify: O(2n + 300)`,
+ [`O(n)`,`O(2n)`,`O(n + 300)`,`O(n²)`],0,
+ `Drop constant factors and smaller terms — only the shape matters.`],
+[1,`Big Ω (Omega) describes…`,
+ [`an upper bound — at most`,`a lower bound — at least`,`a tight bound — exactly`,`the average case`],1,
+ `Ω = at least, O = at most, Θ = both at once.`],
+[1,`A loop over n items INSIDE another loop over n items is…`,
+ [`O(n)`,`O(log n)`,`O(n²)`,`O(2n)`],2,
+ `n steps for each of n rounds → n·n = n².`],
+
+[2,`An int array starts at address 1000, each int is 4 bytes. Where is a[3]?`,
+ [`1003`,`1012`,`1016`,`1300`],1,
+ `1000 + 4·3 = 1012. One multiplication — that's why array access is O(1).`],
+[2,`C++ stores 2D arrays in…`,
+ [`row-major order`,`column-major order`,`random order`,`sorted order`],0,
+ `C/C++, Pascal, Python: row by row (1,2,3 / 4,5,6…). Fortran and MATLAB go by columns.`],
+[2,`Which line correctly frees <code>int* a = new int[10];</code>?`,
+ [`delete a;`,`remove(a);`,`delete [] a;`,`a = 0;`],2,
+ `Arrays made with new[] must be freed with delete [] — anything else leaks or misbehaves.`],
+[2,`Inserting an element in the MIDDLE of an array costs…`,
+ [`O(1)`,`O(log n)`,`O(n) — later elements must shift`,`O(n²)`],2,
+ `Every element after the insert point moves one place. That's the array's weakness.`],
+[2,`The correct order to delete the head of a singly linked list:`,
+ [`delete head; head = head->next;`,`tmp = head; head = head->next; delete tmp;`,`head = head->next; delete head;`,`head = 0; delete head;`],1,
+ `Remember the old head with tmp FIRST — delete it only after head has moved on.`],
+[2,`To find the node BEFORE the tail you loop while…`,
+ [`tmp->next != 0`,`tmp != 0`,`tmp->next->next != 0`,`tmp->prev != 0`],2,
+ `You must stop one node early — tmp->next->next sees the end one step ahead.`],
+[2,`Which job is O(1) in a doubly linked list but O(n) in a singly linked list?`,
+ [`deleting the head`,`deleting the tail`,`searching for a value`,`printing the list`],1,
+ `tail = tail->prev reaches the predecessor instantly; a singly list must walk from the front.`],
+[2,`In the CMU grades example, roughly how much of the full table was EMPTY?`,
+ [`50%`,`75%`,`5%`,`99.3%`],3,
+ `Only 175,000 of 25,000,000 bytes were real data — that's a sparse table.`],
+
+[3,`A stack is…`,
+ [`FIFO — First In First Out`,`LIFO — Last In First Out`,`always sorted`,`accessed at both ends`],1,
+ `One end only (the top) — like the pile of canteen trays.`],
+[3,`Which stack operation reads the top WITHOUT removing it?`,
+ [`pop()`,`push()`,`topEl()`,`clear()`],2,
+ `pop() removes and returns; topEl() just looks.`],
+[3,`push(1), push(2), push(3), pop(), pop(). What is on top now?`,
+ [`1`,`2`,`3`,`nothing — it's empty`],0,
+ `3 and 2 came off (last in, first out). Only 1 remains.`],
+[3,`Why does <code>a = b + ( c − d ) * ( e − f ))</code> fail the delimiter check?`,
+ [`Too many delimiters for one stack`,`The final ) arrives when the stack is already empty`,`( and ) cannot be nested`,`It doesn't fail`],1,
+ `A closer with nothing left to pop = error. (A non-empty stack at the end is an error too.)`],
+[3,`A queue adds and removes where?`,
+ [`Add at the back, remove from the front`,`Add and remove at the top`,`Add at the front, remove from the back`,`Anywhere you like`],0,
+ `FIFO: enqueue joins the end of the line, dequeue serves the front.`],
+[3,`The circular array exists so that…`,
+ [`the queue stays sorted`,`the empty cells at the FRONT get reused`,`the array can grow forever`,`dequeue becomes O(n)`],1,
+ `After dequeues, front cells are free — wrapping around reuses them instead of wasting them.`],
+[3,`A queue on a doubly linked list: enqueue and dequeue cost…`,
+ [`O(1) and O(n)`,`O(n) and O(n)`,`O(1) and O(1)`,`O(log n) each`],2,
+ `Pointers to both ends + prev/next links = constant time at each end.`],
+[3,`In a heap priority queue, dequeue works by…`,
+ [`removing the root, putting the LAST node on top, letting it sink down`,`removing a leaf`,`searching every node for the max`,`removing the leftmost node`],0,
+ `The root IS the highest priority; the moved node descends by swapping with its bigger child.`],
+
+[4,`The Binary Search Tree rule: for every node…`,
+ [`left subtree < node < right subtree`,`left subtree > node > right subtree`,`children ≥ parent`,`all leaves are equal`],0,
+ `That ordering is exactly what makes BST search fast.`],
+[4,`Which traversal of a BST visits values in SORTED order?`,
+ [`pre-order (VLR)`,`in-order (LVR)`,`post-order (LRV)`,`breadth-first`],1,
+ `LVR: everything smaller first, then the node, then everything bigger.`],
+[4,`Breadth-first traversal is implemented with…`,
+ [`a stack`,`double recursion`,`a queue`,`threads`],2,
+ `Visit a node, enqueue its children — the queue preserves the level-by-level order.`],
+[4,`Post-order (LRV) of the tree 5(3(2(1),4), 8(6(–,7),9)) begins…`,
+ [`5, 3, 2, …`,`1, 2, 4, …`,`1, 2, 3, …`,`9, 8, 7, …`],1,
+ `Post-order visits parents LAST: 1, 2, 4, 3, 7, 6, 9, 8, 5.`],
+[4,`The AVL balance factor is…`,
+ [`Height(left) − Height(right), allowed −1, 0, +1`,`Height(right) − Height(left), allowed 0 only`,`the number of children`,`path length + 1`],0,
+ `Left minus right on our slides. The moment it hits ±2 → rotate.`],
+[4,`A new key lands in the LEFT subtree of the LEFT child; balance hits +2. The fix?`,
+ [`one LEFT rotation`,`one RIGHT rotation`,`a double rotation`,`delete and re-insert`],1,
+ `LL case → a single right rotation (the child rises; the middle subtree switches parents).`],
+[4,`Deletion by MERGING: what replaces the deleted node?`,
+ [`the root of its LEFT subtree`,`the leftmost node of the right subtree`,`a random leaf`,`its parent`],0,
+ `Left root takes over, and the rightmost node of the left subtree adopts the right subtree.`],
+[4,`A balanced tree with 10,000 nodes needs at most about how many tests to find a value?`,
+ [`10,000`,`500`,`14`,`2`],2,
+ `Height = lg(10,001) ≈ 13.3 → 14 tests. That's why balancing matters.`]
+];
+
+/* ================= CODE PRACTICE data ================= */
+/* line = string, or [textBefore, {a:answer, alt:[...]}, textAfter...] */
+const PRACTICE = [
+{w:1, lvl:'Easy', title:'Sum of an array — the O(n) loop', note:'Fill in the loop header and the line that adds each element.', lines:[
+`#include <iostream>`,
+`using namespace std;`,
+``,
+`int main() {`,
+`    int a[5] = {4, 8, 15, 16, 23};`,
+`    int sum = 0;`,
+[`    for (`, {a:`int i = 0; i < 5; i++`, alt:[`int i = 0; i < 5; ++i`]}, `) {`],
+[`        `, {a:`sum += a[i];`, alt:[`sum = sum + a[i];`]}, `      // add each element`],
+`    }`,
+`    cout << sum << endl;      // prints 66`,
+`    return 0;`,
+`}`]},
+
+{w:1, lvl:'Medium', title:'The halving loop — O(log n)', note:'This loop shape IS logarithmic complexity. Know it by heart.', lines:[
+`int n = 64;`,
+`int steps = 0;`,
+[`while (`, {a:`n > 1`, alt:[`1 < n`]}, `) {          // stop when 1 is left`],
+[`    `, {a:`n = n / 2;`, alt:[`n /= 2;`]}, `            // cut the size in half`],
+`    steps++;`,
+`}`,
+`cout << steps << endl;     // 64→32→16→8→4→2→1 : prints 6`]},
+
+{w:1, lvl:'Hard', title:'Count duplicate pairs — O(n²)', note:'A loop inside a loop. Note where j starts!', lines:[
+`int count = 0;`,
+`for (int i = 0; i < n; i++) {`,
+[`    for (`, {a:`int j = i + 1; j < n; j++`, alt:[`int j = i + 1; j < n; ++j`]}, `) {   // j starts AFTER i`],
+[`        if (`, {a:`a[i] == a[j]`, alt:[`a[j] == a[i]`]}, `)             // same value twice?`],
+`            count++;`,
+`    }`,
+`}`]},
+
+{w:2, lvl:'Easy', title:'Dynamic array — new and delete', note:'Run-time memory: create it, use it, free it.', lines:[
+`int n = 10;`,
+[``, {a:`int* a = new int[n];`, alt:[`int *a = new int[n];`,`int* a = new int[10];`,`int *a = new int[10];`]}, `      // memory given at RUN time`],
+`for (int i = 0; i < n; i++)`,
+[`    `, {a:`a[i] = i * 2;`, alt:[`a[i] = 2 * i;`]}, `             // fill it: 0 2 4 6 ...`],
+`cout << a[n-1] << endl;      // 18`,
+[``, {a:`delete [] a;`, alt:[`delete[] a;`,`delete []a;`,`delete[]a;`]}, `               // give the memory back!`]]},
+
+{w:2, lvl:'Medium', title:'head_insert — the 3 famous steps', note:'Make it, aim it, move head. Order matters!', lines:[
+`class Node {`,
+`public:`,
+`    Node(int i, Node *in = 0) { info = i; next = in; }`,
+`    int info;`,
+`    Node *next;`,
+`};`,
+``,
+`Node *head = 0;              // the list starts empty`,
+``,
+`void headInsert(int x) {`,
+[`    `, {a:`Node* tmp = new Node(x);`, alt:[`Node *tmp = new Node(x);`]}, `   // step 1: make the new node`],
+[`    `, {a:`tmp->next = head;`}, `           // step 2: aim it at the old first node`],
+[`    `, {a:`head = tmp;`}, `                 // step 3: head moves to it`],
+`}`]},
+
+{w:2, lvl:'Hard', title:'Delete head + delete tail (singly list)', note:'The two deletion patterns — including the famous next->next loop.', lines:[
+`void deleteHead() {`,
+`    if (head == 0) return;           // empty list: nothing to do`,
+[`    `, {a:`Node* tmp = head;`, alt:[`Node *tmp = head;`]}, `            // remember the old head`],
+[`    `, {a:`head = head->next;`}, `           // head steps forward`],
+[`    `, {a:`delete tmp;`}, `                  // NOW free the old node`],
+`}`,
+``,
+`void deleteTail() {`,
+`    Node* tmp = head;`,
+[`    while (`, {a:`tmp->next->next != 0`, alt:[`tmp->next->next != NULL`,`tmp->next->next != nullptr`,`0 != tmp->next->next`]}, `)    // stop BEFORE the tail`],
+`        tmp = tmp->next;`,
+[`    `, {a:`delete tmp->next;`}, `            // free the last node`],
+[`    `, {a:`tmp->next = 0;`, alt:[`tmp->next = NULL;`,`tmp->next = nullptr;`]}, `              // tmp is the new end`],
+`    tail = tmp;`,
+`}`]},
+
+{w:3, lvl:'Easy', title:'Stack — pop and push (vector version)', note:'From the Week 3 slides. pop() must read, remove, and return.', lines:[
+`T pop() {`,
+[`    `, {a:`T el = pool.back();`}, `       // read the top element`],
+[`    `, {a:`pool.pop_back();`}, `          // remove it from the vector`],
+[`    `, {a:`return el;`}, `               // hand it back`],
+`}`,
+``,
+[`void push(const T& el) { `, {a:`pool.push_back(el);`}, ` }   // add on top`]]},
+
+{w:3, lvl:'Medium', title:'Delimiter matching with a stack', note:'Openers get pushed. Closers pop and must match. Empty at the end = success.', lines:[
+`bool matched(string s) {`,
+`    Stack<char> st;`,
+`    for (int i = 0; i < s.length(); i++) {`,
+`        char c = s[i];`,
+`        if (c == '(' || c == '[' || c == '{')`,
+[`            `, {a:`st.push(c);`}, `              // opener → push it`],
+`        else if (c == ')' || c == ']' || c == '}') {`,
+[`            if (`, {a:`st.isEmpty()`}, `)            // closer but nothing open?`],
+`                return false;`,
+`            char open = st.pop();        // take the newest opener`,
+`            if (!matches(open, c)) return false;`,
+`        }`,
+`    }`,
+[`    return `, {a:`st.isEmpty();`}, `             // every opener must be closed`],
+`}`]},
+
+{w:3, lvl:'Hard', title:'Circular array queue — enqueue & dequeue', note:'The wrap-around logic from the slides. Watch the first/last indexes.', lines:[
+`void enqueue(T el) {`,
+`    if (!isFull())`,
+`        if (last == size-1 || last == -1) {`,
+[`            `, {a:`storage[0] = el;`}, `      // wrap around to cell 0`],
+`            last = 0;`,
+`            if (first == -1)`,
+[`                `, {a:`first = 0;`}, `        // queue was empty: first points here too`],
+`        }`,
+[`        else `, {a:`storage[++last] = el;`}, `   // normal case: one step right`],
+`    else cout << "Full queue" << endl;`,
+`}`,
+``,
+`T dequeue() {`,
+[`    `, {a:`T tmp = storage[first];`}, `       // take the FRONT element`],
+`    if (first == last)`,
+[`        `, {a:`last = first = -1;`, alt:[`first = last = -1;`]}, `          // that was the only one: empty again`],
+`    else if (first == size-1)`,
+`        first = 0;                   // front wraps to cell 0`,
+[`    else `, {a:`first++;`, alt:[`++first;`,`first = first + 1;`]}, `                  // normal case: front steps right`],
+`    return tmp;`,
+`}`]},
+
+{w:4, lvl:'Easy', title:'Searching a BST', note:'Smaller left, bigger right, NULL means not there.', lines:[
+`T* search(BSTNode* p, const T& el) {`,
+`    while (p != 0)`,
+[`        if (`, {a:`el == p->key`, alt:[`p->key == el`]}, `)`],
+`            return &p->key;          // found it → stop`,
+[`        else if (`, {a:`el < p->key`, alt:[`p->key > el`]}, `)`],
+[`            `, {a:`p = p->left;`}, `           // smaller → go left`],
+`        else`,
+[`            `, {a:`p = p->right;`}, `          // bigger → go right`],
+[`    `, {a:`return 0;`, alt:[`return NULL;`,`return nullptr;`]}, `                    // fell off: not in the tree`],
+`}`]},
+
+{w:4, lvl:'Medium', title:'The three traversals — VLR, LVR, LRV', note:'The position of visit(p) is the whole difference. Type the missing lines.', lines:[
+`void inorder(BSTNode *p) {       // LVR = in-order`,
+`    if (p != 0) {`,
+[`        `, {a:`inorder(p->left);`}, `       // L`],
+[`        `, {a:`visit(p);`}, `               // V — in the middle`],
+[`        `, {a:`inorder(p->right);`}, `      // R`],
+`    }`,
+`}`,
+``,
+`void preorder(BSTNode *p) {      // VLR = pre-order`,
+`    if (p != 0) {`,
+[`        `, {a:`visit(p);`}, `               // V comes FIRST`],
+`        preorder(p->left);`,
+`        preorder(p->right);`,
+`    }`,
+`}`,
+``,
+`void postorder(BSTNode *p) {     // LRV = post-order`,
+`    if (p != 0) {`,
+`        postorder(p->left);`,
+`        postorder(p->right);`,
+[`        `, {a:`visit(p);`}, `               // V comes LAST`],
+`    }`,
+`}`]},
+
+{w:4, lvl:'Hard', title:'balance() — sorted array → balanced tree', note:'Middle becomes the root, then recurse into both halves. Straight from the slides.', lines:[
+`void balance(T data[], int first, int last) {`,
+[`    if (`, {a:`first <= last`, alt:[`last >= first`]}, `) {                    // anything left to place?`],
+[`        `, {a:`int middle = (first + last) / 2;`, alt:[`int middle = (first + last)/2;`]}, `  // find the middle`],
+[`        `, {a:`insert(data[middle]);`}, `             // middle becomes the (sub)root`],
+[`        `, {a:`balance(data, first, middle - 1);`, alt:[`balance(data, first, middle-1);`]}, ` // recurse: left half`],
+[`        `, {a:`balance(data, middle + 1, last);`, alt:[`balance(data, middle+1, last);`]}, `  // recurse: right half`],
+`    }`,
+`}`]},
+
+{w:4, lvl:'Hard', title:'Breadth-first traversal — with a queue', note:'Enqueue the root; then dequeue, visit, enqueue children, repeat.', lines:[
+`void breadthFirst() {`,
+`    Queue<BSTNode*> queue;`,
+`    BSTNode *p = root;`,
+`    if (p != 0) {`,
+[`        `, {a:`queue.enqueue(p);`}, `             // start with the root`],
+[`        while (`, {a:`!queue.empty()`, alt:[`!queue.isEmpty()`]}, `) {`],
+[`            `, {a:`p = queue.dequeue();`}, `      // next node in line`],
+`            visit(p);`,
+`            if (p->left != 0)`,
+[`                `, {a:`queue.enqueue(p->left);`}, `    // children join the line`],
+`            if (p->right != 0)`,
+[`                `, {a:`queue.enqueue(p->right);`}, ``],
+`        }`,
+`    }`,
+`}`]},
+
+{page:'a1', w:4, lvl:'Hard', title:'Worksheet 1 — the exam lines of insert & remove', note:'These are exactly the lines an exam blanks out. The successor hunt is the star.', lines:[
+`Node* insert(Node* p, int x) {`,
+`    if (p == 0) return new Node(x);     // empty spot: place it here`,
+[`    if (`, {a:`x < p->key`, alt:[`p->key > x`]}, `)`],
+[`        `, {a:`p->left = insert(p->left, x);`}, `     // smaller → left subtree`],
+`    else`,
+[`        `, {a:`p->right = insert(p->right, x);`}, `   // bigger → right subtree`],
+`    return p;`,
+`}`,
+``,
+`// inside remove(): the TWO-CHILDREN case (deletion by copying)`,
+[`Node* s = `, {a:`p->right;`}, `                 // go right once...`],
+[`while (`, {a:`s->left != 0`, alt:[`s->left != NULL`,`s->left != nullptr`,`0 != s->left`]}, `)`],
+[`    `, {a:`s = s->left;`}, `                    // ...then left all the way = SUCCESSOR`],
+[``, {a:`p->key = s->key;`}, `                    // copy the successor's value up`],
+[`p->right = `, {a:`remove(p->right, s->key);`}, `  // delete the successor node`]]},
+
+{page:'a2', w:4, lvl:'Hard', title:'Worksheet 2 — height, balance factor & rotation', note:'If you can type these five lines cold, AVL questions are free marks.', lines:[
+`int height(Node* p) {`,
+[`    if (p == 0) `, {a:`return -1;`}, `           // empty subtree = -1 (height counts ARCS)`],
+`    int hl = height(p->left);`,
+`    int hr = height(p->right);`,
+[`    return `, {a:`1 + (hl > hr ? hl : hr);`, alt:[`(hl > hr ? hl : hr) + 1;`,`1 + max(hl, hr);`]}, ``],
+`}`,
+``,
+`int balanceFactor(Node* p) {`,
+[`    return `, {a:`height(p->left) - height(p->right);`}, `   // LEFT minus RIGHT`],
+`}`,
+``,
+`// LEFT rotation — fixes an RR case (like INSERT 18)`,
+`Node* rotateLeft(Node* par) {`,
+[`    Node* ch = `, {a:`par->right;`}, `           // the child that comes up`],
+[`    `, {a:`par->right = ch->left;`}, `           // middle subtree switches parents!`],
+[`    `, {a:`ch->left = par;`}, `                 // old parent drops down-left`],
+[`    `, {a:`return ch;`}, `                      // new root of this subtree`],
+`}`]}
+];
+
+/* ================= flashcard engine ================= */
+let fcDeck = [], fcI = 0, fcWeek = 0;
+function fcBuild(){
+  fcDeck = CARDS.map((c,i)=>i).filter(i => fcWeek === 0 || CARDS[i][0] === fcWeek);
+  fcI = 0;
+}
+function fcShow(){
+  const c = CARDS[fcDeck[fcI]];
+  $('fc-q').innerHTML = c[1];
+  $('fc-a').innerHTML = c[2];
+  $('fc-wk-f').textContent = 'Week ' + c[0];
+  $('fc-wk-b').textContent = 'Week ' + c[0];
+  $('fc-count').textContent = 'CARD ' + (fcI+1) + ' / ' + fcDeck.length;
+}
+function fcFlip(){ $('fc').classList.toggle('flip'); }
+function fcMove(d){
+  const was = $('fc').classList.contains('flip');
+  $('fc').classList.remove('flip');
+  fcI = (fcI + d + fcDeck.length) % fcDeck.length;
+  if (was) setTimeout(fcShow, 250); else fcShow();
+}
+function fcShuffle(){
+  for (let i = fcDeck.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [fcDeck[i], fcDeck[j]] = [fcDeck[j], fcDeck[i]];
+  }
+  fcI = 0; $('fc').classList.remove('flip'); setTimeout(fcShow, 120);
+}
+function fcFilter(w, el){
+  fcWeek = w;
+  document.querySelectorAll('#fc-filters .chip').forEach(c => c.classList.toggle('on', c === el));
+  $('fc').classList.remove('flip');
+  fcBuild(); fcShow();
+}
+
+/* ================= quiz engine ================= */
+let qzList = [], qzI = 0, qzHits = 0, qzWeek = 0;
+function qzStart(w, el){
+  qzWeek = w;
+  if (el) document.querySelectorAll('#qz-filters .chip').forEach(c => c.classList.toggle('on', c === el));
+  qzList = QUIZ.map((q,i)=>i).filter(i => w === 0 || QUIZ[i][0] === w);
+  qzI = 0; qzHits = 0;
+  qzQuestion();
+}
+function qzQuestion(){
+  const q = QUIZ[qzList[qzI]];
+  $('qz-prog').textContent = 'QUESTION ' + (qzI+1) + ' / ' + qzList.length + '  ·  WEEK ' + q[0];
+  $('qz-score').textContent = 'SCORE ' + (qzHits * 100);
+  let h = '<div class="q-text">' + q[1] + '</div>';
+  const keys = ['A','B','C','D'];
+  q[2].forEach((opt,i)=>{
+    h += '<button class="opt" id="qopt'+i+'" onclick="qzAnswer('+i+')"><span class="key">'+keys[i]+'</span>'+opt+'</button>';
+  });
+  h += '<div class="q-why" id="q-why"><span class="verdict" id="q-verdict"></span><span id="q-reason"></span></div>';
+  h += '<div class="btnrow" id="q-nextrow" style="display:none"><button class="btn b-blue" onclick="qzNext()">' +
+       (qzI === qzList.length-1 ? 'See results ▶' : 'Next question ▶') + '</button></div>';
+  $('qz-body').innerHTML = h;
+}
+function qzAnswer(pick){
+  const q = QUIZ[qzList[qzI]];
+  const right = q[3];
+  q[2].forEach((_,i)=>{ $('qopt'+i).disabled = true; });
+  $('qopt'+right).classList.add('is-right');
+  const why = $('q-why');
+  if (pick === right) {
+    qzHits++;
+    why.classList.add('show','good');
+    $('q-verdict').textContent = '★ CORRECT! +100';
+  } else {
+    $('qopt'+pick).classList.add('is-wrong');
+    why.classList.add('show','bad');
+    $('q-verdict').textContent = '✖ NOT QUITE — the answer is ' + ['A','B','C','D'][right];
+  }
+  $('q-reason').textContent = q[4];
+  $('qz-score').textContent = 'SCORE ' + (qzHits * 100);
+  $('q-nextrow').style.display = 'flex';
+}
+function qzNext(){
+  qzI++;
+  if (qzI < qzList.length) { qzQuestion(); window.scrollTo(0,0); return; }
+  const n = qzList.length, pct = qzHits / n;
+  const msg = pct === 1 ? 'PERFECT RUN! You are exam-ready.' :
+              pct >= .8 ? 'Strong! Re-check the ones you missed and go again.' :
+              pct >= .5 ? 'Good base — read the reasons above, then retry.' :
+              'No stress. Re-read the week pages, then come back.';
+  $('qz-prog').textContent = 'RUN COMPLETE';
+  $('qz-score').textContent = '';
+  $('qz-body').innerHTML =
+    '<div class="q-end"><div class="q-prog">FINAL SCORE</div>' +
+    '<div class="bigscore">' + (qzHits*100) + ' PTS</div>' +
+    '<div class="msg">' + qzHits + ' / ' + n + ' correct — ' + msg + '</div>' +
+    '<button class="btn b-red" onclick="qzStart(qzWeek)">⟳ Retry</button></div>';
+}
+
+/* ================= code practice engine ================= */
+function prBlankHtml(pi, bi, part){
+  const len = Math.max(part.a.length + 2, 10);
+  return '<input class="blank" id="pr'+pi+'b'+bi+'" style="width:'+len+'ch" spellcheck="false" autocomplete="off" autocapitalize="off">';
+}
+function prProgramHtml(p, pi){
+  let bi = 0;
+  let h = '<div class="card" id="prg'+pi+'">';
+  h += '<div class="pr-head"><span class="pill wk">Week '+p.w+'</span>';
+  h += '<span class="pill '+(p.lvl==='Easy'?'easy':p.lvl==='Medium'?'med':'hard')+'">'+p.lvl+'</span>';
+  h += '<h3 style="margin:0">'+p.title+'</h3></div>';
+  h += '<p class="small">'+p.note+'</p><pre class="code">';
+  for (const line of p.lines) {
+    h += '<div class="cl">';
+    if (typeof line === 'string') h += hlCpp(line) || ' ';
+    else for (const part of line) {
+      if (typeof part === 'string') h += hlCpp(part);
+      else { h += prBlankHtml(pi, bi, part); bi++; }
+    }
+    h += '</div>';
+  }
+  h += '</pre><div class="btnrow"><button class="btn b-grn" onclick="prCheck('+pi+')">✔ Check</button>';
+  h += '<button class="btn" onclick="prReset('+pi+')">Reset</button>';
+  h += '<span class="pr-result" id="prres'+pi+'"></span></div></div>';
+  return h;
+}
+function prAnswers(p){
+  const out = [];
+  for (const line of p.lines)
+    if (typeof line !== 'string')
+      for (const part of line)
+        if (typeof part !== 'string') out.push(part);
+  return out;
+}
+const norm = s => s.replace(/\s+/g,'');
+function prCheck(pi){
+  const p = PRACTICE[pi], ans = prAnswers(p);
+  document.querySelectorAll('#prg'+pi+' .fixline').forEach(e => e.remove());
+  let good = 0;
+  ans.forEach((part, bi)=>{
+    const inp = $('pr'+pi+'b'+bi);
+    const val = norm(inp.value);
+    const ok = val.length > 0 && (val === norm(part.a) || (part.alt||[]).some(x => norm(x) === val));
+    inp.classList.toggle('ok', ok);
+    inp.classList.toggle('bad', !ok);
+    if (ok) good++;
+    else {
+      const fix = document.createElement('div');
+      fix.className = 'cl fixline';
+      fix.innerHTML = '   <span class="lbl">↳ correct line:</span>  ' + esc(part.a);
+      inp.closest('.cl').after(fix);
+    }
+  });
+  const res = $('prres'+pi);
+  if (good === ans.length) { res.textContent = '★ ALL GREEN — LEVEL CLEARED!'; res.style.color = 'var(--green)'; }
+  else { res.textContent = good + ' / ' + ans.length + ' — fix the red ones'; res.style.color = 'var(--red)'; }
+}
+function prReset(pi){
+  document.querySelectorAll('#prg'+pi+' .fixline').forEach(e => e.remove());
+  document.querySelectorAll('#prg'+pi+' input.blank').forEach(i => { i.value=''; i.classList.remove('ok','bad'); });
+  $('prres'+pi).textContent = '';
+}
+let prWeek = 0;
+function prFilter(w, el){
+  prWeek = w;
+  if (el) document.querySelectorAll('#pr-filters .chip').forEach(c => c.classList.toggle('on', c === el));
+  let h = '';
+  PRACTICE.forEach((p,pi)=>{ if (!p.page && (w === 0 || p.w === w)) h += prProgramHtml(p, pi); });
+  $('pr-list').innerHTML = h;
+}
+
+/* ================= boot ================= */
+document.querySelectorAll('pre.code[data-code]').forEach(p => { p.innerHTML = hlCpp(CODE[p.dataset.code] || ''); });
+document.querySelectorAll('.treebox[data-tree]').forEach(drawTree);
+document.querySelectorAll('.btreebox[data-btree]').forEach(drawBTree);
+(function(){
+  let h1 = '', h2 = '';
+  PRACTICE.forEach((p,pi)=>{ if (p.page === 'a1') h1 += prProgramHtml(p,pi); if (p.page === 'a2') h2 += prProgramHtml(p,pi); });
+  $('pr-a1').innerHTML = h1; $('pr-a2').innerHTML = h2;
+})();
+fcBuild(); fcShow();
+qzStart(0);
+prFilter(0);
+
+
+
+
+/* ===== course switcher (canonical) ===== */
+(function(){
+  var b=document.getElementById("logoBtn"),p=document.getElementById("csPop");
+  if(!b||!p)return;
+  b.addEventListener("click",function(e){e.stopPropagation();
+    var on=p.classList.toggle("on");b.setAttribute("aria-expanded",on?"true":"false");});
+  p.addEventListener("click",function(e){e.stopPropagation()});
+  document.addEventListener("click",function(){p.classList.remove("on");b.setAttribute("aria-expanded","false")});
+  document.addEventListener("keydown",function(e){if(e.key==="Escape")p.classList.remove("on")});
+  var s=document.getElementById("csSelf");
+  if(s)s.addEventListener("click",function(e){e.preventDefault();p.classList.remove("on");
+    if(typeof go==="function"){go("home")}
+    else if(typeof showTab==="function"){showTab("home",true)}});
+})();
 </script>
+
+<script src="./tree-mastery.js?v=20260823b"></script>
+<script src="./assignment3.js?v=20260823b"></script>
+<script src="./tree-mastery-upgrade.js?v=20260823b"></script>
+
 </body>
 </html>
