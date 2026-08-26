@@ -1,11 +1,14 @@
 body[data-study-console="algo"]{background-image:none!important}
 
-/* The shared Study Console header replaces ALGO's old desktop top bar.
-   Keeping the old fixed/sticky bar after the migration created two empty
-   header-height gaps above the lesson content. */
-body[data-study-console="algo"] > #top{display:none!important}
-body[data-study-console="algo"] #side{top:var(--sc-header-h)!important;background:var(--sc-surface)!important;border-color:var(--sc-line)!important}
-body[data-study-console="algo"] main{padding-top:0!important}
+/* Desktop: the shared Study Console shell is the only global header. */
+body[data-study-console="algo"]:not(.sc-embedded) > header#top{display:none!important}
+body[data-study-console="algo"]:not(.sc-embedded) > #side{top:var(--sc-header-h)!important;background:var(--sc-surface)!important;border-color:var(--sc-line)!important}
+body[data-study-console="algo"]:not(.sc-embedded) > main{padding-top:0!important}
+
+/* The midterm definition bank is embedded inside the ALGO page. It must not
+   render its own legacy header or a second Study Console shell. */
+body[data-study-console="algo"].sc-embedded > .top{display:none!important}
+body[data-study-console="algo"].sc-embedded > main.wrap{padding-top:24px!important}
 
 body[data-study-console="algo"] #side .navgroup{font-family:inherit!important;color:var(--sc-muted)!important;letter-spacing:.03em!important}
 body[data-study-console="algo"] #side .navbtn{font-family:inherit!important;color:var(--sc-muted)!important}
@@ -16,10 +19,9 @@ body[data-study-console="algo"] .hero .p1{font-family:inherit!important;color:va
 body[data-study-console="algo"] .stat,body[data-study-console="algo"] .sq,body[data-study-console="algo"] .treebox{filter:saturate(.45);box-shadow:none!important}
 body[data-study-console="algo"] .code{font-size:.92rem!important}
 
-/* On small screens the legacy top bar is retained only as the local sidebar
-   menu row. It sits directly under the shared header and no spacer is added. */
+/* Mobile: keep only the small local menu row needed to open the course sidebar. */
 @media(max-width:960px){
-  body[data-study-console="algo"] > #top{
+  body[data-study-console="algo"]:not(.sc-embedded) > header#top{
     display:flex!important;
     position:sticky!important;
     top:var(--sc-header-h)!important;
@@ -31,8 +33,8 @@ body[data-study-console="algo"] .code{font-size:.92rem!important}
     box-shadow:none!important;
     backdrop-filter:none!important;
   }
-  body[data-study-console="algo"] > #top #burger{display:block!important}
-  body[data-study-console="algo"] #side{top:calc(var(--sc-header-h) + 46px)!important}
-  body[data-study-console="algo"] main{margin-left:0!important;padding-top:0!important}
+  body[data-study-console="algo"]:not(.sc-embedded) > header#top #burger{display:block!important}
+  body[data-study-console="algo"]:not(.sc-embedded) > #side{top:calc(var(--sc-header-h) + 46px)!important}
+  body[data-study-console="algo"]:not(.sc-embedded) > main{margin-left:0!important;padding-top:0!important}
   body[data-study-console="algo"] main .wrap{padding-inline:14px!important}
 }
