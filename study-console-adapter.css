@@ -1,0 +1,11 @@
+body[data-study-console="algo"]{background-image:none!important}
+body[data-study-console="algo"] #side{background:var(--sc-surface)!important;border-color:var(--sc-line)!important}
+body[data-study-console="algo"] #side .navgroup{font-family:inherit!important;color:var(--sc-muted)!important;letter-spacing:.03em!important}
+body[data-study-console="algo"] #side .navbtn{font-family:inherit!important;color:var(--sc-muted)!important}
+body[data-study-console="algo"] #side .navbtn.on{background:var(--sc-accent-soft)!important;color:var(--sc-accent)!important}
+body[data-study-console="algo"] main .wrap{max-width:1120px!important}
+body[data-study-console="algo"] .hero{background:transparent!important;border:0!important;padding:24px 0!important}
+body[data-study-console="algo"] .hero .p1{font-family:inherit!important;color:var(--sc-accent)!important}
+body[data-study-console="algo"] .stat,body[data-study-console="algo"] .sq,body[data-study-console="algo"] .treebox{filter:saturate(.45);box-shadow:none!important}
+body[data-study-console="algo"] .code{font-size:.92rem!important}
+@media(max-width:820px){body[data-study-console="algo"] main{margin-left:0!important}body[data-study-console="algo"] #side{top:var(--sc-header-h)!important}body[data-study-console="algo"] main .wrap{padding-inline:14px!important}}
