@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Midterm Mock — Algorithms & Data Structures</title>
+<meta name="theme-color" content="#7d2638">
+<link rel="stylesheet" href="https://zann208.github.io/study/shared/v1/study-system.css">
+<link rel="stylesheet" href="./midterm-mock.css">
+</head>
+<body data-study-console="algo" data-console-id="algo" data-console-name="Algorithms & Data Structures">
+<main class="mock-main" id="main">
+  <header class="mock-hero">
+    <a class="mock-back" href="./">← Algorithms console</a>
+    <div class="mock-eyebrow">269202 · Official / supplied mock</div>
+    <h1>Midterm Mock</h1>
+    <p>Practice the supplied mock question set. Questions and values follow <strong>MockQuestions-Midterm.pdf</strong>; written and tree answers are self-review.</p>
+  </header>
+
+  <div class="mock-modebar" aria-label="Mock mode">
+    <button class="mock-btn primary" id="modeTake" type="button">TAKE MOCK</button>
+    <button class="mock-btn" id="modeReview" type="button">REVIEW ANSWERS</button>
+    <span class="mock-meta" id="mockPosition"></span>
+  </div>
+
+  <section class="mock-card" data-subcount="9">
+    <div class="mock-qhead"><span class="mock-number">01</span><div><div class="mock-topic">Binary Search Trees</div><h2>Balanced BST + operations + DSW</h2></div></div>
+    <div class="mock-question">
+      <p>Construct a complete, balanced, binary search tree, using the following values;</p>
+      <pre>A[] = {1, 5, 7, 12, 14, 17, 21, 23, 25, 28, 33, 35, 38, 45, 58 }</pre>
+      <p>Describe the algorithm you used to transform the array into a binary tree.</p>
+      <p>Redraw your tree after each of the following operations - for each operation explain the algorithm you use to complete it.</p>
+      <ol><li>INSERT value 15</li><li>DELETE value 7</li><li>DELETE value 14</li><li>DELETE value 35</li><li>SEARCH for value 38</li></ol>
+      <p>Why might you want to balance a binary search tree?</p>
+      <p>Demonstrate how you could rebalance your tree using the DSW balancing algorithm.</p>
+    </div>
+    <div class="answer">
+      <div class="answer-label">Best exam answer</div>
+      <p><strong>Construction:</strong> choose the middle value as the root, then recursively choose the middle of each left and right half until every value is placed. The first root is <strong>23</strong>.</p>
+      <div class="tree-sequence">
+        <div class="tree-step"><b>Initial balanced BST</b><div class="tree-diagram" data-tree="bst0"></div></div>
+        <div class="tree-step"><b>INSERT 15</b><div class="tree-diagram" data-tree="bst1"></div></div>
+        <div class="tree-step"><b>DELETE 7 · leaf</b><div class="tree-diagram" data-tree="bst2"></div></div>
+        <div class="tree-step"><b>DELETE 14 · one child</b><div class="tree-diagram" data-tree="bst3"></div></div>
+        <div class="tree-step"><b>DELETE 35 · two children</b><div class="tree-diagram" data-tree="bst4"></div></div>
+      </div>
+      <p><strong>INSERT 15:</strong> 15 &lt; 23 → right of 12 → left of 17 → right of 14. Insert at the empty child.</p>
+      <p><strong>DELETE 7:</strong> leaf case; remove it and set its parent pointer to NULL.</p>
+      <p><strong>DELETE 14:</strong> one-child case; its child 15 replaces it.</p>
+      <p><strong>DELETE 35:</strong> two-child copying case; copy the leftmost value of the right subtree, <strong>38</strong>, into 35's position, then remove the original 38.</p>
+      <p><strong>SEARCH 38:</strong> 38 &gt; 23 → move right → 38 found.</p>
+      <p><strong>Why balance:</strong> a balanced BST keeps search/insert/delete near O(log n); a badly skewed tree can degrade toward O(n).</p>
+      <h3>DSW</h3>
+      <ol><li>Use rotations to convert the tree to a right-leaning backbone/vine.</li><li>Compress the vine with left rotations.</li><li>Repeat compression until balanced.</li></ol>
+      <div class="tree-sequence">
+        <div class="tree-step"><b>Backbone order</b><div class="flow"><span>1</span><i>→</i><span>5</span><i>→</i><span>12</span><i>→</i><span>15</span><i>→</i><span>17</span><i>→</i><span>21</span><i>→</i><span>23</span><i>→</i><span>25</span><i>→</i><span>28</span><i>→</i><span>33</span><i>→</i><span>38</span><i>→</i><span>45</span><i>→</i><span>58</span></div></div>
+        <div class="tree-step"><b>One valid DSW-balanced result</b><div class="tree-diagram" data-tree="dsw"></div></div>
+      </div>
+      <p class="why"><strong>WHY:</strong> This follows the course's middle-element construction, deletion-by-copying convention, and DSW backbone/compression method.</p>
+    </div>
+    <div class="q-actions"><button class="mock-btn" data-prev type="button">PREVIOUS</button><button class="mock-btn primary" data-show-answer type="button">SHOW ANSWER</button><button class="mock-btn" data-next type="button">NEXT</button></div>
+  </section>
+
+  <section class="mock-card" data-subcount="4">
+    <div class="mock-qhead"><span class="mock-number">02</span><div><div class="mock-topic">Traversal</div><h2>Recursive inorder function</h2></div></div>
+    <div class="mock-question">
+<pre>void BST&lt;Int&gt;::function1(BSTNode&lt;Int&gt; *p) {
+if (p!=0) {
+function1(p-&gt;left);
+print(p-&gt;data);
+function1(p-&gt;right);
+}
+}</pre>
+      <p>What does the function do? How efficiently does it perform its task?</p>
+      <p>Compare this with at least 2 alternative approaches.</p>
+      <p>Show output of this function start from root use your latest tree.</p>
+    </div>
+    <div class="answer">
+      <div class="answer-label">Best exam answer</div>
+      <p>The function performs a depth-first <strong>inorder (LVR)</strong> traversal and prints every node in sorted order for a BST. Time is <strong>O(n)</strong>; recursive auxiliary space is <strong>O(h)</strong>.</p>
+      <p><strong>Alternative 1 — iterative stack:</strong> use an explicit stack instead of recursion; O(n) time and O(h) extra space.</p>
+      <p><strong>Alternative 2 — Morris traversal:</strong> temporarily restructure/thread the tree and restore it; O(n) time with O(1) extra space.</p>
+      <p><strong>Output:</strong> <code>1 5 12 15 17 21 23 25 28 33 38 45 58</code></p>
+      <p class="why"><strong>WHY:</strong> The exact supplied function calls left subtree, prints <code>p-&gt;data</code>, then calls right subtree.</p>
+    </div>
+    <div class="q-actions"><button class="mock-btn" data-prev type="button">PREVIOUS</button><button class="mock-btn primary" data-show-answer type="button">SHOW ANSWER</button><button class="mock-btn" data-next type="button">NEXT</button></div>
+  </section>
+
+  <section class="mock-card" data-subcount="5">
+    <div class="mock-qhead"><span class="mock-number">03</span><div><div class="mock-topic">AVL</div><h2>Self-balancing rules + three inserts</h2></div></div>
+    <div class="mock-question">
+      <p>How do AVL trees differ from using a balancing algorithm</p>
+      <p>What are the extra rules for managing an AVL tree?</p>
+      <p>Redraw your AVL tree after each of the following operations</p>
+      <ol><li>Insert 18</li><li>Insert 15</li><li>Insert 14</li></ol>
+      <div class="source-visual source-reconstructed"><div class="tree-diagram" data-tree="avl0"></div><div class="source-caption">Initial AVL tree reconstructed from the supplied mock.</div></div>
+    </div>
+    <div class="answer">
+      <div class="answer-label">Best exam answer</div>
+      <p>An AVL tree maintains balance automatically during insert/delete. It uses the course balance factor <strong>height(left) − height(right)</strong>, which must remain −1, 0 or +1; if it reaches ±2, fix the lowest unbalanced node using LL, RR, LR or RL rotations.</p>
+      <div class="tree-sequence">
+        <div class="tree-step"><b>Initial tree</b><div class="tree-diagram" data-tree="avl0"></div></div>
+        <div class="tree-step"><b>Insert 18 · RR at 13 → rotate left</b><div class="tree-diagram" data-tree="avl18"></div></div>
+        <div class="tree-step"><b>Insert 15 · balanced, no rotation</b><div class="tree-diagram" data-tree="avl15"></div></div>
+        <div class="tree-step"><b>Insert 14 · RL at 13 → right at 15, left at 13</b><div class="tree-diagram" data-tree="avl14"></div></div>
+      </div>
+    </div>
+    <div class="q-actions"><button class="mock-btn" data-prev type="button">PREVIOUS</button><button class="mock-btn primary" data-show-answer type="button">SHOW ANSWER</button><button class="mock-btn" data-next type="button">NEXT</button></div>
+  </section>
+
+  <section class="mock-card" data-subcount="3">
+    <div class="mock-qhead"><span class="mock-number">04</span><div><div class="mock-topic">Splay Trees</div><h2>Access 4, then insert 16</h2></div></div>
+    <div class="mock-question">
+      <p>What is the purpose of self-adjusting trees (Splay Tress)?</p>
+      <p>The following is a splay tree – redraw the splay tree after each of the following operations;</p>
+      <ol><li>show each operation when access 4</li><li>then show each operation when insert 16</li></ol>
+      <div class="source-visual source-reconstructed"><div class="tree-diagram" data-tree="splay0"></div><div class="source-caption">Initial Splay tree reconstructed from the supplied mock.</div></div>
+    </div>
+    <div class="answer">
+      <div class="answer-label">Best exam answer</div>
+      <p>A splay tree is self-adjusting: after an access or insertion, the accessed node is rotated toward the root so recently used values become quicker to reach on average.</p>
+      <h3>Access 4</h3>
+      <p>Path: <code>11 → 8 → 1 → 4</code>. 4 and parent 1 form a <strong>heterogeneous</strong> case under 8; rotate 4 around 1, then 4 around 8. Then 4 is a child of root 11: use the <strong>parent-root</strong> case and rotate 4 around 11.</p>
+      <div class="tree-sequence">
+        <div class="tree-step"><b>Before</b><div class="tree-diagram" data-tree="splay0"></div></div>
+        <div class="tree-step"><b>After heterogeneous pair</b><div class="tree-diagram" data-tree="splay4a"></div></div>
+        <div class="tree-step"><b>After parent-root rotation</b><div class="tree-diagram" data-tree="splay4"></div></div>
+      </div>
+      <h3>Insert 16</h3>
+      <p>Insert 16 by the BST rule on the result above. The path is <code>4 → 11 → 12 → 15 → 16</code>. Splay 16 using two <strong>homogeneous</strong> right-right cases until 16 reaches the root.</p>
+      <div class="tree-sequence">
+        <div class="tree-step"><b>After first homogeneous pair</b><div class="tree-diagram" data-tree="splay16a"></div></div>
+        <div class="tree-step"><b>Final · 16 at root</b><div class="tree-diagram" data-tree="splay16"></div></div>
+      </div>
+    </div>
+    <div class="q-actions"><button class="mock-btn" data-prev type="button">PREVIOUS</button><button class="mock-btn primary" data-show-answer type="button">SHOW ANSWER</button><button class="mock-btn" data-next type="button">NEXT</button></div>
+  </section>
+
+  <section class="mock-card" data-subcount="2">
+    <div class="mock-qhead"><span class="mock-number">05</span><div><div class="mock-topic">Heaps</div><h2>Max heap + min heap</h2></div></div>
+    <div class="mock-question">
+      <p>What is max heap. and give 1 example that we may use max heap.</p>
+      <p>What is min heap ? and give 1 example that use min heap.</p>
+    </div>
+    <div class="answer">
+      <div class="answer-label">Best exam answer</div>
+      <p><strong>Max heap:</strong> a binary tree where every parent is greater than or equal to its children; the tree is perfectly balanced with last-level leaves in the leftmost positions, so the largest value is at the root. Example: a max-priority queue.</p>
+      <p><strong>Min heap:</strong> the reverse heap rule: every parent is less than or equal to its children, so the smallest value is at the root. Example: a calendar/appointment queue where the earliest deadline is removed first.</p>
+    </div>
+    <div class="q-actions"><button class="mock-btn" data-prev type="button">PREVIOUS</button><button class="mock-btn primary" data-show-answer type="button">SHOW ANSWER</button><button class="mock-btn" data-next type="button">NEXT</button></div>
+  </section>
+
+  <section class="mock-card" data-subcount="6">
+    <div class="mock-qhead"><span class="mock-number">06</span><div><div class="mock-topic">B-Tree operations</div><h2>Order-5 B-Tree</h2></div></div>
+    <div class="mock-question">
+      <p>Suggest a situation where using a B-Tree would be appropriate.</p>
+      <p>The following is a B-Tree of order 5. Explain what would happen for each of the following operations;</p>
+      <ol><li>SEARCH for value 52.</li><li>SEARCH for value 60</li><li>INSERT value 7</li><li>INSERT value 34</li><li>DELETE value 81</li></ol>
+      <div class="source-visual source-reconstructed">
+        <div class="btree-source" role="img" aria-label="Order-5 B-Tree from the supplied mock">
+          <div class="btree-node btree-root"><span>41</span><span>66</span><span>87</span><span class="empty"></span></div>
+          <div class="btree-groups">
+            <div class="btree-group">
+              <div class="btree-node"><span>8</span><span>18</span><span>26</span><span>35</span></div>
+              <div class="btree-leaves"><span>2<br>4<br>6</span><span>10<br>12<br>14<br>16</span><span>20<br>22<br>24</span><span>28<br>30<br>31<br>32</span><span>36<br>37<br>38<br>39</span></div>
+            </div>
+            <div class="btree-group">
+              <div class="btree-node"><span>48</span><span>52</span><span>56</span><span class="empty"></span></div>
+              <div class="btree-leaves"><span>42<br>44<br>46</span><span>49<br>50<br>51</span><span>53<br>54<br>55</span><span>57<br>58<br>59</span></div>
+            </div>
+            <div class="btree-group">
+              <div class="btree-node"><span>72</span><span>78</span><span>83</span><span class="empty"></span></div>
+              <div class="btree-leaves"><span>68<br>69<br>70</span><span>73<br>74</span><span>79<br>81</span><span>84<br>85</span></div>
+            </div>
+          </div>
+          <div class="source-caption">Exact populated nodes shown in the supplied order-5 B-Tree. The source diagram also shows the unused/rightmost pointer after 87.</div>
+        </div>
+      </div>
+    </div>
+    <div class="answer">
+      <div class="answer-label">Best exam answer</div>
+      <p><strong>Use case:</strong> a large disk-based database, because a B-Tree stores many keys per node and reduces disk seeks.</p>
+      <p><strong>SEARCH 52:</strong></p><div class="flow"><span>[41 66 87]</span><i>→</i><span>[48 52 56]</span><i>→</i><span>52 FOUND</span></div>
+      <p><strong>SEARCH 60:</strong></p><div class="flow"><span>[41 66 87]</span><i>→</i><span>[48 52 56]</span><i>→</i><span>[57 58 59]</span><i>→</i><span>NOT FOUND</span></div>
+      <p><strong>INSERT 7:</strong> follow the leftmost path to leaf <code>[2 4 6]</code>. Insert 7 → <code>[2 4 6 7]</code>. The node still has at most 4 keys, so no split.</p>
+      <p><strong>INSERT 34:</strong> go to leaf <code>[28 30 31 32]</code>. Insert → <code>[28 30 31 32 34]</code>, so it overflows. Split and promote 31. Parent becomes <code>[8 18 26 31 35]</code>, which also overflows; split it and promote 26. Root becomes <code>[26 41 66 87]</code>.</p>
+      <p><strong>DELETE 81:</strong> follow the 66–87 branch to <code>[72 78 83]</code>, then leaf <code>[79 81]</code>. Delete 81 → <code>[79]</code>, which is under half full. Its sibling cannot lend, so combine with the right sibling using separator 83: <code>[79 83 84 85]</code>. Parent becomes <code>[72 78]</code>.</p>
+      <p class="why"><strong>WHY:</strong> The insert-34 double split and delete-81 combine match the exact operation set in the supplied practice source.</p>
+    </div>
+    <div class="q-actions"><button class="mock-btn" data-prev type="button">PREVIOUS</button><button class="mock-btn primary" data-show-answer type="button">SHOW ANSWER</button><button class="mock-btn" data-next type="button">NEXT</button></div>
+  </section>
+
+  <section class="mock-card" data-subcount="3">
+    <div class="mock-qhead"><span class="mock-number">07</span><div><div class="mock-topic">Multiway Trees</div><h2>B, B*, B**, B+</h2></div></div>
+    <div class="mock-question">
+      <p>In what situation would a B-Tree gain height?</p>
+      <p>What is the difference between a B-Tree, a B*-Tree and a B**-Tree?</p>
+      <p>What is a B+ Tree? Briefly discuss the advantage a B+ Tree gives over normal B-Trees.</p>
+    </div>
+    <div class="answer">
+      <div class="answer-label">Best exam answer</div>
+      <p><strong>B-Tree height:</strong> a B-Tree gains height only when the <strong>root itself splits</strong> and a new root is created.</p>
+      <p><strong>B / B* / B**:</strong> a B-Tree is at least about half full. A B*-Tree is about two-thirds full and delays splitting by redistributing first, then splitting two full nodes into three. A B**-Tree pushes the occupancy requirement to about 75%.</p>
+      <p><strong>B+ Tree:</strong> internal nodes are indexes while all actual data values are stored in leaves. The leaves are linked, so ordered/range traversal can move through the leaves without repeatedly visiting internal levels.</p>
+      <p class="why"><strong>WHY:</strong> This uses the existing ALGO Week 6 conventions, including the course statement that only a root split increases B-Tree height.</p>
+    </div>
+    <div class="q-actions"><button class="mock-btn" data-prev type="button">PREVIOUS</button><button class="mock-btn primary" data-show-answer type="button">SHOW ANSWER</button><button class="mock-btn" data-next type="button">NEXT</button></div>
+  </section>
+
+  <section class="mock-card" data-subcount="2">
+    <div class="mock-qhead"><span class="mock-number">08</span><div><div class="mock-topic">Indexes & Tries</div><h2>Prefix B+ Tree + Trie</h2></div></div>
+    <div class="mock-question"><p>What is a Prefix B+ Tree?</p><p>What is Trie</p></div>
+    <div class="answer">
+      <div class="answer-label">Best exam answer</div>
+      <p><strong>Prefix B+ Tree:</strong> a B+ Tree whose internal index nodes store only enough of each key prefix to distinguish between branches. Shorter index keys allow more keys and pointers per node.</p>
+      <p><strong>Trie:</strong> a tree that searches using successive parts of a key, such as one character or bit at each level; the path from the root spells the key.</p>
+    </div>
+    <div class="q-actions"><button class="mock-btn" data-prev type="button">PREVIOUS</button><button class="mock-btn primary" data-show-answer type="button">SHOW ANSWER</button><button class="mock-btn" data-next type="button">NEXT</button></div>
+  </section>
+
+  <section class="mock-card" data-subcount="8">
+    <div class="mock-qhead"><span class="mock-number">09</span><div><div class="mock-topic">Graph + Dijkstra</div><h2>Construct, classify, shortest paths from F</h2></div></div>
+    <div class="mock-question">
+      <p>Construct a graph, using the following values; answer the following;</p>
+      <ul><li>is it a multigraph?</li><li>is it a pseudograph?</li><li>is it a digraph?</li><li>is it a weighted graph?</li><li>is it a complete graph?</li><li>is it a disjointed graph? (with isolated nodes).</li></ul>
+      <p>Show shortest path from vertex F to every vertices using Dijkstra's algorithm</p>
+      <div class="table-wrap source-matrix"><table class="mock-table matrix" aria-label="Exact weighted matrix from the supplied mock">
+        <thead><tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>H</th><th>I</th></tr></thead>
+        <tbody>
+          <tr><th>A</th><td>0</td><td>2</td><td>1</td><td>7</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+          <tr><th>B</th><td>2</td><td>0</td><td>5</td><td>5</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+          <tr><th>C</th><td>1</td><td>5</td><td>0</td><td>4</td><td>0</td><td>9</td><td>0</td><td>0</td><td>0</td></tr>
+          <tr><th>D</th><td>7</td><td>5</td><td>4</td><td>0</td><td>8</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+          <tr><th>E</th><td>0</td><td>0</td><td>0</td><td>8</td><td>0</td><td>3</td><td>7</td><td>0</td><td>0</td></tr>
+          <tr><th>F</th><td>0</td><td>0</td><td>9</td><td>0</td><td>3</td><td>0</td><td>5</td><td>10</td><td>0</td></tr>
+          <tr><th>G</th><td>0</td><td>0</td><td>0</td><td>0</td><td>7</td><td>5</td><td>0</td><td>11</td><td>6</td></tr>
+          <tr><th>H</th><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>10</td><td>11</td><td>0</td><td>3</td></tr>
+          <tr><th>I</th><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>6</td><td>3</td><td>0</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="answer">
+      <div class="answer-label">Best exam answer</div>
+      <div class="table-wrap"><table class="mock-table matrix">
+        <thead><tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>H</th><th>I</th></tr></thead>
+        <tbody>
+          <tr><th>A</th><td>0</td><td>2</td><td>1</td><td>7</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+          <tr><th>B</th><td>2</td><td>0</td><td>5</td><td>5</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+          <tr><th>C</th><td>1</td><td>5</td><td>0</td><td>4</td><td>0</td><td>9</td><td>0</td><td>0</td><td>0</td></tr>
+          <tr><th>D</th><td>7</td><td>5</td><td>4</td><td>0</td><td>8</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+          <tr><th>E</th><td>0</td><td>0</td><td>0</td><td>8</td><td>0</td><td>3</td><td>7</td><td>0</td><td>0</td></tr>
+          <tr><th>F</th><td>0</td><td>0</td><td>9</td><td>0</td><td>3</td><td>0</td><td>5</td><td>10</td><td>0</td></tr>
+          <tr><th>G</th><td>0</td><td>0</td><td>0</td><td>0</td><td>7</td><td>5</td><td>0</td><td>11</td><td>6</td></tr>
+          <tr><th>H</th><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>10</td><td>11</td><td>0</td><td>3</td></tr>
+          <tr><th>I</th><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>6</td><td>3</td><td>0</td></tr>
+        </tbody>
+      </table></div>
+      <ul>
+        <li><strong>Multigraph?</strong> No — the matrix represents at most one edge between each pair.</li>
+        <li><strong>Pseudograph?</strong> No — the diagonal is zero, so there are no loops.</li>
+        <li><strong>Digraph?</strong> No — the matrix is symmetric, so edges are undirected.</li>
+        <li><strong>Weighted?</strong> Yes — non-zero entries are edge weights.</li>
+        <li><strong>Complete?</strong> No — many vertex pairs have no edge.</li>
+        <li><strong>Disjoint / isolated?</strong> No — the graph is connected and no vertex is isolated.</li>
+      </ul>
+      <h3>Dijkstra from F</h3>
+      <div class="table-wrap"><table class="mock-table">
+        <thead><tr><th>Vertex</th><th>Distance</th><th>Previous</th><th>Shortest path</th></tr></thead>
+        <tbody>
+          <tr><td>A</td><td>10</td><td>C</td><td>F → C → A</td></tr>
+          <tr><td>B</td><td>12</td><td>A</td><td>F → C → A → B</td></tr>
+          <tr><td>C</td><td>9</td><td>F</td><td>F → C</td></tr>
+          <tr><td>D</td><td>11</td><td>E</td><td>F → E → D</td></tr>
+          <tr><td>E</td><td>3</td><td>F</td><td>F → E</td></tr>
+          <tr><td>F</td><td>0</td><td>—</td><td>F</td></tr>
+          <tr><td>G</td><td>5</td><td>F</td><td>F → G</td></tr>
+          <tr><td>H</td><td>10</td><td>F</td><td>F → H</td></tr>
+          <tr><td>I</td><td>11</td><td>G</td><td>F → G → I</td></tr>
+        </tbody>
+      </table></div>
+      <p class="why"><strong>Finalization order:</strong> F, E, G, C, A, H, D, I, B. A and H are both distance 10, and D and I are both distance 11; either tied pair may be finalized in the opposite order without changing the shortest distances.</p>
+    </div>
+    <div class="q-actions"><button class="mock-btn" data-prev type="button">PREVIOUS</button><button class="mock-btn primary" data-show-answer type="button">SHOW ANSWER</button><button class="mock-btn" data-next type="button">FINISH / REVIEW</button></div>
+  </section>
+
+  <footer class="mock-footer">
+    <p>Source priority: current ALGO course material → Algo Practice.pdf → supplied mock question wording → candidate answer sheet → handwritten revision notes.</p>
+    <p><a href="./">Back to Algorithms console</a> · <a href="./midterm.html">Exam Definitions</a></p>
+  </footer>
+</main>
+<script src="./midterm-mock.js"></script>
+<script src="https://zann208.github.io/study/shared/v1/study-system.js" defer></script>
+</body>
+</html>

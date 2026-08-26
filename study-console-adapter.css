@@ -12,12 +12,31 @@ body[data-study-console="algo"].sc-embedded > main.wrap{padding-top:24px!importa
 
 body[data-study-console="algo"] #side .navgroup{font-family:inherit!important;color:var(--sc-muted)!important;letter-spacing:.03em!important}
 body[data-study-console="algo"] #side .navbtn{font-family:inherit!important;color:var(--sc-muted)!important}
+body[data-study-console="algo"] #side a.navbtn{text-decoration:none!important}
 body[data-study-console="algo"] #side .navbtn.on{background:var(--sc-accent-soft)!important;color:var(--sc-accent)!important}
 body[data-study-console="algo"] main .wrap{max-width:1120px!important}
 body[data-study-console="algo"] .hero{background:transparent!important;border:0!important;padding:24px 0!important}
 body[data-study-console="algo"] .hero .p1{font-family:inherit!important;color:var(--sc-accent)!important}
 body[data-study-console="algo"] .stat,body[data-study-console="algo"] .sq,body[data-study-console="algo"] .treebox{filter:saturate(.45);box-shadow:none!important}
 body[data-study-console="algo"] .code{font-size:.92rem!important}
+
+/* Tree Mastery expanded course path */
+.tm-course-expanded{margin-top:24px;padding-top:20px;border-top:1px solid var(--line)}
+.tm-course-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:14px}
+.tm-course-head h2{margin:3px 0 5px;font-size:clamp(20px,2.4vw,28px)}
+.tm-course-groups{display:grid;gap:18px}
+.tm-course-group>h3{margin:0 0 8px;font-size:16px}
+.tm-course-topic{border-top:1px solid var(--line);background:transparent}
+.tm-course-topic:last-child{border-bottom:1px solid var(--line)}
+.tm-course-topic>summary{list-style:none;cursor:pointer;padding:12px 4px;font-weight:750;color:var(--ink);display:flex;align-items:center;gap:10px}
+.tm-course-topic>summary::-webkit-details-marker{display:none}
+.tm-course-topic>summary::before{content:'+';width:20px;height:20px;display:grid;place-items:center;border:1px solid var(--line2);border-radius:5px;color:var(--am);font:700 13px/1 var(--mono)}
+.tm-course-topic[open]>summary::before{content:'−'}
+.tm-course-topic>summary:hover{color:var(--am)}
+.tm-course-body{padding:0 0 14px 30px}
+.tm-course-body>.card{margin:0;background:transparent;border:0;padding:0;box-shadow:none}
+.tm-course-body>.card>h2:first-child{display:none}
+.tm-course-body .treebox,.tm-course-body .btreebox,.tm-course-body pre{max-width:100%;overflow:auto}
 
 /* Mobile: keep only the small local menu row needed to open the course sidebar. */
 @media(max-width:960px){
@@ -37,4 +56,8 @@ body[data-study-console="algo"] .code{font-size:.92rem!important}
   body[data-study-console="algo"]:not(.sc-embedded) > #side{top:calc(var(--sc-header-h) + 46px)!important}
   body[data-study-console="algo"]:not(.sc-embedded) > main{margin-left:0!important;padding-top:0!important}
   body[data-study-console="algo"] main .wrap{padding-inline:14px!important}
+}
+@media(max-width:640px){
+  .tm-course-body{padding-left:0}
+  .tm-course-topic>summary{padding:12px 0}
 }

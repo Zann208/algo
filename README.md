@@ -12,7 +12,8 @@ Vanilla HTML/CSS/JavaScript with no framework or external runtime dependencies.
 |---|---|
 | **Topics** | Weeks 1, 2, 3, 4 and 6 rewritten in plain language, with commented C++ and diagrams |
 | **Assignments** | Assignments 1–3 worked through step by step: BST, AVL and Splay Tree operations |
-| **Tree Mastery** | Learn + visual labs + assignment-mode drills + exam questions for all Week 4 and Week 6 tree structures |
+| **Tree Mastery** | Full Week 4 + Week 6 Learn path, visual labs, assignment-mode drills and exam questions |
+| **Midterm Mock** | Supplied mock questions with verified, concise model answers and tree/graph working |
 | **Flashcards** | Filterable recall practice by week |
 | **Quiz** | Immediate feedback with explanations |
 | **Code practice** | Fill-in-the-blank C++ exercises in the same style as course exercises |
