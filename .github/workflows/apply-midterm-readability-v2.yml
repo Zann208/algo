@@ -1,0 +1,77 @@
+name: Apply reviewed midterm readability pass v2
+
+on:
+  push:
+    paths:
+      - '.github/workflows/apply-midterm-readability-v2.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: algo-midterm-readability-v2
+  cancel-in-progress: false
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Apply reviewed presentation-only patch
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import base64, re
+
+          carrier = Path('.github/workflows/apply-midterm-readability.yml').read_text(encoding='utf-8')
+          css = re.search(r"css_b64 = '''([^']+)'''", carrier, re.S)
+          js = re.search(r"js_b64 = '''([^']+)'''", carrier, re.S)
+          if not css or not js:
+              raise SystemExit('Could not recover reviewed readability payload')
+
+          Path('midterm-mock.css').write_bytes(base64.b64decode(css.group(1)))
+          Path('midterm-mock-readability.js').write_bytes(base64.b64decode(js.group(1)))
+
+          p = Path('midterm-mock.html')
+          before = p.read_text(encoding='utf-8')
+          needle = '<script src="./midterm-mock.js"></script>'
+          extra = '<script src="./midterm-mock-readability.js"></script>'
+          if extra not in before:
+              if before.count(needle) != 1:
+                  raise SystemExit('Unexpected midterm mock script structure')
+              after = before.replace(needle, needle + '\n' + extra, 1)
+              # Strong content-integrity check: the only HTML mutation is this one script tag.
+              if after.replace('\n' + extra, '', 1) != before:
+                  raise SystemExit('HTML integrity check failed')
+              p.write_text(after, encoding='utf-8')
+          PY
+
+      - name: Validate scope
+        run: |
+          node --check midterm-mock.js
+          node --check midterm-mock-readability.js
+          python - <<'PY'
+          from pathlib import Path
+          css=Path('midterm-mock.css').read_text(encoding='utf-8')
+          html=Path('midterm-mock.html').read_text(encoding='utf-8')
+          assert css.count('{') == css.count('}')
+          assert 'var(--sc-header)' not in css
+          assert 'var(--sc-header-h)' in css
+          assert html.count('midterm-mock-readability.js') == 1
+          assert 'Access 4, then insert 16' in html
+          assert 'DELETE value 81' in html
+          PY
+          changed="$(git diff --name-only)"
+          printf '%s\n' "$changed"
+          test "$changed" = $'midterm-mock.css\nmidterm-mock-readability.js\nmidterm-mock.html' || {
+            echo 'Unexpected changed files'; exit 1;
+          }
+
+      - name: Commit readability pass
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add midterm-mock.css midterm-mock-readability.js midterm-mock.html
+          git commit -m "Improve ALGO midterm mock readability"
+          git push
