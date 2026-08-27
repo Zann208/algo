@@ -1,0 +1,164 @@
+name: Refine Midterm Mock answer wording
+
+on:
+  push:
+    paths:
+      - '.github/workflows/refine-midterm-answer-wording.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: algo-midterm-answer-wording
+  cancel-in-progress: false
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Apply source-aligned wording only
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          p=Path('midterm-mock.html')
+          s=p.read_text(encoding='utf-8')
+
+          replacements=[
+            (
+              '<p><strong>Construction:</strong> choose the middle value as the root, then recursively choose the middle of each left and right half until every value is placed. The first root is <strong>23</strong>.</p>',
+              '<p><strong>Construction:</strong> choose the middle value as the root. Split the remaining values into left and right halves, then repeat the same middle-value process recursively for each half until no values are left to split. The first root is <strong>23</strong>.</p>'
+            ),
+            (
+              '<p><strong>INSERT 15:</strong> 15 &lt; 23 → right of 12 → left of 17 → right of 14. Insert at the empty child.</p>',
+              '<p><strong>INSERT 15:</strong> 15 &lt; 23 → go left; 15 &gt; 12 → go right; 15 &lt; 17 → go left; 15 &gt; 14 → insert 15 as the right child of 14.</p>'
+            ),
+            (
+              '<p><strong>DELETE 7:</strong> leaf case; remove it and set its parent pointer to NULL.</p>',
+              '<p><strong>DELETE 7:</strong> 7 &lt; 23 → left; 7 &lt; 12 → left; 7 &gt; 5 → right. Find 7 as a leaf node, so delete it directly.</p>'
+            ),
+            (
+              '<p><strong>DELETE 14:</strong> one-child case; its child 15 replaces it.</p>',
+              '<p><strong>DELETE 14:</strong> 14 &lt; 23 → left; 14 &gt; 12 → right; 14 &lt; 17 → left. Find 14 with one child, so promote its child 15 to replace it.</p>'
+            ),
+            (
+              '<p><strong>DELETE 35:</strong> two-child copying case; copy the leftmost value of the right subtree, <strong>38</strong>, into 35\'s position, then remove the original 38.</p>',
+              '<p><strong>DELETE 35:</strong> 35 &gt; 23 → go right and find 35. It has two children, so promote the leftmost node of its right subtree, <strong>38</strong>, to replace 35, then remove the original 38.</p>'
+            ),
+            (
+              '<p><strong>SEARCH 38:</strong> 38 &gt; 23 → move right → 38 found.</p>',
+              '<p><strong>SEARCH 38:</strong> 38 &gt; 23 → go right → 38 is found.</p>'
+            ),
+            (
+              '<p><strong>Why balance:</strong> a balanced BST keeps search/insert/delete near O(log n); a badly skewed tree can degrade toward O(n).</p>',
+              '<p><strong>Why balance:</strong> after many insertions and deletions, a BST can become very unbalanced. Then search, insertion and deletion may no longer stay near O(log n) and can degrade toward O(n).</p>'
+            ),
+            (
+              '<ol><li>Use rotations to convert the tree to a right-leaning backbone/vine.</li><li>Compress the vine with left rotations.</li><li>Repeat compression until balanced.</li></ol>',
+              '<ol><li>Convert the tree into a right-leaning backbone (vine) using rotations.</li><li>Use rotations to compress the backbone back into a balanced tree.</li><li>Repeat the compression until the tree is balanced.</li></ol>'
+            ),
+            (
+              '<p>The function performs a depth-first <strong>inorder (LVR)</strong> traversal and prints every node in sorted order for a BST. Time is <strong>O(n)</strong>; recursive auxiliary space is <strong>O(h)</strong>.</p>',
+              '<p>The function performs a depth-first <strong>inorder (LVR)</strong> traversal: left subtree → node → right subtree. It visits every node and prints the values in sorted order for a BST. Time complexity is <strong>O(n)</strong>.</p>'
+            ),
+            (
+              '<p><strong>Alternative 1 — iterative stack:</strong> use an explicit stack instead of recursion; O(n) time and O(h) extra space.</p>',
+              '<p><strong>Alternative 1 — iterative traversal:</strong> use an explicit stack instead of recursion.</p>'
+            ),
+            (
+              '<p><strong>Alternative 2 — Morris traversal:</strong> temporarily restructure/thread the tree and restore it; O(n) time with O(1) extra space.</p>',
+              '<p><strong>Alternative 2 — Morris traversal:</strong> temporarily use links/threading so the tree can be traversed without recursion or an extra stack.</p>'
+            ),
+            (
+              '<p>An AVL tree maintains balance automatically during insert/delete. It uses the course balance factor <strong>height(left) − height(right)</strong>, which must remain −1, 0 or +1; if it reaches ±2, fix the lowest unbalanced node using LL, RR, LR or RL rotations.</p>',
+              '<p>An AVL tree is self-balancing, so it maintains balance automatically during insertions and deletions. Its balance factor is <strong>height(left) − height(right)</strong> and should stay at −1, 0 or +1. If a node becomes unbalanced, fix that subtree using LL, RR, LR or RL rotations instead of rebalancing the whole tree.</p>'
+            ),
+            (
+              '<p>A splay tree is self-adjusting: after an access or insertion, the accessed node is rotated toward the root so recently used values become quicker to reach on average.</p>',
+              '<p>A splay tree is self-adjusting. It improves average access time by moving a recently or frequently accessed node closer to the root.</p>'
+            ),
+            (
+              '<p>Path: <code>11 → 8 → 1 → 4</code>. 4 and parent 1 form a <strong>heterogeneous</strong> case under 8; rotate 4 around 1, then 4 around 8. Then 4 is a child of root 11: use the <strong>parent-root</strong> case and rotate 4 around 11.</p>',
+              '<p>Access 4 along the path <code>11 → 8 → 1 → 4</code>. Perform the required splay rotations until 4 reaches the root: first a <strong>heterogeneous</strong> case, then a <strong>parent-root</strong> rotation.</p>'
+            ),
+            (
+              '<p>Insert 16 by the BST rule on the result above. The path is <code>4 → 11 → 12 → 15 → 16</code>. Splay 16 using two <strong>homogeneous</strong> right-right cases until 16 reaches the root.</p>',
+              '<p>Insert 16 using the normal BST rule along <code>4 → 11 → 12 → 15 → 16</code>. Then splay 16 upward using the required <strong>homogeneous</strong> rotations until 16 becomes the root.</p>'
+            ),
+            (
+              '<p><strong>Max heap:</strong> a binary tree where every parent is greater than or equal to its children; the tree is perfectly balanced with last-level leaves in the leftmost positions, so the largest value is at the root. Example: a max-priority queue.</p>',
+              '<p><strong>Max heap:</strong> a binary tree where each parent is greater than or equal to its children, so the largest value is at the root. Example: a max-priority queue where the most important item is removed first.</p>'
+            ),
+            (
+              '<p><strong>Min heap:</strong> the reverse heap rule: every parent is less than or equal to its children, so the smallest value is at the root. Example: a calendar/appointment queue where the earliest deadline is removed first.</p>',
+              '<p><strong>Min heap:</strong> a binary tree where each parent is less than or equal to its children, so the smallest value is at the root. Example: an appointment queue where the earliest deadline is removed first.</p>'
+            ),
+            (
+              '<p><strong>Use case:</strong> a large disk-based database, because a B-Tree stores many keys per node and reduces disk seeks.</p>',
+              '<p><strong>Use case:</strong> a database containing many customer records or a large number of entries.</p>'
+            ),
+            (
+              '<p><strong>B / B* / B**:</strong> a B-Tree is at least about half full. A B*-Tree is about two-thirds full and delays splitting by redistributing first, then splitting two full nodes into three. A B**-Tree pushes the occupancy requirement to about 75%.</p>',
+              '<p><strong>B / B* / B**:</strong> a B-Tree is about half full and splits one full node into two. A B*-Tree is about two-thirds full and splits two nodes into three. A B**-Tree is about 75% full and splits three nodes into four.</p>'
+            ),
+            (
+              '<p><strong>B+ Tree:</strong> internal nodes are indexes while all actual data values are stored in leaves. The leaves are linked, so ordered/range traversal can move through the leaves without repeatedly visiting internal levels.</p>',
+              '<p><strong>B+ Tree:</strong> internal nodes act as indexes that guide the search to the actual data stored in the leaf nodes. This allows efficient searching.</p>'
+            ),
+            (
+              '<p><strong>Prefix B+ Tree:</strong> a B+ Tree whose internal index nodes store only enough of each key prefix to distinguish between branches. Shorter index keys allow more keys and pointers per node.</p>',
+              '<p><strong>Prefix B+ Tree:</strong> a type of B+ Tree that saves space by storing shared prefixes of keys only once.</p>'
+            ),
+          ]
+
+          for old,new in replacements:
+            count=s.count(old)
+            if count!=1:
+              raise SystemExit(f'Expected exactly one match, found {count}: {old[:100]}')
+            s=s.replace(old,new,1)
+
+          p.write_text(s,encoding='utf-8')
+          PY
+
+      - name: Validate scope and preserved verified data
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          s=Path('midterm-mock.html').read_text(encoding='utf-8')
+          # Preserve exact questions / verified operations / matrix corrections.
+          required=[
+            'INSERT value 15',
+            'DELETE value 81',
+            'Access 4, then insert 16',
+            '<td>9</td>',
+            '<td>8</td>',
+            'What is Trie',
+          ]
+          for marker in required:
+            assert marker in s, marker
+          # Source-backed wording changes should now be present.
+          expected=[
+            'after many insertions and deletions, a BST can become very unbalanced',
+            'use an explicit stack instead of recursion',
+            'moving a recently or frequently accessed node closer to the root',
+            'most important item is removed first',
+            'database containing many customer records',
+            'splits three nodes into four',
+            'storing shared prefixes of keys only once',
+          ]
+          for marker in expected:
+            assert marker in s, marker
+          PY
+          changed="$(git diff --name-only)"
+          printf '%s\n' "$changed"
+          test "$changed" = "midterm-mock.html"
+
+      - name: Commit wording refinement
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add midterm-mock.html
+          git commit -m "Align Midterm Mock answers with practice source wording"
+          git push
