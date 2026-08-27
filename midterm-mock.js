@@ -19,13 +19,26 @@ function save(){
     completionState:state.completionState
   }));}catch(e){}
 }
-function setTake(index){
+function setTake(index,{preserveScroll=false}={}){
+  const lockedScrollY=preserveScroll?window.scrollY:null;
+  const lockedScrollX=preserveScroll?window.scrollX:null;
   document.body.classList.remove('review-mode');
   state.current=Math.max(0,Math.min(cards.length-1,index));
   cards.forEach((c,i)=>{c.hidden=i!==state.current; c.querySelector('.answer')?.classList.remove('open');});
   takeBtn.classList.add('primary');reviewBtn.classList.remove('primary');
   pos.textContent='Question group '+(state.current+1)+' / '+cards.length+' · 42 supplied sub-prompts · written/tree answers are self-review';
-  save();window.scrollTo({top:0,behavior:'smooth'});
+  save();
+  if(preserveScroll){
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      const root=document.documentElement;
+      const previousBehavior=root.style.scrollBehavior;
+      root.style.scrollBehavior='auto';
+      window.scrollTo(lockedScrollX,lockedScrollY);
+      root.style.scrollBehavior=previousBehavior;
+    }));
+  }else{
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
 }
 function setReview(){
   document.body.classList.add('review-mode');
@@ -41,10 +54,10 @@ document.querySelectorAll('[data-show-answer]').forEach(b=>b.addEventListener('c
   b.textContent=open?'HIDE ANSWER':'SHOW ANSWER';
 }));
 document.querySelectorAll('[data-next]').forEach(b=>b.addEventListener('click',()=>{
-  if(state.current<cards.length-1) setTake(state.current+1);
+  if(state.current<cards.length-1) setTake(state.current+1,{preserveScroll:true});
   else {state.completionState=true;save();setReview();}
 }));
-document.querySelectorAll('[data-prev]').forEach(b=>b.addEventListener('click',()=>setTake(state.current-1)));
+document.querySelectorAll('[data-prev]').forEach(b=>b.addEventListener('click',()=>setTake(state.current-1,{preserveScroll:true})));
 
 const trees={
 bst0:{v:23,l:{v:12,l:{v:5,l:{v:1},r:{v:7}},r:{v:17,l:{v:14},r:{v:21}}},r:{v:35,l:{v:28,l:{v:25},r:{v:33}},r:{v:45,l:{v:38},r:{v:58}}}},
