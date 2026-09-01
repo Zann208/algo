@@ -1,0 +1,23 @@
+name: Export current ALGO
+
+on:
+  push:
+    paths:
+      - '.github/workflows/export-current.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build archive
+        run: zip -r algo-current.zip . -x '.git/*' '.github/workflows/export-current.yml'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: algo-current-main
+          path: algo-current.zip
+          retention-days: 1
