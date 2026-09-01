@@ -382,6 +382,7 @@ html:not(.dark) #csPop{box-shadow:0 22px 55px rgba(15,23,42,.16)}
   <button class="navbtn" data-page="week3" onclick="go('week3')"><span class="dot" style="background:var(--am2)"></span>Stacks &amp; queues<span class="num">W3</span></button>
   <button class="navbtn" data-page="week4" onclick="go('week4')"><span class="dot" style="background:var(--gr)"></span>Trees &amp; heaps<span class="num">W4</span></button>
   <button class="navbtn" data-page="week6" onclick="go('week6')"><span class="dot" style="background:var(--vi)"></span>B-Trees &amp; Tries<span class="num">W6</span></button>
+  <button class="navbtn" data-page="week7" onclick="go('week7')"><span class="dot" style="background:var(--cy)"></span>Graphs<span class="num">W7</span></button>
 
   <div class="navgroup">Midterm</div>
   <button class="navbtn" data-page="midterm" onclick="go('midterm')"><span class="dot" style="background:var(--am)"></span>Exam definitions<span class="num">MID</span></button>
@@ -408,11 +409,11 @@ html:not(.dark) #csPop{box-shadow:0 22px 55px rgba(15,23,42,.16)}
     <div class="p1">269202 · Algorithms for iSNE</div>
     <h1>Algorithms — study console</h1>
     <p>Your study base for <b style="color:var(--am)">269202 Algorithms for iSNE</b> (Dr. Ken Cosh).
-    Everything here is organized around the posted midterm material: Weeks 1, 2, 3, 4 and 6, plus Worksheets 1–2.</p>
+    The learning path now covers Weeks 1, 2, 3, 4, 6 and <b>Week 7 Graphs</b>. The separate Midterm area remains limited to the currently posted midterm scope.</p>
   </div>
 
   <div class="statrow">
-    <div class="stat s-blue"><div class="n">5</div><div class="l">Topics</div></div>
+    <div class="stat s-blue"><div class="n">6</div><div class="l">Topics</div></div>
     <div class="stat s-red"><div class="n">2</div><div class="l">Worksheets</div></div>
     <div class="stat s-yel"><div class="n">40%</div><div class="l">Midterm weight</div></div>
     <div class="stat s-grn"><div class="n">80%</div><div class="l">Attendance needed</div></div>
@@ -425,14 +426,15 @@ html:not(.dark) #csPop{box-shadow:0 22px 55px rgba(15,23,42,.16)}
     <p><b>Week 3:</b> Stacks. Queues. Priority queues. Heaps as priority queues.</p>
     <p><b>Week 4:</b> Trees, Binary Trees, Binary Search Trees (BST). Traversal. Insertion and deletion. Balancing: DSW and AVL. Splay trees. Heaps and heapsort. Expression trees.</p>
     <p><b>Week 6:</b> Multiway trees. B-Trees, B*, B**, B+, Prefix B+ and Bit Trees. Tries.</p>
-    <p style="margin-top:15px"><button class="btn b-yel" onclick="go('midterm')">MIDTERM · EXAM DEFINITIONS →</button></p>
+    <p><b>Week 7:</b> Graphs. Graph representations, DFS/BFS, shortest paths, cycle detection, union-find, spanning trees, topological sort, Eulerian/Hamiltonian graphs and TSP.</p>
+    <p style="margin-top:15px"><button class="btn b-blue" onclick="go('week7')">OPEN GRAPH MODULE →</button> <button class="btn b-yel" onclick="go('midterm')">MIDTERM · EXAM DEFINITIONS →</button></p>
     <p class="small">Marks (from the syllabus): assignments 10% · midterm 40% · final 50%. You need 80% attendance to sit the exams.</p>
   </div>
 
   <div class="card">
     <h2><span class="sq s-grn"></span>How to use this</h2>
     <ol>
-      <li><b>Read a level</b> (Weeks 1, 2, 3, 4 and 6). Each one explains every topic in simple words, with code.</li>
+      <li><b>Read a level</b> (Weeks 1, 2, 3, 4, 6 and 7). Each one turns the source material into a structured study path.</li>
       <li><b>Check the yellow Notes box</b> on each level. That is your exam cheat-sheet.</li>
       <li><b>Flip the Flashcards</b> until the answers feel easy.</li>
       <li><b>Take the Quiz.</b> Wrong answers show a one-line reason, so you learn as you go.</li>
@@ -1501,6 +1503,182 @@ html:not(.dark) #csPop{box-shadow:0 22px 55px rgba(15,23,42,.16)}
 
 </section>
 
+
+<!-- ===== WEEK7 ===== -->
+<section class="page" id="page-week7">
+<div class="lvlchip c-blue">Week 7 · Graphs</div>
+  <h1>Graphs</h1>
+  <p class="sub">Trees force parent/child hierarchy. Graphs are more flexible: they model <b>vertices (nodes)</b> and the <b>edges (connections)</b> between them.</p>
+
+  <div class="box notes"><span class="tag">Source scope</span>This module follows the supplied Week 7 deck. It keeps the deck's terminology and algorithms; where a slide asks you to work something out, the console keeps it as a learner task rather than silently adding an answer.</div>
+
+  <div class="card">
+    <h2><span class="sq"></span>1 · Core graph definitions</h2>
+    <table class="simple">
+      <tr><th>Term</th><th>Meaning from the Week 7 material</th></tr>
+      <tr><td><b>Simple graph</b></td><td><code>G=(V,E)</code>: a nonempty set of vertices <code>V</code> and a possibly empty set of edges <code>E</code>.</td></tr>
+      <tr><td><b>Directed graph (digraph)</b></td><td>Direction matters: an edge from <code>vi</code> to <code>vj</code> is not the same as one from <code>vj</code> to <code>vi</code>.</td></tr>
+      <tr><td><b>Multigraph</b></td><td>Two vertices may be joined by multiple edges.</td></tr>
+      <tr><td><b>Pseudograph</b></td><td>A multigraph where the restriction <code>vj ≠ vi</code> is removed.</td></tr>
+      <tr><td><b>Path</b></td><td>A route from <code>v1</code> to <code>vn</code> by following edges.</td></tr>
+      <tr><td><b>Circuit</b></td><td>A path where <code>v1 = vn</code> and no edge is repeated.</td></tr>
+      <tr><td><b>Cycle</b></td><td>A circuit where all vertices are different.</td></tr>
+      <tr><td><b>Weighted graph</b></td><td>Each edge has a value, such as distance or cost.</td></tr>
+      <tr><td><b>Complete graph</b></td><td>Every pair of vertices has a joining edge.</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-yel"></span>2 · Representing a graph as data</h2>
+    <p>A drawn network is easy for a person to read, but the deck stresses that it is not an effective storage format. Three representations are introduced:</p>
+    <table class="simple">
+      <tr><th>Representation</th><th>Idea</th></tr>
+      <tr><td><b>Adjacency list</b></td><td>For each vertex, store the vertices directly connected to it. Example from the deck: <code>A → B, C, D</code>.</td></tr>
+      <tr><td><b>Adjacency linked list</b></td><td>Store each vertex with a linked list of its adjacent vertices.</td></tr>
+      <tr><td><b>Adjacency matrix</b></td><td>A table with one row and column per vertex; the supplied simple-graph example uses <code>1</code> for a connection and <code>0</code> for no connection.</td></tr>
+    </table>
+    <div class="box idea"><span class="tag">Remember</span>The efficiency of later traversal algorithms depends partly on whether the graph is stored as an adjacency list or adjacency matrix.</div>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-grn"></span>3 · Traversal: DFS vs BFS</h2>
+    <p>Graph traversal means visiting every node once. It is harder than tree traversal because a graph can contain a <b>cycle</b>, so the algorithm marks nodes as visited. Graphs may also contain isolated vertices, so an outer loop is needed to find unvisited parts.</p>
+    <table class="simple">
+      <tr><th>DFS</th><th>BFS</th></tr>
+      <tr><td>Picks one neighbour and keeps going until a dead end.</td><td>Visits every neighbour before moving to their neighbours.</td></tr>
+      <tr><td>Uses recursion in the supplied algorithm (therefore a stack).</td><td>Uses a queue.</td></tr>
+      <tr><td>Marks vertices using <code>num(v)</code> so cycles do not cause an infinite loop.</td><td>Also marks each vertex before enqueueing it.</td></tr>
+    </table>
+<pre class="code">Depthfirstsearch()
+for all vertices v
+    num(v) = 0
+edges = null
+i = 1
+while there is a vertex v with num(v) = 0
+    DFS(v)
+output edges
+
+DFS(v)
+num(v) = i++
+for all vertices u adjacent to v
+    if num(u) is 0
+        attach edge(uv) to edges
+        DFS(u)</pre>
+<pre class="code">Breadthfirst()
+for all vertices u
+    num(u) = 0
+edges = null
+i = 1
+while there is a vertex v such that num(v) == 0
+    num(v) = i++
+    enqueue(v)
+    while queue is not empty
+        v = dequeue()
+        for all vertices u adjacent to v
+            if num(u) is 0
+                num(u) = i++
+                enqueue(u)
+                attach edge(vu) to edges
+output edges</pre>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-blue"></span>4 · Shortest paths</h2>
+    <h3>Dijkstra's algorithm — one start vertex</h3>
+    <p>Each edge in a weighted graph has a value. The shortest path is the path with the least total value. Dijkstra starts every current distance at <b>∞</b>, except the first vertex at <b>0</b>. It repeatedly selects the unchecked vertex with the smallest current distance and tests whether it gives its neighbours a shorter route.</p>
+<pre class="code">DijkstraAlgorithm(weighted simple digraph, vertex first)
+for all vertices v
+    currDist(v) = ∞
+currDist(first) = 0
+toBeChecked = all vertices
+while toBeChecked is not empty
+    v = a vertex in toBeChecked with minimal currDist(v)
+    remove v from toBeChecked
+    for all vertices u adjacent to v and in toBeChecked
+        if currDist(u) &gt; currDist(v) + weight(edge(vu))
+            currDist(u) = currDist(v) + weight(edge(vu))
+            predecessor(u) = v</pre>
+    <div class="box mistakes"><span class="tag">Dijkstra problem</span>The Week 7 deck states that Dijkstra does <b>not</b> work when there are negative-valued edges.</div>
+
+    <h3>All-to-all shortest paths — WFI</h3>
+    <p>The Warshall–Floyd–Ingerman algorithm starts from a weight matrix where non-directly-connected nodes have distance <b>∞</b>, then repeatedly tests whether routing through an intermediate vertex improves a pair's distance.</p>
+<pre class="code">WFIalgorithm(matrix weight)
+for i = 1 to |V|
+    for j = 1 to |V|
+        for k = 1 to |V|
+            if weight[j][k] &gt; weight[j][i] + weight[i][k]
+                weight[j][k] = weight[j][i] + weight[i][k]</pre>
+    <div class="box notes"><span class="tag">Your turn from the deck</span>The slide asks: <b>What is Big-O for this algorithm?</b> Keep this as a practice question and infer it from the loop structure.</div>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-red"></span>5 · Cycle detection and Union-Find</h2>
+    <h3>Cycle detection</h3>
+    <p>The deck extends DFS: if an adjacent vertex is already visited and the edge is not already one of the traversal edges, a cycle is detected. It notes that digraphs are slightly more complicated.</p>
+<pre class="code">DFS(v)
+num(v) = i++
+for all vertices u adjacent to v
+    if num(u) is 0
+        attach edge(uv) to edges
+        DFS(u)
+    else if edge(vu) is not in edges
+        cycle detected</pre>
+    <h3>Union-Find</h3>
+    <p>Union-Find first <b>finds</b> which set an element belongs to, then <b>unions</b> two sets. In this graph context it can be used to determine whether two nodes are connected. The supplied description merges sets into a linked list.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq"></span>6 · Spanning trees and Kruskal</h2>
+    <p>A <b>spanning tree</b> keeps all destinations connected while removing unnecessary routes. When edge costs matter, the goal is a <b>minimum spanning tree</b>.</p>
+<pre class="code">Kruskal(weighted unconnected undirected graph)
+tree = null
+edges = sequence of all edges of graph sorted by weight
+for (i = 1; i ≤ |E| and |tree| &lt; |V|-1; i++)
+    if e from edges does not form a cycle with edges in tree
+        add e to tree</pre>
+    <p>Kruskal repeatedly tests the smallest available edge and adds it only if it does not create a cycle, stopping when the spanning tree is complete.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-yel"></span>7 · Topological sort and networks</h2>
+    <h3>Topological sort</h3>
+    <p>Some digraphs represent tasks that must happen in a particular order. Topological sort orders their vertices by repeatedly locating a minimal vertex, numbering it, and removing it and its edges.</p>
+<pre class="code">toposort(digraph)
+for i = 1 to |V|
+    find minimal vertex v
+    num(v) = i
+    remove v from digraph and all edges</pre>
+    <h3>Network</h3>
+    <p>The deck defines a network as a special <b>digraph</b> with one <b>source</b> (no incoming edges), one <b>sink</b> (no outgoing edges), and a <b>capacity</b> on each edge. Examples include water through pumps/pipes and data through a computer network.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-grn"></span>8 · Eulerian graphs and the Chinese Postman</h2>
+    <table class="simple">
+      <tr><td><b>Eulerian trail</b></td><td>A route through a graph that includes every edge only once.</td></tr>
+      <tr><td><b>Eulerian cycle</b></td><td>An Eulerian trail that is also a cycle.</td></tr>
+      <tr><td><b>Eulerian graph</b></td><td>A graph containing an Eulerian cycle.</td></tr>
+    </table>
+    <p>The deck states: a graph is Eulerian if every vertex is incident to an <b>even</b> number of edges; a graph contains an Eulerian trail if it has exactly <b>two odd-degree vertices</b>.</p>
+    <h3>Chinese Postman</h3>
+    <p>The goal is to traverse every street at least once and return to the start using as short a walk as possible. If the graph is not Eulerian, repeat edges between odd-degree vertices until there are no odd-degree vertices, choosing short repeats where possible.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-blue"></span>9 · Hamiltonian graphs and TSP</h2>
+    <p>A <b>Hamiltonian cycle</b> passes through all vertices of a graph. A <b>Hamiltonian graph</b> has at least one Hamiltonian cycle. The deck states that all complete graphs are Hamiltonian.</p>
+    <h3>Travelling Salesman Problem</h3>
+    <p>The TSP asks for the shortest Hamiltonian cycle: visit every city while choosing the shortest tour.</p>
+    <p>The deck presents two approximate approaches:</p>
+    <ol>
+      <li>Begin with a <b>minimum spanning tree</b>, follow it, and use triangle shortcuts when a node would be visited again. The deck states the TSP solution should be no more than <code>2 × l</code>, where <code>l</code> is the minimum spanning tree length.</li>
+      <li>Begin at a root, insert its nearest neighbour to make a loop, then repeatedly add the next nearest neighbour by linking it to its two closest neighbours until all nodes are linked.</li>
+    </ol>
+  </div>
+
+  <div class="box idea"><span class="tag">Week 7 one-line map</span><b>Represent → traverse → find paths → detect cycles/connectivity → build spanning trees → order digraph tasks → reason about edge-visiting and vertex-visiting tours.</b></div>
+</section>
+
 <!-- ===== MIDTERM ===== -->
 <section class="page" id="page-midterm">
   <div class="lvlchip c-red">Midterm · Exam Definition Bank</div>
@@ -1638,6 +1816,27 @@ html:not(.dark) #csPop{box-shadow:0 22px 55px rgba(15,23,42,.16)}
 
 </section>
 
+
+  <div class="card">
+    <h2><span class="sq s-blue"></span>Graphs — Week 7 quick reference</h2>
+    <table class="simple">
+      <tr><th>Problem / idea</th><th>Remember</th></tr>
+      <tr><td>Graph</td><td><code>G=(V,E)</code> · vertices + edges.</td></tr>
+      <tr><td>DFS</td><td>Go deep along one neighbour; supplied version uses recursion/stack; mark visited nodes.</td></tr>
+      <tr><td>BFS</td><td>Visit all neighbours first; uses a queue; mark before enqueueing.</td></tr>
+      <tr><td>Dijkstra</td><td>Single-source shortest paths; start 0 / others ∞; repeatedly process minimum current distance; deck warns against negative edges.</td></tr>
+      <tr><td>WFI</td><td>All-to-all shortest paths using a weight matrix and intermediate vertices.</td></tr>
+      <tr><td>Cycle detection</td><td>DFS plus a check for an already-visited neighbour reached by a non-tree edge (digraphs need extra care).</td></tr>
+      <tr><td>Union-Find</td><td>Find a set, then union sets; useful for connectivity.</td></tr>
+      <tr><td>Kruskal</td><td>Sort edges by weight; add the smallest edge that does not form a cycle; stop at <code>|V|-1</code> tree edges.</td></tr>
+      <tr><td>Topological sort</td><td>For ordering tasks in a digraph; repeatedly remove a minimal vertex.</td></tr>
+      <tr><td>Eulerian</td><td>Every edge once. Eulerian graph: all vertex degrees even. Eulerian trail: exactly two odd-degree vertices.</td></tr>
+      <tr><td>Hamiltonian</td><td>A cycle through all vertices. All complete graphs are Hamiltonian.</td></tr>
+      <tr><td>TSP</td><td>Shortest Hamiltonian cycle; Week 7 presents MST/triangle-shortcut and nearest-insertion approaches.</td></tr>
+    </table>
+  </div>
+
+
 <!-- ===== CARDS ===== -->
 <section class="page" id="page-cards">
 <div class="lvlchip">Practice · Flashcards</div>
@@ -1651,6 +1850,7 @@ html:not(.dark) #csPop{box-shadow:0 22px 55px rgba(15,23,42,.16)}
     <button class="chip" data-fw="3" onclick="fcFilter(3,this)">Week 3</button>
     <button class="chip" data-fw="4" onclick="fcFilter(4,this)">Week 4</button>
     <button class="chip" data-fw="6" onclick="fcFilter(6,this)">Week 6</button>
+    <button class="chip" data-fw="7" onclick="fcFilter(7,this)">Week 7</button>
   </div>
 
   <div class="fc-stage">
@@ -1690,6 +1890,7 @@ html:not(.dark) #csPop{box-shadow:0 22px 55px rgba(15,23,42,.16)}
     <button class="chip" onclick="qzStart(3,this)">Week 3</button>
     <button class="chip" onclick="qzStart(4,this)">Week 4</button>
     <button class="chip" onclick="qzStart(6,this)">Week 6</button>
+    <button class="chip" onclick="qzStart(7,this)">Week 7</button>
   </div>
 
   <div class="card" id="qz-card">
@@ -2376,6 +2577,24 @@ function drawBTree(el){
 /* ================= FLASHCARDS data ================= */
 /* [week, question, answer] */
 const CARDS = [
+[7,`What is a simple graph?`,`<b>G=(V,E)</b>: a nonempty set of vertices V and a possibly empty set of edges E.`],
+[7,`Simple graph vs directed graph (digraph)`,`In a simple graph the connection is symmetric; in a <b>digraph direction matters</b>, so vi→vj is not the same as vj→vi.`],
+[7,`Path vs circuit vs cycle`,`A <b>path</b> follows edges from v1 to vn. A <b>circuit</b> returns to the start with no repeated edge. A <b>cycle</b> is a circuit where all vertices are different.`],
+[7,`Three graph representations introduced in Week 7`,`<b>Adjacency list</b>, <b>adjacency linked list</b>, and <b>adjacency matrix</b>.`],
+[7,`Why must traversal mark vertices as visited?`,`Graphs may contain <b>cycles</b>. Without visited marks, traversal could loop forever.`],
+[7,`DFS vs BFS in one sentence`,`<b>DFS</b> follows one neighbour deeply (recursion/stack); <b>BFS</b> visits all neighbours first using a <b>queue</b>.`],
+[7,`What is the key idea of Dijkstra's algorithm?`,`Start the source at distance <b>0</b>, all others at <b>∞</b>; repeatedly choose the unchecked vertex with minimum current distance and relax routes to its neighbours.`],
+[7,`What problem with Dijkstra is stated in Week 7?`,`It does <b>not work with negative-valued edges</b>.`],
+[7,`What does the WFI algorithm calculate?`,`<b>All-to-all shortest paths</b> from a weight matrix by testing whether an intermediate vertex gives a shorter route.`],
+[7,`What does Union-Find do?`,`It <b>finds</b> which set an element belongs to and <b>unions</b> sets together; here it can test graph connectivity.`],
+[7,`What is a minimum spanning tree?`,`A spanning tree that keeps every vertex connected while choosing routes with minimum total cost.`],
+[7,`Kruskal's rule`,`Sort all edges by weight and repeatedly add the <b>smallest edge that does not form a cycle</b>, until the spanning tree is complete.`],
+[7,`What is topological sort for?`,`Ordering vertices in a <b>digraph</b> that represents tasks or prerequisites that must happen in a particular order.`],
+[7,`How does Week 7 define a network?`,`A special <b>digraph</b> with one source (no incoming edges), one sink (no outgoing edges), and a capacity on each edge.`],
+[7,`Eulerian trail vs Eulerian cycle`,`An <b>Eulerian trail</b> includes every edge once. An <b>Eulerian cycle</b> is an Eulerian trail that also returns to its start.`],
+[7,`When is a graph Eulerian according to Week 7?`,`When <b>every vertex has even degree</b>. An Eulerian trail exists when exactly two vertices have odd degree.`],
+[7,`What is a Hamiltonian cycle?`,`A cycle that passes through <b>all vertices</b> of the graph.`],
+[7,`What graph problem is the Travelling Salesman Problem?`,`Finding the <b>shortest Hamiltonian cycle</b>.`],
 [6,`Why do B-trees exist at all?`,`Because <b>seek time</b> on a disk is mechanical — <b>milliseconds</b>, while CPU work is <b>microseconds</b> (1,000× faster). Processing is essentially free, so it is worth extra CPU work to avoid even one disk access.`],
 [6,`A multiway tree node has m children. How many keys?`,`<b>m − 1</b>. Always one fewer key than pointers.`],
 [6,`A node holds k keys. How many pointers?`,`<b>k + 1</b>.`],
@@ -2459,6 +2678,45 @@ const CARDS = [
 /* ================= QUIZ data ================= */
 /* [week, question, [4 options], correctIndex, one-line reason] */
 const QUIZ = [
+[7,`A graph is fundamentally a collection of…`,
+ [`vertices and edges`,`parents and children only`,`array cells and indexes`,`keys and disk blocks`],0,
+ `Week 7 introduces graphs as vertices (nodes) plus edges (connections).`],
+[7,`Which graph representation uses a row and column for every vertex?`,
+ [`Adjacency matrix`,`Adjacency linked list`,`Stack`,`Trie`],0,
+ `The adjacency matrix records whether vertex pairs are connected.`],
+[7,`Why does graph traversal mark each visited node?`,
+ [`To prevent cycles from causing repeated/infinite traversal`,`To sort all edges by weight`,`To make the graph complete`,`To remove isolated vertices`],0,
+ `Unlike a tree, a graph can contain a cycle.`],
+[7,`Which pairing matches the Week 7 traversal algorithms?`,
+ [`DFS → recursion/stack; BFS → queue`,`DFS → queue; BFS → recursion only`,`Both → priority queue`,`Both → adjacency matrix only`],0,
+ `DFS goes deep; BFS processes neighbours level-by-level using a queue.`],
+[7,`Dijkstra starts the chosen first vertex with current distance…`,
+ [`0`,`∞`,`1`,`the largest edge weight`],0,
+ `All other vertices begin at infinity; the source begins at zero.`],
+[7,`Week 7 states that Dijkstra has a problem when the graph has…`,
+ [`negative-valued edges`,`isolated vertices`,`more than one path`,`an adjacency list`],0,
+ `The deck explicitly warns that Dijkstra does not work with negative-valued edges.`],
+[7,`The WFI algorithm is introduced for…`,
+ [`all-to-all shortest paths`,`single-source DFS`,`heap construction`,`topological sorting`],0,
+ `It updates a weight matrix by testing intermediate vertices.`],
+[7,`Kruskal considers edges in what order?`,
+ [`in increasing weight order`,`in vertex-name order`,`randomly`,`largest weight first`],0,
+ `It tests the smallest available edge and adds it only if no cycle is formed.`],
+[7,`Topological sort is especially useful when a digraph represents…`,
+ [`tasks that must be performed in an order`,`an undirected delivery map only`,`a binary search tree`,`disk blocks`],0,
+ `The deck gives process diagrams and prerequisite diagrams as examples.`],
+[7,`A network in Week 7 has…`,
+ [`one source, one sink, and edge capacities`,`only undirected edges`,`no edge values`,`every vertex connected to every other vertex`],0,
+ `A network is defined as a special digraph with a source, sink, and capacities.`],
+[7,`An Eulerian trail is concerned with visiting every…`,
+ [`edge once`,`vertex once`,`vertex twice`,`weighted edge from smallest to largest`],0,
+ `Eulerian problems focus on edges; Hamiltonian problems focus on vertices.`],
+[7,`A Hamiltonian cycle passes through…`,
+ [`all vertices`,`all edges exactly once`,`only vertices of even degree`,`only the source and sink`],0,
+ `Week 7 defines a Hamiltonian cycle by visiting all vertices.`],
+[7,`The Travelling Salesman Problem is described as finding the…`,
+ [`shortest Hamiltonian cycle`,`shortest Eulerian trail only`,`largest spanning tree`,`fastest DFS ordering`],0,
+ `The salesman must visit every city and minimize the total tour.`],
 [6,`Why are B-trees used for data stored on disk?`,
  [`Seek time is mechanical and ~1,000× slower than CPU work, so extra processing is worth it to avoid an access`,`They use less RAM than binary trees`,`They are easier to program than AVL trees`,`They keep the data sorted, which binary trees cannot`],0,
  `Seek time is milliseconds, CPU time is microseconds. Processing is essentially free, so the whole design goal is fewer disk accesses.`],

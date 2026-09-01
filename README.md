@@ -10,7 +10,7 @@ Vanilla HTML/CSS/JavaScript with no framework or external runtime dependencies.
 
 | Section | What it does |
 |---|---|
-| **Topics** | Weeks 1, 2, 3, 4 and 6 rewritten in plain language, with commented C++ and diagrams |
+| **Topics** | Weeks 1, 2, 3, 4, 6 and 7 rewritten in plain language, with algorithms, commented C++ and diagrams |
 | **Assignments** | Assignments 1–3 worked through step by step: BST, AVL and Splay Tree operations |
 | **Tree Mastery** | Full Week 4 + Week 6 Learn path, visual labs, assignment-mode drills and exam questions |
 | **Midterm Mock** | Supplied mock questions with verified, concise model answers and tree/graph working |
@@ -19,7 +19,9 @@ Vanilla HTML/CSS/JavaScript with no framework or external runtime dependencies.
 | **Code practice** | Fill-in-the-blank C++ exercises in the same style as course exercises |
 | **Cheat sheet** | Complexity, structure and rotation rules in one reference page |
 
-Current midterm-preparation scope covers computational complexity; arrays and linked lists; stacks, queues and priority queues; then the full tree material: tree fundamentals, BSTs, traversal, insertion/deletion, DSW, AVL, splay trees, heaps/heapsort, expression trees, multiway trees, B-Trees, B*, B**, B+, Prefix B+, Bit Trees and Tries.
+Current learning coverage includes computational complexity; arrays and linked lists; stacks, queues and priority queues; tree fundamentals, BSTs, traversal, insertion/deletion, DSW, AVL, splay trees, heaps/heapsort, expression trees, multiway trees, B-Trees, B*, B**, B+, Prefix B+, Bit Trees and Tries; plus Week 7 Graphs: representations, DFS/BFS, shortest paths, cycle detection, union-find, spanning trees/Kruskal, topological sort, networks, Eulerian/Hamiltonian graphs and TSP.
+
+The dedicated midterm pages remain limited to the currently posted midterm scope (Weeks 1, 2, 3, 4 and 6); Week 7 is added to the main learning console without being silently marked as midterm content.
 
 ## Tree practice
 
