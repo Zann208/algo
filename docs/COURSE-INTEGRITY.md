@@ -1,59 +1,73 @@
-# Course Integrity Report
+# ALGO Content Integrity Report
 
 ## Canonical baseline
 
-The educational-content baseline is the current live `Zann208/algo` course repository before this feature merge.
+The educational-content baseline is the existing `Zann208/algo` console plus the newly supplied **Week 7** source deck.
 
-The existing course source remains unchanged. The upgrade is additive: it adds a Midterm Mock, expands the Tree Mastery **presentation** by reusing existing Week 4 / Week 6 cards, and adds only the navigation needed to reach the new mock.
+The Week 7 update is additive. Existing Weeks 1, 2, 3, 4 and 6 material, assignments, Tree Mastery, Midterm Definitions and Midterm Mock remain intact.
 
-## Verified unchanged course sources
+## Week 7 source integration
 
-The following existing files remain byte-for-byte unchanged:
+The main console now includes a dedicated **Week 7 — Graphs** module based on the supplied Week 7 deck.
+
+Coverage added to `index.html`:
+
+- graph definitions: simple graph, digraph, multigraph, pseudograph
+- path, circuit, cycle, weighted graph and complete graph
+- adjacency list, adjacency linked list and adjacency matrix
+- graph traversal and visited-node marking
+- depth-first search (DFS)
+- breadth-first search (BFS)
+- shortest paths and Dijkstra's algorithm
+- all-to-all shortest paths using the WFI algorithm
+- cycle detection
+- union-find
+- spanning trees and Kruskal's algorithm
+- topological sort
+- networks with source, sink and capacity
+- Eulerian trails/cycles and the Chinese Postman problem
+- Hamiltonian cycles/graphs
+- Travelling Salesman Problem approaches presented in the source
+
+The Week 7 material is also represented in:
+
+- sidebar topic navigation
+- home learning-path summary
+- Cheat Sheet
+- Flashcards
+- Quiz
+- README learning coverage
+
+## Midterm boundary
+
+The dedicated midterm pages remain limited to the currently posted midterm scope: **Weeks 1, 2, 3, 4 and 6**.
+
+Week 7 has **not** been silently added to `midterm.html` or the Midterm Mock because the supplied Week 7 deck establishes new learning material but does not state that the existing midterm scope changed.
+
+## Source fidelity
+
+The Week 7 module preserves the terminology, algorithms and framing of the supplied deck. Where the source presents a learner question without giving the answer—for example the Big-O prompt for the WFI algorithm—the main console keeps it as a learner task rather than silently inserting an external answer.
+
+The source slide deck itself is not redistributed in the repository.
+
+## Existing material retained
 
 - `legacy.html`
 - `tree-mastery.js`
 - `tree-mastery-upgrade.js`
+- `tree-mastery-learn-expanded.js`
 - `assignment3.js`
 - `midterm.html`
-
-The canonical `index.html` differs from the pre-feature live page only by:
-
-1. one **Midterm Mock** navigation link; and
-2. one script include for the presentation-only Tree Mastery Learn expansion.
-
-## Tree Mastery expansion
-
-`tree-mastery-learn-expanded.js` clones the already-rendered direct course cards into collapsible Learn topics.
-
-Coverage:
-
-- Week 4 direct course cards: **12 / 12**
-- Week 6 direct course cards: **11 / 11**
-
-It does not rewrite the card text, formulas, examples, code, tree conventions, or existing answers.
-
-## Added files
-
-- `tree-mastery-learn-expanded.js`
 - `midterm-mock.html`
-- `midterm-mock.css`
-- `midterm-mock.js`
-- `docs/MIDTERM-MOCK-AUDIT.md`
-- `docs/COURSE-INTEGRITY.md`
-- `docs/VALIDATION.md`
-
-The supplied PDF screenshots are **not redistributed** in the repository. The new mock reconstructs the required AVL, Splay, B-Tree and graph/matrix information as HTML/SVG from the supplied questions.
+- existing Weeks 1, 2, 3, 4 and 6 lessons
+- existing assignment and mastery progress behavior
 
 ## Integrity statement
 
-- Existing lessons changed: **NO**
-- Existing assignments changed: **NO**
-- Existing definitions changed: **NO**
-- Existing examples changed: **NO**
-- Existing answers changed: **NO**
-- Existing code examples changed: **NO**
-- Existing algorithms/formulas changed: **NO**
-- Existing module order changed: **NO**
-- Existing progress keys changed: **NO**
-
-The new Midterm Mock is new material and is audited separately in `MIDTERM-MOCK-AUDIT.md`.
+- Existing lessons removed: **NO**
+- Existing assignments removed: **NO**
+- Existing midterm scope changed: **NO**
+- Existing answers rewritten by the Week 7 update: **NO**
+- Week 7 added to main learning console: **YES**
+- Week 7 added to general Flashcards / Quiz / Cheat Sheet: **YES**
+- Week 7 incorrectly marked as midterm material: **NO**
