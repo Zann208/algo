@@ -45,12 +45,10 @@ public:
     Graph(int input[SIZE][SIZE]) {
         edgeCount = 0;
 
-        // create nodes
         for (int i = 0; i < SIZE; i++) {
             nodes[i] = Node('A' + i);
         }
 
-        // create edges
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
                 matrix[i][j] = input[i][j];
@@ -83,12 +81,76 @@ public:
         }
     }
 
-    bool isMultigraph();
-    bool isPseudograph();
-    bool isDigraph();
-    bool isWeighted();
-    bool isComplete();
-    bool isDisjointed();
+    bool isMultigraph() {
+        for (int i = 0; i < edgeCount; i++) {
+            for (int j = i + 1; j < edgeCount; j++) {
+                if (edges[i].from == edges[j].from &&
+                    edges[i].to == edges[j].to) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    bool isPseudograph() {
+        for (int i = 0; i < SIZE; i++) {
+            if (matrix[i][i] != 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    bool isDigraph() {
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = i + 1; j < SIZE; j++) {
+                if (matrix[i][j] != matrix[j][i]) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    bool isWeighted() {
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                if (matrix[i][j] != 0 && matrix[i][j] != 1) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    bool isComplete() {
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = i + 1; j < SIZE; j++) {
+                if (matrix[i][j] == 0 && matrix[j][i] == 0) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    bool isDisjointed() {
+        for (int i = 0; i < SIZE; i++) {
+            bool isolated = true;
+
+            for (int j = 0; j < SIZE; j++) {
+                if (matrix[i][j] != 0 || matrix[j][i] != 0) {
+                    isolated = false;
+                }
+            }
+
+            if (isolated) {
+                return true;
+            }
+        }
+        return false;
+    }
 };
 
 int main() {
@@ -108,6 +170,14 @@ int main() {
 
     graph.showNodes();
     graph.showEdges();
+
+    cout << boolalpha << endl;
+    cout << "Multigraph: " << graph.isMultigraph() << endl;
+    cout << "Pseudograph: " << graph.isPseudograph() << endl;
+    cout << "Digraph: " << graph.isDigraph() << endl;
+    cout << "Weighted graph: " << graph.isWeighted() << endl;
+    cout << "Complete graph: " << graph.isComplete() << endl;
+    cout << "Disjointed graph: " << graph.isDisjointed() << endl;
 
     return 0;
 }
