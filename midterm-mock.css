@@ -48,7 +48,7 @@ body{min-height:100vh}
   color:var(--sc-text);border-radius:6px;padding:0 15px;font-weight:700;cursor:pointer;
   line-height:1.2
 }
-.mock-btn.primary{background:var(--sc-accent);border-color:var(--sc-accent);color:#fff}
+.mock-btn.primary{background:var(--sc-accent);border-color:var(--sc-accent);color:var(--sc-on-accent)}
 .mock-meta{margin-left:auto;color:var(--sc-muted);font-size:.9rem;line-height:1.45}
 
 .mock-card{border-top:1px solid var(--sc-line);padding:32px 0}
@@ -260,7 +260,7 @@ body{min-height:100vh}
     border-color:color-mix(in srgb,var(--sc-accent) 34%,var(--sc-line));
     color:var(--sc-accent)
   }
-  .mock-btn.primary:hover{color:#fff}
+  .mock-btn.primary:hover{color:var(--sc-on-accent)}
 }
 @media (hover:none),(pointer:coarse){
   .mock-btn,.diagram-expand,.diagram-dialog-close{min-height:44px}

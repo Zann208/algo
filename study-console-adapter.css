@@ -14,10 +14,10 @@ body[data-study-console="algo"] #side .navgroup{font-family:inherit!important;co
 body[data-study-console="algo"] #side .navbtn{font-family:inherit!important;color:var(--sc-muted)!important}
 body[data-study-console="algo"] #side a.navbtn{text-decoration:none!important}
 body[data-study-console="algo"] #side .navbtn.on{background:var(--sc-accent-soft)!important;color:var(--sc-accent)!important}
-body[data-study-console="algo"] main .wrap{max-width:1120px!important}
+body[data-study-console="algo"] main .wrap{max-width:1200px!important}
 body[data-study-console="algo"] .hero{background:transparent!important;border:0!important;padding:24px 0!important}
 body[data-study-console="algo"] .hero .p1{font-family:inherit!important;color:var(--sc-accent)!important}
-body[data-study-console="algo"] .stat,body[data-study-console="algo"] .sq,body[data-study-console="algo"] .treebox{filter:saturate(.45);box-shadow:none!important}
+body[data-study-console="algo"] .stat,body[data-study-console="algo"] .sq,body[data-study-console="algo"] .treebox{box-shadow:none!important}
 body[data-study-console="algo"] .code{font-size:.92rem!important}
 
 /* Tree Mastery expanded course path */
@@ -53,7 +53,7 @@ body[data-study-console="algo"] .code{font-size:.92rem!important}
     backdrop-filter:none!important;
   }
   body[data-study-console="algo"]:not(.sc-embedded) > header#top #burger{display:block!important}
-  body[data-study-console="algo"]:not(.sc-embedded) > #side{top:calc(var(--sc-header-h) + 46px)!important}
+  body[data-study-console="algo"]:not(.sc-embedded) > #side{top:calc(var(--sc-header-h) + var(--sc-local-nav-h))!important}
   body[data-study-console="algo"]:not(.sc-embedded) > main{margin-left:0!important;padding-top:0!important}
   body[data-study-console="algo"] main .wrap{padding-inline:14px!important}
 }
@@ -61,3 +61,11 @@ body[data-study-console="algo"] .code{font-size:.92rem!important}
   .tm-course-body{padding-left:0}
   .tm-course-topic>summary{padding:12px 0}
 }
+
+/* Sidebar belongs to ALGO; the same global switcher remains above it. */
+body[data-study-console="algo"] #side{padding:18px 12px}
+body[data-study-console="algo"] #side .navbtn{min-height:42px;padding:10px 12px;border-radius:8px;font-size:.875rem;line-height:1.4;letter-spacing:0}
+body[data-study-console="algo"] #side .navgroup{padding:16px 12px 6px;font-size:.75rem}
+body[data-study-console="algo"] #scrim{inset:calc(var(--sc-header-h) + var(--sc-local-nav-h)) 0 0}
+body[data-study-console="algo"] #burger{min-width:44px;min-height:40px;font-size:1rem}
+body[data-study-console="algo"] .top .back{min-height:40px;font:600 .875rem var(--sc-sans)}
