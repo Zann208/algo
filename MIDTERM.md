@@ -1,4 +1,4 @@
-# MIDTERM — 269202 Algorithms for ISNE
+# MIDTERM — Algorithms for ISNE
 
 The dedicated midterm definition bank is available at [`midterm.html`](./midterm.html).
 

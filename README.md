@@ -1,6 +1,6 @@
 # ALGO — Algorithms Study Console
 
-Study console for **269202 Algorithms for iSNE** at Chiang Mai University.
+Study console for **Algorithms for iSNE** at Chiang Mai University.
 
 **→ [Live](https://zann208.github.io/algo/)** · part of [my semester consoles](https://zann208.github.io/study)
 
@@ -39,4 +39,4 @@ Vanilla HTML · CSS custom properties · plain JavaScript · SVG · localStorage
 The explanations are my own restatement of the course material, written for comprehension. Lecture slides and worksheets belong to the course instructor and are not redistributed here.
 
 ---
-Built by **Zann** — [portfolio](https://zann208.github.io) · [email](mailto:thuhtoozan_1@cmu.ac.th)
+[Study Console](https://zann208.github.io/study/)
