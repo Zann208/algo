@@ -15,6 +15,7 @@ jobs:
         run: |
           node --check tree-mastery.js
           node --check assignment3.js
+          node --check assignment4.js
           node --check tree-mastery-upgrade.js
           node --check tree-mastery-learn-expanded.js
           node --check midterm-mock.js
@@ -23,4 +24,5 @@ jobs:
           test -f index.html
           test -f midterm.html
           test -f midterm-mock.html
+          test -f final.html
           test -f study-console-adapter.css

@@ -51,6 +51,18 @@
 
 Verified mock distances from F: `F=0, E=3, G=5, C=9, A=10, H=10, D=11, I=11, B=12`.
 
+## Weeks 10, 12, 13, Assignment 4 and Final checks
+
+- Assignment 4 graph transcribed as 10 vertices / 18 edges: **PASS**
+- Kruskal and Prim (from A) both give 9 edges, total weight 33, and the graph has exactly one minimum spanning tree: **PASS**
+- Walkthrough edge orders match the written answer: **PASS**
+- Lecture minimax example (worst cases 3, 2, 2 → a1) and pruned leaves c2, c3: **PASS**
+- Joint probability sums (0.93, 0.32) and meningitis Bayes result (0.0002): **PASS**
+- Wumpus pit probabilities with prior 0.2 (0.86 and 0.31): **PASS**
+- Lecture Huffman code is prefix-free; total 355 bits for 120 symbols; five decoding messages decode to CABBAGE, ADDED, DEAF, BIGHEADED, HEADACHE: **PASS**
+- Final practice answers (Kruskal/Prim total 13, Dijkstra distances, minimax value 5, Bayes 0.18, Huffman average 2.24 bits) recomputed by script: **PASS**
+- Page loads with no script errors at desktop and phone widths, light and dark: **PASS**
+
 ## Browser/device note
 
 Responsive rules keep wide technical artifacts inside local scroll containers. A full physical-device Safari/Android/Firefox render pass is not available in this execution environment, so this report does not claim hardware/browser screenshots.

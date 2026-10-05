@@ -50,6 +50,20 @@ The Week 7 module preserves the terminology, algorithms and framing of the suppl
 
 The source slide deck itself is not redistributed in the repository.
 
+## Weeks 10, 12 and 13, Assignment 4 and the Final area
+
+Added to `index.html` as new pages, without changing existing lessons:
+
+- **Week 10**: agents, rationality, task environments, agent programs, problem formulation, uninformed search, heuristic search, local search
+- **Week 12**: game theory, minimax, alpha-beta pruning, cut-off and the horizon effect, decision theory, probability, Bayes' law, Wumpus World
+- **Week 13**: prefix property, code optimisation, Huffman coding, adaptive Huffman, run-length encoding
+- **Assignment 4**: minimum spanning tree with Kruskal and Prim (`assignment4.js` draws the graph and the two walkthroughs)
+- **Final**: `final.html` definition bank and an in-console practice page, both scoped to Weeks 7, 10, 12 and 13
+
+The same weeks are represented in the sidebar, home page, Cheat Sheet, Flashcards and Quiz. The midterm pages are unchanged.
+
+Where a slide asks a question without answering it, the console now gives a worked answer and says what it assumes (for example the Wumpus World pit probability uses a pit prior of 0.2).
+
 ## Existing material retained
 
 - `legacy.html`

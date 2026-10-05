@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://zann208.github.io/study/shared/v2/theme-init.js"></script>
+<script>try{if(localStorage.getItem("algoSideHidden")==="1")document.documentElement.classList.add("side-hidden")}catch(e){}</script>
 <title>ALGO // Algorithms Console</title>
 <meta name="theme-color" content="#0a0d14">
 <style>
@@ -297,10 +298,48 @@ html:not(.dark) #csPop{box-shadow:0 22px 55px rgba(15,23,42,.16)}
 .csft a{color:var(--faint)}
 .csft a:hover{color:var(--am)}
 
+/* ---------- SIDEBAR HIDE / SHOW (desktop) ---------- */
+.navgroup-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+#sideHide{border:1px solid var(--line2);background:transparent;color:var(--faint);border-radius:6px;padding:3px 8px;
+  font:700 10px/1.5 var(--mono);letter-spacing:.7px;text-transform:uppercase;cursor:pointer;transition:.13s}
+#sideHide:hover{color:var(--am);border-color:var(--am)}
+#sideShow{position:fixed;z-index:52;left:0;top:calc(var(--sc-header-h,54px) + 4px);width:18px;height:36px;display:none;
+  align-items:center;justify-content:center;padding:0;border:1px solid var(--line2);border-left:0;border-radius:0 8px 8px 0;
+  background:var(--panel);color:var(--dim);font:700 14px/1 var(--mono);cursor:pointer;transition:width .13s,color .13s,border-color .13s}
+#sideShow:hover{color:var(--am);border-color:var(--am);width:24px}
+#side{transition:transform .22s ease,visibility .22s}
+main{transition:margin-left .22s ease}
+@media(min-width:961px){
+  html.side-hidden{--rail:0px}
+  html.side-hidden #side{width:252px;transform:translateX(-100%);visibility:hidden}
+  html.side-hidden #sideShow{display:flex}
+}
+@media(prefers-reduced-motion:reduce){#side,main{transition:none}}
+
+/* ---------- WEEK 12: WUMPUS GRID ---------- */
+.wgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;max-width:460px;margin:13px 0 6px}
+.wgrid>div{min-height:72px;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:6px 4px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+  font-family:var(--mono);font-size:11px;font-weight:700;text-align:center;color:var(--ink)}
+.wgrid span{display:block;font-weight:600;font-size:10.5px}
+.w-s{color:var(--rd)} .w-b{color:var(--cy)} .w-g{color:var(--am)}
+.wgrid .w-pit{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.wgrid .w-wump{border-color:var(--rd);color:var(--rd)}
+.wgrid .w-gold{border-color:var(--am);color:var(--am)}
+.wgrid .w-start{border-style:dashed;border-color:var(--gr);color:var(--gr)}
+
+/* ---------- FINAL PRACTICE + REVEALS ---------- */
+.fp details{margin-top:12px;border-top:1px solid var(--line);padding-top:11px}
+.fp summary,.simple summary{cursor:pointer;width:max-content;font-family:var(--mono);font-size:11.5px;font-weight:700;
+  letter-spacing:.6px;text-transform:uppercase;color:var(--gr)}
+.fp details[open]>summary{margin-bottom:10px}
+.fp-data{font-family:var(--mono);font-size:13.5px;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:9px 12px}
+
 /* ---------- RESPONSIVE ---------- */
 @media(max-width:960px){
   :root{--rail:0px}
   #burger{display:block}
+  #sideHide{display:none}
   #side{transform:translateX(-100%);transition:transform .25s;width:262px;box-shadow:0 0 40px rgba(0,0,0,.4)}
   #side.open{transform:none}
   main{margin-left:0}
@@ -312,7 +351,7 @@ html:not(.dark) #csPop{box-shadow:0 22px 55px rgba(15,23,42,.16)}
   .code{font-size:12px}
 }
 @media print{
-  #top,#side,#scrim,.chiprow,.btnrow{display:none!important}
+  #top,#side,#sideShow,#scrim,.chiprow,.btnrow{display:none!important}
   main{margin:0}.page{display:block!important}
   body{background:#fff;color:#000}
 }
@@ -375,7 +414,7 @@ html:not(.dark) #csPop{box-shadow:0 22px 55px rgba(15,23,42,.16)}
 <div id="scrim" onclick="toggleSide()"></div>
 
 <nav id="side">
-  <div class="navgroup">Overview</div>
+  <div class="navgroup navgroup-top">Overview<button id="sideHide" type="button" onclick="setSideHidden(true)" aria-controls="side" title="Hide sidebar ( [ )">‹ Hide</button></div>
   <button class="navbtn on" data-page="home" onclick="go('home')"><span class="dot" style="background:var(--am)"></span>Course home</button>
 
   <div class="navgroup">Topics</div>
@@ -385,14 +424,22 @@ html:not(.dark) #csPop{box-shadow:0 22px 55px rgba(15,23,42,.16)}
   <button class="navbtn" data-page="week4" onclick="go('week4')"><span class="dot" style="background:var(--gr)"></span>Trees &amp; heaps<span class="num">W4</span></button>
   <button class="navbtn" data-page="week6" onclick="go('week6')"><span class="dot" style="background:var(--vi)"></span>B-Trees &amp; Tries<span class="num">W6</span></button>
   <button class="navbtn" data-page="week7" onclick="go('week7')"><span class="dot" style="background:var(--cy)"></span>Graphs<span class="num">W7</span></button>
+  <button class="navbtn" data-page="week10" onclick="go('week10')"><span class="dot" style="background:var(--gr)"></span>Agents &amp; search<span class="num">W10</span></button>
+  <button class="navbtn" data-page="week12" onclick="go('week12')"><span class="dot" style="background:var(--rd)"></span>Games &amp; probability<span class="num">W12</span></button>
+  <button class="navbtn" data-page="week13" onclick="go('week13')"><span class="dot" style="background:var(--am2)"></span>Compression<span class="num">W13</span></button>
 
   <div class="navgroup">Midterm</div>
   <button class="navbtn" data-page="midterm" onclick="go('midterm')"><span class="dot" style="background:var(--am)"></span>Exam definitions<span class="num">MID</span></button>
   <a class="navbtn" href="midterm-mock.html"><span class="dot" style="background:var(--am)"></span>Midterm Mock<span class="num">MOCK</span></a>
 
+  <div class="navgroup">Final</div>
+  <button class="navbtn" data-page="final" onclick="go('final')"><span class="dot" style="background:var(--rd)"></span>Exam definitions<span class="num">FIN</span></button>
+  <button class="navbtn" data-page="finalprac" onclick="go('finalprac')"><span class="dot" style="background:var(--rd)"></span>Practice problems<span class="num">20 Q</span></button>
+
   <div class="navgroup">Assignments</div>
   <button class="navbtn" data-page="a1" onclick="go('a1')"><span class="dot" style="background:var(--cy)"></span>Worksheet 1</button>
   <button class="navbtn" data-page="a2" onclick="go('a2')"><span class="dot" style="background:var(--gr)"></span>Worksheet 2</button>
+  <button class="navbtn" data-page="a4" onclick="go('a4')"><span class="dot" style="background:var(--cy)"></span>Assignment 4<span class="num">MST</span></button>
 
   <div class="navgroup">Practice</div>
   <button class="navbtn" data-page="cards" onclick="go('cards')"><span class="dot" style="background:var(--am2)"></span>Flashcards</button>
@@ -402,6 +449,7 @@ html:not(.dark) #csPop{box-shadow:0 22px 55px rgba(15,23,42,.16)}
   <div class="navgroup">Reference</div>
   <button class="navbtn" data-page="cheat" onclick="go('cheat')"><span class="dot" style="background:var(--vi)"></span>Cheat sheet</button>
 </nav>
+<button id="sideShow" type="button" onclick="setSideHidden(false)" aria-controls="side" aria-label="Show sidebar" title="Show sidebar ( [ )">›</button>
 
 <main><div class="wrap">
 
@@ -411,32 +459,36 @@ html:not(.dark) #csPop{box-shadow:0 22px 55px rgba(15,23,42,.16)}
     <div class="p1">Algorithms for iSNE</div>
     <h1>Algorithms — study console</h1>
     <p>Your study base for <b style="color:var(--am)">Algorithms for iSNE</b>.
-    The learning path now covers Weeks 1, 2, 3, 4, 6 and <b>Week 7 Graphs</b>. The separate Midterm area remains limited to the currently posted midterm scope.</p>
+    Weeks 1–7, 10, 12 and 13, four assignments, and separate Midterm and Final areas.</p>
   </div>
 
   <div class="statrow">
-    <div class="stat s-blue"><div class="n">6</div><div class="l">Topics</div></div>
-    <div class="stat s-red"><div class="n">2</div><div class="l">Worksheets</div></div>
+    <div class="stat s-blue"><div class="n">9</div><div class="l">Topics</div></div>
+    <div class="stat s-red"><div class="n">4</div><div class="l">Assignments</div></div>
     <div class="stat s-yel"><div class="n">40%</div><div class="l">Midterm weight</div></div>
+    <div class="stat s-red"><div class="n">50%</div><div class="l">Final weight</div></div>
     <div class="stat s-grn"><div class="n">80%</div><div class="l">Attendance needed</div></div>
   </div>
 
   <div class="card">
-    <h2><span class="sq"></span>What the exam covers (so far)</h2>
+    <h2><span class="sq"></span>What the course covers</h2>
     <p><b>Week 1:</b> Computational complexity. Big O, Big Ω (Omega), Big Θ (Theta). Asymptotic complexity.</p>
     <p><b>Week 2:</b> Arrays. Linked lists (singly, doubly, circular). Sparse tables.</p>
     <p><b>Week 3:</b> Stacks. Queues. Priority queues. Heaps as priority queues.</p>
     <p><b>Week 4:</b> Trees, Binary Trees, Binary Search Trees (BST). Traversal. Insertion and deletion. Balancing: DSW and AVL. Splay trees. Heaps and heapsort. Expression trees.</p>
     <p><b>Week 6:</b> Multiway trees. B-Trees, B*, B**, B+, Prefix B+ and Bit Trees. Tries.</p>
     <p><b>Week 7:</b> Graphs. Graph representations, DFS/BFS, shortest paths, cycle detection, union-find, spanning trees, topological sort, Eulerian/Hamiltonian graphs and TSP.</p>
-    <p style="margin-top:15px"><button class="btn b-blue" onclick="go('week7')">OPEN GRAPH MODULE →</button> <button class="btn b-yel" onclick="go('midterm')">MIDTERM · EXAM DEFINITIONS →</button></p>
+    <p><b>Week 10:</b> Intelligent agents. Rationality and task environments. Uninformed search (breadth-first, depth-first, iterative deepening). Heuristic search, A*. Hill climbing and simulated annealing.</p>
+    <p><b>Week 12:</b> Game theory. Minimax and alpha-beta pruning. Horizon effect. Decision theory, MEU. Joint probability, product rule, Bayes' law. Wumpus World.</p>
+    <p><b>Week 13:</b> Data compression. Prefix property. Huffman and adaptive Huffman coding. Run-length encoding.</p>
+    <p style="margin-top:15px"><button class="btn b-red" onclick="go('final')">FINAL · EXAM DEFINITIONS →</button> <button class="btn b-blue" onclick="go('finalprac')">FINAL · PRACTICE PROBLEMS →</button> <button class="btn b-yel" onclick="go('midterm')">MIDTERM · EXAM DEFINITIONS →</button></p>
     <p class="small">Marks (from the syllabus): assignments 10% · midterm 40% · final 50%. You need 80% attendance to sit the exams.</p>
   </div>
 
   <div class="card">
     <h2><span class="sq s-grn"></span>How to use this</h2>
     <ol>
-      <li><b>Read a level</b> (Weeks 1, 2, 3, 4, 6 and 7). Each one turns the source material into a structured study path.</li>
+      <li><b>Read a level</b> (Weeks 1–7, 10, 12 and 13). Each one is a structured study path.</li>
       <li><b>Check the yellow Notes box</b> on each level. That is your exam cheat-sheet.</li>
       <li><b>Flip the Flashcards</b> until the answers feel easy.</li>
       <li><b>Take the Quiz.</b> Wrong answers show a one-line reason, so you learn as you go.</li>
@@ -1505,6 +1557,74 @@ html:not(.dark) #csPop{box-shadow:0 22px 55px rgba(15,23,42,.16)}
 
 </section>
 
+<!-- ===== ASSIGNMENT 4 ===== -->
+<section class="page" id="page-a4">
+<div class="lvlchip c-blue">Assignment 4 · Minimum Spanning Tree</div>
+  <h1>Assignment 4 — Kruskal &amp; Prim</h1>
+  <p class="sub">Build the minimum spanning tree of one weighted graph twice: once with Kruskal's algorithm, once with Prim's algorithm starting from A. Write the order in which edges are added.</p>
+
+  <div class="card">
+    <h2><span class="sq"></span>What the assignment asks</h2>
+    <p>The graph has <b>10 vertices</b> (A–J) and <b>18 weighted edges</b>. A spanning tree of 10 vertices always has <b>9 edges</b>.</p>
+    <div class="treebox"><div class="tcap">The given graph</div><div id="a4-given"></div></div>
+    <table class="simple">
+      <tr><th>Weight</th><th>Edges</th></tr>
+      <tr><td><b>1</b></td><td>C–E</td></tr>
+      <tr><td><b>2</b></td><td>C–F · E–J</td></tr>
+      <tr><td><b>3</b></td><td>B–F</td></tr>
+      <tr><td><b>4</b></td><td>A–D · F–H · E–G</td></tr>
+      <tr><td><b>5</b></td><td>A–J · B–C</td></tr>
+      <tr><td><b>6</b></td><td>B–J · C–J</td></tr>
+      <tr><td><b>7</b></td><td>A–B · C–G</td></tr>
+      <tr><td><b>8</b></td><td>C–H · D–J · H–I</td></tr>
+      <tr><td><b>9</b></td><td>D–E · G–I</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-yel"></span>Part 1 — Kruskal's algorithm</h2>
+    <ol>
+      <li>Sort all edges by weight, smallest first.</li>
+      <li>Take the next edge. If it joins two vertices that are <b>not already connected</b>, add it. If it would close a <b>cycle</b>, skip it.</li>
+      <li>Stop when the tree has <b>|V| − 1 = 9</b> edges.</li>
+    </ol>
+    <div id="a4-kruskal"></div>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-grn"></span>Part 2 — Prim's algorithm from A</h2>
+    <ol>
+      <li>Start with only <b>A</b> in the tree.</li>
+      <li>Look at every edge with <b>one end inside the tree and one end outside</b>. Add the cheapest.</li>
+      <li>Repeat until every vertex is in the tree.</li>
+    </ol>
+    <div id="a4-prim"></div>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-blue"></span>My answer</h2>
+    <h3>Kruskal — order of edges added</h3>
+    <p class="a4-seq">C–E (1) → C–F (2) → E–J (2) → F–B (3) → F–H (4) → E–G (4) → A–D (4) → A–J (5) → H–I (8)</p>
+    <h3>Prim from A — order of edges added</h3>
+    <p class="a4-seq">A–D (4) → A–J (5) → J–E (2) → E–C (1) → C–F (2) → F–B (3) → F–H (4) → E–G (4) → H–I (8)</p>
+    <div class="box idea"><span class="tag">✔ Checked</span>Both orders are valid and both give the same tree: <b>9 edges, total weight 33</b> (1 + 2 + 2 + 3 + 4 + 4 + 4 + 5 + 8). This graph has exactly one minimum spanning tree, so Kruskal and Prim must agree on the edges even though the order differs.</div>
+    <details class="a4-photos"><summary>Handwritten working</summary>
+      <img src="assignments/a4/kruskal.jpg" alt="Handwritten Kruskal solution for Assignment 4" loading="lazy">
+      <img src="assignments/a4/prim.jpg" alt="Handwritten Prim solution for Assignment 4" loading="lazy">
+    </details>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-red"></span>Things that lose marks</h2>
+    <ul>
+      <li><b>Ties.</b> Edges with equal weight can be taken in either order. In Kruskal, C–F and E–J (both 2) can swap, and so can A–D, F–H and E–G (all 4). In Prim, F–H and E–G (both 4) can swap. Any of these orders is correct.</li>
+      <li><b>Kruskal skips, it does not stop.</b> B–C (5) is the first rejected edge: B and C are already joined through F. Keep going down the sorted list until there are 9 edges.</li>
+      <li><b>Prim grows one connected tree.</b> You cannot take C–E (1) first when starting from A, because neither end is in the tree yet. That is the difference from Kruskal, which can build separate pieces and join them later.</li>
+      <li><b>Count the edges.</b> 10 vertices → 9 edges. More means a cycle; fewer means the tree is not finished.</li>
+    </ul>
+  </div>
+</section>
+
 
 <!-- ===== WEEK7 ===== -->
 <section class="page" id="page-week7">
@@ -1630,7 +1750,7 @@ for all vertices u adjacent to v
   </div>
 
   <div class="card">
-    <h2><span class="sq"></span>6 · Spanning trees and Kruskal</h2>
+    <h2><span class="sq"></span>6 · Spanning trees: Kruskal and Prim</h2>
     <p>A <b>spanning tree</b> keeps all destinations connected while removing unnecessary routes. When edge costs matter, the goal is a <b>minimum spanning tree</b>.</p>
 <pre class="code">Kruskal(weighted unconnected undirected graph)
 tree = null
@@ -1639,6 +1759,9 @@ for (i = 1; i ≤ |E| and |tree| &lt; |V|-1; i++)
     if e from edges does not form a cycle with edges in tree
         add e to tree</pre>
     <p>Kruskal repeatedly tests the smallest available edge and adds it only if it does not create a cycle, stopping when the spanning tree is complete.</p>
+    <h3>Prim's algorithm</h3>
+    <p>Prim reaches a minimum spanning tree a different way: start from one vertex and repeatedly add the <b>cheapest edge that joins a vertex in the tree to a vertex outside it</b>. Kruskal can build separate pieces and join them later; Prim always grows one connected tree.</p>
+    <p><button class="btn b-blue" onclick="go('a4')">ASSIGNMENT 4 · KRUSKAL &amp; PRIM STEP BY STEP →</button></p>
   </div>
 
   <div class="card">
@@ -1681,6 +1804,398 @@ for i = 1 to |V|
   <div class="box idea"><span class="tag">Week 7 one-line map</span><b>Represent → traverse → find paths → detect cycles/connectivity → build spanning trees → order digraph tasks → reason about edge-visiting and vertex-visiting tours.</b></div>
 </section>
 
+<!-- ===== WEEK10 ===== -->
+<section class="page" id="page-week10">
+<div class="lvlchip c-green">Week 10 · Agents &amp; Search</div>
+  <h1>Intelligent agents &amp; search</h1>
+  <p class="sub">An <b>agent</b> senses an environment and acts in it. A problem-solving agent decides what to do by <b>searching</b> a tree of possible action sequences.</p>
+
+  <div class="card">
+    <h2><span class="sq"></span>1 · Agents, percepts and actions</h2>
+    <table class="simple">
+      <tr><th style="width:170px">Term</th><th>Meaning</th></tr>
+      <tr><td><b>Agent</b></td><td>Anything that <b>perceives</b> its environment and <b>acts</b> upon it.</td></tr>
+      <tr><td><b>Sensors</b></td><td>How the agent perceives (eyes, ears, a camera, a temperature monitor).</td></tr>
+      <tr><td><b>Actuators</b></td><td>How the agent acts (arms, motors, sending network packets).</td></tr>
+      <tr><td><b>Percept</b></td><td>The inputs the agent receives at one instant.</td></tr>
+      <tr><td><b>Percept sequence</b></td><td>The complete history of everything the agent has perceived. In general an agent should use the whole sequence to choose an action.</td></tr>
+    </table>
+    <h3>Vacuum Cleaner World</h3>
+    <p>Two locations, <b>A</b> and <b>B</b>, which can be dirty. The agent perceives <b>where it is</b> and <b>whether that square is dirty</b>. Its actions are <b>suck</b>, <b>move left</b>, <b>move right</b> or <b>do nothing</b>.</p>
+    <p>A simple agent function: <i>"If the current square is dirty, suck. Otherwise move to the other square."</i> Whether that is good depends on how success is measured.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-yel"></span>2 · Rationality and performance measures</h2>
+    <p>A <b>rational agent</b> does the right thing, the thing that makes it most successful. So we need a <b>performance measure</b>: an <b>objective</b> test of success set by the designer (not the agent's own opinion, which could be delusional).</p>
+    <div class="box mistakes"><span class="tag">Bad measure</span>"Amount of dirt cleaned in an 8-hour shift." The agent can clean dirt, dump it back and clean it again to score more.</div>
+    <div class="box idea"><span class="tag">Rule</span>Design the measure around <b>what you want in the environment</b>, not how you expect the agent to behave. Better: <b>the number of clean squares at each time step</b>.</div>
+    <p>What is rational at any moment depends on four things:</p>
+    <ol>
+      <li>The <b>performance measure</b> that defines success.</li>
+      <li>The agent's <b>prior knowledge</b> of the environment.</li>
+      <li>The <b>actions</b> the agent can perform.</li>
+      <li>The <b>percept sequence</b> to date.</li>
+    </ol>
+    <table class="simple">
+      <tr><th style="width:170px">Idea</th><th>Meaning</th></tr>
+      <tr><td><b>Rationality vs omniscience</b></td><td>Agents are not expected to know everything. <b>Rationality maximises expected performance; perfection maximises actual performance.</b></td></tr>
+      <tr><td><b>Exploration</b></td><td>When the environment is not fully known, the agent takes actions to change its future percepts and find out more.</td></tr>
+      <tr><td><b>Learning</b></td><td>A rational agent learns from what it perceives to improve its behaviour. Computation happens at three levels: by the <b>designer</b>, when the agent <b>decides its next action</b>, and when it <b>learns from experience</b>.</td></tr>
+      <tr><td><b>Autonomy</b></td><td>An agent that relies only on prior knowledge and does not learn lacks autonomy (the dung beetle keeps plugging its nest after the ball is taken away). Autonomy need not exist from the start: the designer installs some initial knowledge.</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-grn"></span>3 · Task environments</h2>
+    <table class="simple">
+      <tr><th style="width:210px">Dimension</th><th>Question to ask</th></tr>
+      <tr><td><b>Fully vs partially observable</b></td><td>Can the sensors access the complete (relevant) state at each point in time? Vacuum Cleaner Man only detects dirt in his own square → partially observable.</td></tr>
+      <tr><td><b>Deterministic vs stochastic</b></td><td>Is the next state decided entirely by the current state and the agent's action? If outside influences can change things → stochastic. Deterministic except for other agents' actions → <b>strategic</b>.</td></tr>
+      <tr><td><b>Episodic vs sequential</b></td><td>Is each decision independent of earlier ones? Checking defects on a production line is episodic; chess is sequential. Episodic is simpler because no planning ahead is needed.</td></tr>
+      <tr><td><b>Static vs dynamic</b></td><td>Can the environment change while the agent is deciding? Static waits. <b>Semidynamic</b>: the environment does not change but the agent's score does (time pressure).</td></tr>
+      <tr><td><b>Discrete vs continuous</b></td><td>Are percepts, actions and states a limited set, or a continuous range?</td></tr>
+      <tr><td><b>Single vs multi-agent</b></td><td>Is there only one agent? <b>Competitive</b>: one agent's gain is another's loss. <b>Cooperative</b>: one agent's success helps another (avoiding collisions when driving).</td></tr>
+    </table>
+    <div class="box notes"><span class="tag">Hardest case</span>Partially observable, stochastic, sequential, dynamic, continuous and multi-agent. Most real situations have to be treated as stochastic.</div>
+    <table class="simple">
+      <tr><th>Environment</th><th>Observable</th><th>Deterministic</th><th>Episodic</th><th>Static</th><th>Discrete</th><th>Agents</th></tr>
+      <tr><td><b>Chess with a clock</b></td><td>Fully</td><td>Strategic</td><td>Sequential</td><td>Semidynamic</td><td>Discrete</td><td>Multi</td></tr>
+      <tr><td><b>Medical diagnosis</b></td><td>Partially</td><td>Stochastic</td><td>Sequential</td><td>Dynamic</td><td>Continuous</td><td>Single</td></tr>
+      <tr><td><b>Autonomous vehicle</b></td><td>Partially</td><td>Stochastic</td><td>Sequential</td><td>Dynamic</td><td>Continuous</td><td>Multi</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-blue"></span>4 · Agent programs</h2>
+    <p>The simplest program is a <b>lookup table</b> from percepts to actions. It works, but it does not scale: a table for chess would need about <b>10<sup>150</sup></b> entries. So the table has to be replaced by short code.</p>
+    <table class="simple">
+      <tr><th style="width:190px">Agent type</th><th>How it decides</th><th>Weakness / example</th></tr>
+      <tr><td><b>Simple reflex</b></td><td>Uses the <b>current percept only</b>, ignoring the percept sequence.</td><td>"If the car in front brakes, brake." Weak when the environment is not fully observable; infinite loops are often unavoidable.</td></tr>
+      <tr><td><b>Model-based reflex</b></td><td>Keeps an internal <b>model (state)</b> of the environment, updated by each new percept, and applies its rules to that state.</td><td>Handles parts of the world it cannot currently see.</td></tr>
+      <tr><td><b>Goal-based</b></td><td>Adds a <b>goal</b>. Uses <b>searching and planning</b> to reach a desired future state.</td><td>Brake lights ahead → the car will slow → to reach point B without a crash, braking is a good idea.</td></tr>
+      <tr><td><b>Utility-based</b></td><td>Goals are a crude happy/unhappy split. <b>Utility</b> puts a number on how good a state is.</td><td>Many routes reach the destination; some are quicker, safer or cheaper. Brake or overtake?</td></tr>
+      <tr><td><b>Learning</b></td><td>Starts in an unknown environment and works out its own way to succeed.</td><td>A learning chess program should not lose the same way twice.</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-red"></span>5 · Problem-solving agents</h2>
+    <ol>
+      <li><b>Goal formulation</b>: identify the <b>goal states</b>, the set of states where the goal is satisfied.</li>
+      <li><b>Problem formulation</b>: pick the subset of states and actions worth considering (in chess, ignore "knock the board over").</li>
+      <li><b>Search</b> for a sequence of actions → the sequence is the <b>solution</b> → <b>execute</b> it.</li>
+    </ol>
+    <h3>The 16 grid (sliding-tile puzzle)</h3>
+    <table class="simple">
+      <tr><td style="width:170px"><b>Goal</b></td><td>One single goal state: tiles 1–15 in order with the blank in the bottom-right corner.</td></tr>
+      <tr><td><b>Actions</b></td><td>Left, Right, Up, Down (ignore half-moved tiles, shaking the game and so on).</td></tr>
+      <tr><td><b>States</b></td><td><code>16!/2 = 10,461,394,944,000</code></td></tr>
+    </table>
+    <p>The search takes the form of a <b>tree traversal</b>. Several actions lead back to a state seen before, which can cause an <b>infinite loop</b>. The 16 grid is <b>NP-hard</b>: no polynomial-time algorithm is known (the slides put it as "no algorithm can solve the problem in polynomial time"), but a proposed solution can be checked very quickly.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq"></span>6 · Uninformed search</h2>
+    <p>No information about where the goal is. The agent can only generate successors and tell goal from non-goal states. In the diagrams, red nodes are states that repeat an earlier state.</p>
+    <div class="treebox"><div class="tcap">Breadth-first: numbers show the order nodes are expanded (level by level)</div><svg viewBox="0 0 600 232" width="100%" style="max-width:640px;margin:0 auto" role="img" aria-label="Breadth-first: numbers show the order nodes are expanded (level by level)"><line class="tln" x1="300" y1="30" x2="120" y2="110"/><line class="tln" x1="120" y1="110" x2="45" y2="190"/><line class="tln" x1="120" y1="110" x2="95" y2="190"/><line class="tln" x1="120" y1="110" x2="145" y2="190"/><line class="tln" x1="120" y1="110" x2="195" y2="190"/><line class="tln" x1="300" y1="30" x2="300" y2="110"/><line class="tln" x1="300" y1="110" x2="275" y2="190"/><line class="tln" x1="300" y1="110" x2="325" y2="190"/><line class="tln" x1="300" y1="30" x2="480" y2="110"/><line class="tln" x1="480" y1="110" x2="430" y2="190"/><line class="tln" x1="480" y1="110" x2="480" y2="190"/><line class="tln" x1="480" y1="110" x2="530" y2="190"/><circle class="tc-hl" cx="300" cy="30" r="15"/><text class="tt-onhl" x="300" y="34" text-anchor="middle">1</text><circle class="tc" cx="120" cy="110" r="15"/><text class="tt" x="120" y="114" text-anchor="middle">2</text><text class="tb" x="176.0" y="66.0" text-anchor="middle" font-size="10.5">MoveUp()</text><circle class="tc" cx="45" cy="190" r="15"/><text class="tt" x="45" y="194" text-anchor="middle">5</text><text class="tb" x="45" y="221" text-anchor="middle" font-size="9.5">MU</text><circle class="tc" cx="95" cy="190" r="15"/><text class="tt" x="95" y="194" text-anchor="middle">6</text><text class="tb" x="95" y="221" text-anchor="middle" font-size="9.5">MR</text><circle class="tc" cx="145" cy="190" r="15"/><text class="tt" x="145" y="194" text-anchor="middle">7</text><text class="tb" x="145" y="221" text-anchor="middle" font-size="9.5">ML</text><circle class="tc-bad" cx="195" cy="190" r="15"/><text class="tt" x="195" y="194" text-anchor="middle">8</text><text class="tb" x="195" y="221" text-anchor="middle" font-size="9.5">MD</text><circle class="tc" cx="300" cy="110" r="15"/><text class="tt" x="300" y="114" text-anchor="middle">3</text><text class="tb" x="308" y="74.0" text-anchor="start" font-size="10.5">MoveRight()</text><circle class="tc" cx="275" cy="190" r="15"/><text class="tt" x="275" y="194" text-anchor="middle">9</text><text class="tb" x="275" y="221" text-anchor="middle" font-size="9.5">MU</text><circle class="tc-bad" cx="325" cy="190" r="15"/><text class="tt" x="325" y="194" text-anchor="middle">10</text><text class="tb" x="325" y="221" text-anchor="middle" font-size="9.5">ML</text><circle class="tc" cx="480" cy="110" r="15"/><text class="tt" x="480" y="114" text-anchor="middle">4</text><text class="tb" x="428.0" y="66.0" text-anchor="middle" font-size="10.5">MoveLeft()</text><circle class="tc" cx="430" cy="190" r="15"/><text class="tt" x="430" y="194" text-anchor="middle">11</text><text class="tb" x="430" y="221" text-anchor="middle" font-size="9.5">MU</text><circle class="tc-bad" cx="480" cy="190" r="15"/><text class="tt" x="480" y="194" text-anchor="middle">12</text><text class="tb" x="480" y="221" text-anchor="middle" font-size="9.5">MR</text><circle class="tc" cx="530" cy="190" r="15"/><text class="tt" x="530" y="194" text-anchor="middle">13</text><text class="tb" x="530" y="221" text-anchor="middle" font-size="9.5">ML</text></svg></div>
+    <div class="treebox"><div class="tcap">Depth-first: the same tree, numbered in depth-first order</div><svg viewBox="0 0 600 232" width="100%" style="max-width:640px;margin:0 auto" role="img" aria-label="Depth-first: the same tree, numbered in depth-first order"><line class="tln" x1="300" y1="30" x2="120" y2="110"/><line class="tln" x1="120" y1="110" x2="45" y2="190"/><line class="tln" x1="120" y1="110" x2="95" y2="190"/><line class="tln" x1="120" y1="110" x2="145" y2="190"/><line class="tln" x1="120" y1="110" x2="195" y2="190"/><line class="tln" x1="300" y1="30" x2="300" y2="110"/><line class="tln" x1="300" y1="110" x2="275" y2="190"/><line class="tln" x1="300" y1="110" x2="325" y2="190"/><line class="tln" x1="300" y1="30" x2="480" y2="110"/><line class="tln" x1="480" y1="110" x2="430" y2="190"/><line class="tln" x1="480" y1="110" x2="480" y2="190"/><line class="tln" x1="480" y1="110" x2="530" y2="190"/><circle class="tc-hl" cx="300" cy="30" r="15"/><text class="tt-onhl" x="300" y="34" text-anchor="middle">1</text><circle class="tc" cx="120" cy="110" r="15"/><text class="tt" x="120" y="114" text-anchor="middle">2</text><text class="tb" x="176.0" y="66.0" text-anchor="middle" font-size="10.5">MoveUp()</text><circle class="tc" cx="45" cy="190" r="15"/><text class="tt" x="45" y="194" text-anchor="middle">3</text><text class="tb" x="45" y="221" text-anchor="middle" font-size="9.5">MU</text><circle class="tc" cx="95" cy="190" r="15"/><text class="tt" x="95" y="194" text-anchor="middle">4</text><text class="tb" x="95" y="221" text-anchor="middle" font-size="9.5">MR</text><circle class="tc" cx="145" cy="190" r="15"/><text class="tt" x="145" y="194" text-anchor="middle">5</text><text class="tb" x="145" y="221" text-anchor="middle" font-size="9.5">ML</text><circle class="tc-bad" cx="195" cy="190" r="15"/><text class="tt" x="195" y="194" text-anchor="middle">6</text><text class="tb" x="195" y="221" text-anchor="middle" font-size="9.5">MD</text><circle class="tc" cx="300" cy="110" r="15"/><text class="tt" x="300" y="114" text-anchor="middle">7</text><text class="tb" x="308" y="74.0" text-anchor="start" font-size="10.5">MoveRight()</text><circle class="tc" cx="275" cy="190" r="15"/><text class="tt" x="275" y="194" text-anchor="middle">8</text><text class="tb" x="275" y="221" text-anchor="middle" font-size="9.5">MU</text><circle class="tc-bad" cx="325" cy="190" r="15"/><text class="tt" x="325" y="194" text-anchor="middle">9</text><text class="tb" x="325" y="221" text-anchor="middle" font-size="9.5">ML</text><circle class="tc" cx="480" cy="110" r="15"/><text class="tt" x="480" y="114" text-anchor="middle">10</text><text class="tb" x="428.0" y="66.0" text-anchor="middle" font-size="10.5">MoveLeft()</text><circle class="tc" cx="430" cy="190" r="15"/><text class="tt" x="430" y="194" text-anchor="middle">11</text><text class="tb" x="430" y="221" text-anchor="middle" font-size="9.5">MU</text><circle class="tc-bad" cx="480" cy="190" r="15"/><text class="tt" x="480" y="194" text-anchor="middle">12</text><text class="tb" x="480" y="221" text-anchor="middle" font-size="9.5">MR</text><circle class="tc" cx="530" cy="190" r="15"/><text class="tt" x="530" y="194" text-anchor="middle">13</text><text class="tb" x="530" y="221" text-anchor="middle" font-size="9.5">ML</text></svg></div>
+    <table class="simple">
+      <tr><th style="width:190px">Strategy</th><th>Idea</th><th>Remember</th></tr>
+      <tr><td><b>Breadth-first</b></td><td>Search each level completely before going deeper. <b>FIFO queue</b>.</td><td>Time is not the big problem, <b>space</b> is. Memory is exponential: <code>O(b<sup>d+1</sup>)</code> for branching factor <code>b</code> and goal depth <code>d</code>.</td></tr>
+      <tr><td><b>Uniform cost</b></td><td>Like breadth-first, but steps have different costs: always take the <b>cheapest</b> step. If all steps cost the same it equals breadth-first.</td><td>Can loop forever on a zero-cost action (NoOp). May waste time on many small steps when one big step is better.</td></tr>
+      <tr><td><b>Depth-first</b></td><td>Expand the deepest node of the current branch first. <b>LIFO stack</b>.</td><td>Needs less memory (finished branches are dropped). May find a deep goal instead of a shallower one. Never finishes if a branch is unbounded.</td></tr>
+      <tr><td><b>Depth-limited</b></td><td>Depth-first with a depth limit <code>l</code>.</td><td>No infinite descent, but choosing <code>l</code> can be hard or impossible.</td></tr>
+      <tr><td><b>Iterative deepening (IDDFS)</b></td><td>Depth-limited search repeated with <code>l = 0, 1, 2, …</code></td><td>Behaves like depth-first for memory and like breadth-first for results. <code>O(b<sup>d</sup>)</code>, slightly better than breadth-first, and it never generates nodes below the goal.</td></tr>
+      <tr><td><b>Iterative lengthening</b></td><td>Iterative deepening using path cost instead of depth.</td><td>Not as efficient as the others.</td></tr>
+      <tr><td><b>Bidirectional</b></td><td>Search forwards from the start and backwards from the goal until the two meet.</td><td>Works best with a single goal state, such as the 16 puzzle.</td></tr>
+    </table>
+    <div class="box notes"><span class="tag">Why repeating the top levels is cheap</span>Most nodes are in the bottom level. The goal level <code>d</code> is generated once, level <code>d−1</code> twice, <code>d−2</code> three times: total = <code>d·b + (d−1)·b² + … + 1·b<sup>d</sup></code> → <code>O(b<sup>d</sup>)</code>.</div>
+    <div class="box idea"><span class="tag">Further notes</span>If the state space is a graph, check for <b>repeated states</b>. A partially observable environment may need exploration. Even a sensorless agent can sometimes be steered to a goal.</div>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-yel"></span>7 · Informed (heuristic) search</h2>
+    <p>Uninformed search is inefficient. If something is known about the environment, a <b>heuristic function</b> can say which direction looks better.</p>
+    <table class="simple">
+      <tr><th style="width:190px">Strategy</th><th>Idea</th></tr>
+      <tr><td><b>Best-first</b></td><td>Expand the <b>seemingly best</b> node first, judged by a heuristic. (If we truly knew the best choice there would be nothing to search.)</td></tr>
+      <tr><td><b>Heuristic function</b></td><td>Returns an estimate of how promising a state is. For the 16 puzzle: the number of tiles in the right place, or the total distance tiles must move if each could go straight to its goal position.</td></tr>
+      <tr><td><b>Greedy best-first</b></td><td>Expands the node that <b>looks closest to the goal</b>. Like depth-first, it can make false starts or loop between states.</td></tr>
+      <tr><td><b>A* search</b></td><td>Combines the <b>cost so far</b> with the <b>estimated cost to the goal</b>: <code>f(n) = g(n) + h(n)</code>. Nodes are ranked by this total.</td></tr>
+    </table>
+    <div class="box mistakes"><span class="tag">Greedy trap: Chonburi → Phuket</span>From Chonburi the choice is Pattaya or Bangkok. Pattaya is closer to Phuket in a straight line, so greedy picks it, but there is no route onward from Pattaya. The right move was Bangkok.</div>
+    <p class="small">Dijkstra's algorithm is related: it returns the shortest route from the start node to every other node.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-grn"></span>8 · Local search and optimisation</h2>
+    <p>Sometimes the route does not matter, only a goal state or the best state found.</p>
+    <table class="simple">
+      <tr><td style="width:190px"><b>Hill climbing</b></td><td>Keep moving to a neighbouring state that gives a better result. When no neighbour is better, you are at a peak. It only looks at <b>immediate neighbours</b> (finding Everest in thick fog with amnesia).</td></tr>
+      <tr><td><b>Local maximum</b></td><td>The main problem with hill climbing: standing on Doi Suthep and believing it is Everest.</td></tr>
+      <tr><td><b>Simulated annealing</b></td><td><b>Shakes</b> the state, roughly at first and then more gently, to escape a local maximum and find a nearby higher slope (Doi Inthanon).</td></tr>
+    </table>
+  </div>
+
+  <div class="box idea"><span class="tag">Week 10 one-line map</span><b>Agent → rationality → environment type → agent program → formulate goal and problem → uninformed search → heuristic search → local search.</b></div>
+</section>
+
+<!-- ===== WEEK12 ===== -->
+<section class="page" id="page-week12">
+<div class="lvlchip c-red">Week 12 · Games &amp; Uncertainty</div>
+  <h1>Adversarial search, game theory &amp; probability</h1>
+  <p class="sub">How to plan ahead when another agent is planning against you, and how to choose an action when you cannot be certain of the outcome.</p>
+
+  <div class="card">
+    <h2><span class="sq"></span>1 · Game theory</h2>
+    <p><b>Game theory</b> is a branch of economics that studies any <b>multi-agent environment</b> where one agent's actions affect another agent, cooperatively or competitively.</p>
+    <h3>The Prisoner's Dilemma</h3>
+    <p>Two suspects are held separately and offered the same deal. Neither knows what the other will choose.</p>
+    <table class="simple">
+      <tr><th></th><th>B stays silent</th><th>B betrays</th></tr>
+      <tr><td><b>A stays silent</b></td><td>A: 6 months · B: 6 months</td><td>A: 10 years · B: goes free</td></tr>
+      <tr><td><b>A betrays</b></td><td>A: goes free · B: 10 years</td><td>A: 2 years · B: 2 years</td></tr>
+    </table>
+    <div class="box notes"><span class="tag">Reading the table</span>Whatever B does, A is better off betraying (free instead of 6 months; 2 years instead of 10). The same holds for B. So two rational prisoners both betray and get 2 years each, even though both staying silent would have been better for both.</div>
+    <p class="small">The lecture's "Who stole the final exam?" game has the same shape: your grade for Admit / Accuse / Deny depends on what everyone else chooses.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-yel"></span>2 · What counts as a "game"</h2>
+    <p>In AI, games are <b>deterministic, turn-taking, two-player, zero-sum games with perfect information</b>: a deterministic, fully observable environment where two agents alternate moves and the final utilities are equal and opposite (chess: winner +1, loser −1, or 0 for a draw).</p>
+    <table class="simple">
+      <tr><th style="width:190px">Part of the definition</th><th>Meaning</th></tr>
+      <tr><td><b>Initial state</b></td><td>The starting board position and whose move it is.</td></tr>
+      <tr><td><b>Successor function</b></td><td>Returns the list of legal moves and the state each one leads to.</td></tr>
+      <tr><td><b>Terminal test</b></td><td>Decides whether a state is terminal, i.e. the game is over.</td></tr>
+      <tr><td><b>Utility function</b></td><td>An objective function giving a numeric value for terminal states, for example −1, 0 or 1.</td></tr>
+    </table>
+    <p>Games suit AI because they are easy to represent, the agent has a small number of actions and the results of actions are well defined (unlike football, with imprecise rules and a huge range of actions).</p>
+    <div class="box mistakes"><span class="tag">Why not just search everything?</span>Chess has a branching factor of about <b>35</b> and roughly 50 moves per player: <code>35<sup>100</sup> ≈ 10<sup>154</sup></code> nodes. So a decision has to be made even when it is not provably optimal.</div>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-grn"></span>3 · Game trees and minimax</h2>
+    <p>From the definition we can build a <b>game tree</b>. A normal search returns a fixed sequence of actions, but here the opponent also moves, so we need a <b>contingent strategy</b>. The <b>optimal strategy</b> does at least as well as any other against an <b>infallible opponent</b>.</p>
+    <p>The <b>minimax algorithm</b> assumes the opponent plays optimally and <b>maximises the worst-case outcome</b>.</p>
+    <div class="treebox"><div class="tcap">Minimax: A (MAX) moves, then the opponent (MIN) replies. Leaves are utilities for A.</div><svg viewBox="0 0 600 244" width="100%" style="max-width:640px;margin:0 auto" role="img" aria-label="Minimax: A (MAX) moves, then the opponent (MIN) replies. Leaves are utilities for A."><line class="tln" x1="300" y1="34" x2="110" y2="118"/><line class="tln" x1="110" y1="118" x2="50" y2="205"/><line class="tln" x1="110" y1="118" x2="110" y2="205"/><line class="tln" x1="110" y1="118" x2="170" y2="205"/><line class="tln" x1="300" y1="34" x2="300" y2="118"/><line class="tln" x1="300" y1="118" x2="240" y2="205"/><line class="tln" x1="300" y1="118" x2="300" y2="205"/><line class="tln" x1="300" y1="118" x2="360" y2="205"/><line class="tln" x1="300" y1="34" x2="490" y2="118"/><line class="tln" x1="490" y1="118" x2="430" y2="205"/><line class="tln" x1="490" y1="118" x2="490" y2="205"/><line class="tln" x1="490" y1="118" x2="550" y2="205"/><circle class="tc-hl" cx="300" cy="34" r="18"/><text class="tt-onhl" x="300" y="38" text-anchor="middle">A</text><text class="tb" x="326" y="26" text-anchor="start" font-size="11">MAX → 3</text><circle class="tc-hl" cx="110" cy="118" r="17"/><text class="tt-onhl" x="110" y="122" text-anchor="middle">B</text><text class="tb" x="134" y="112" text-anchor="start" font-size="11">MIN → 3</text><text class="tb" x="183.0" y="73.0" text-anchor="middle" font-size="10.5">a1</text><circle class="tc" cx="50" cy="205" r="15"/><text class="tt" x="50" y="209" text-anchor="middle">4</text><text class="tb" x="50" y="235" text-anchor="middle" font-size="9.5">b1</text><circle class="tc" cx="110" cy="205" r="15"/><text class="tt" x="110" y="209" text-anchor="middle">7</text><text class="tb" x="110" y="235" text-anchor="middle" font-size="9.5">b2</text><circle class="tc" cx="170" cy="205" r="15"/><text class="tt" x="170" y="209" text-anchor="middle">3</text><text class="tb" x="170" y="235" text-anchor="middle" font-size="9.5">b3</text><circle class="tc" cx="300" cy="118" r="17"/><text class="tt" x="300" y="122" text-anchor="middle">C</text><text class="tb" x="324" y="112" text-anchor="start" font-size="11">MIN → 2</text><text class="tb" x="316.0" y="73.0" text-anchor="middle" font-size="10.5">a2</text><circle class="tc" cx="240" cy="205" r="15"/><text class="tt" x="240" y="209" text-anchor="middle">2</text><text class="tb" x="240" y="235" text-anchor="middle" font-size="9.5">c1</text><circle class="tc" cx="300" cy="205" r="15"/><text class="tt" x="300" y="209" text-anchor="middle">12</text><text class="tb" x="300" y="235" text-anchor="middle" font-size="9.5">c2</text><circle class="tc" cx="360" cy="205" r="15"/><text class="tt" x="360" y="209" text-anchor="middle">6</text><text class="tb" x="360" y="235" text-anchor="middle" font-size="9.5">c3</text><circle class="tc" cx="490" cy="118" r="17"/><text class="tt" x="490" y="122" text-anchor="middle">D</text><text class="tb" x="514" y="112" text-anchor="start" font-size="11">MIN → 2</text><text class="tb" x="417.0" y="73.0" text-anchor="middle" font-size="10.5">a3</text><circle class="tc" cx="430" cy="205" r="15"/><text class="tt" x="430" y="209" text-anchor="middle">10</text><text class="tb" x="430" y="235" text-anchor="middle" font-size="9.5">d1</text><circle class="tc" cx="490" cy="205" r="15"/><text class="tt" x="490" y="209" text-anchor="middle">11</text><text class="tb" x="490" y="235" text-anchor="middle" font-size="9.5">d2</text><circle class="tc" cx="550" cy="205" r="15"/><text class="tt" x="550" y="209" text-anchor="middle">2</text><text class="tb" x="550" y="235" text-anchor="middle" font-size="9.5">d3</text></svg></div>
+    <table class="simple">
+      <tr><th>Move</th><th>Opponent's replies</th><th>Worst case (MIN)</th></tr>
+      <tr><td><b>a1</b></td><td>4, 7, 3</td><td><b>3</b> ← chosen</td></tr>
+      <tr><td><b>a2</b></td><td>2, 12, 6</td><td>2</td></tr>
+      <tr><td><b>a3</b></td><td>10, 11, 2</td><td>2</td></tr>
+    </table>
+    <div class="box idea"><span class="tag">Why a1</span>a2 has the best single utility (12) and a3 has the best average (7.67), but minimax picks <b>a1</b> because the opponent is assumed to choose their best reply. a1 guarantees at least 3.</div>
+    <table class="simple">
+      <tr><td style="width:190px"><b>Efficiency</b></td><td>Maximum depth <code>m</code>, <code>b</code> legal moves at each point: time <code>O(b<sup>m</sup>)</code>, space <code>O(bm)</code>. Exponential time.</td></tr>
+      <tr><td><b>Multiplayer games</b></td><td>The utility becomes a <b>vector</b>, one value per player, e.g. (5, 2, 3). Each player still picks the action leading to their best worst case. <b>Alliances</b> often form to stop one player winning.</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-blue"></span>4 · Alpha-beta pruning</h2>
+    <p>If a player already has a better choice at the parent of node <code>n</code> or anywhere higher up, <code>n</code> will never be reached, so it can be <b>pruned</b> (not searched).</p>
+    <div class="treebox"><div class="tcap">Alpha-beta: after b1–b3 the best so far is 3. c1 = 2 already makes C worse, so c2 and c3 are never examined.</div><svg viewBox="0 0 600 244" width="100%" style="max-width:640px;margin:0 auto" role="img" aria-label="Alpha-beta: after b1–b3 the best so far is 3. c1 = 2 already makes C worse, so c2 and c3 are never examined."><line class="tln" x1="300" y1="34" x2="110" y2="118"/><line class="tln" x1="110" y1="118" x2="50" y2="205"/><line class="tln" x1="110" y1="118" x2="110" y2="205"/><line class="tln" x1="110" y1="118" x2="170" y2="205"/><line class="tln" x1="300" y1="34" x2="300" y2="118"/><line class="tln" x1="300" y1="118" x2="240" y2="205"/><line class="tln" x1="300" y1="118" x2="300" y2="205" stroke-dasharray="4 4" opacity=".55"/><line class="tln" x1="300" y1="118" x2="360" y2="205" stroke-dasharray="4 4" opacity=".55"/><line class="tln" x1="300" y1="34" x2="490" y2="118"/><line class="tln" x1="490" y1="118" x2="430" y2="205"/><line class="tln" x1="490" y1="118" x2="490" y2="205"/><line class="tln" x1="490" y1="118" x2="550" y2="205"/><circle class="tc-hl" cx="300" cy="34" r="18"/><text class="tt-onhl" x="300" y="38" text-anchor="middle">A</text><text class="tb" x="326" y="26" text-anchor="start" font-size="11">MAX → 3</text><circle class="tc-hl" cx="110" cy="118" r="17"/><text class="tt-onhl" x="110" y="122" text-anchor="middle">B</text><text class="tb" x="134" y="112" text-anchor="start" font-size="11">MIN → 3</text><text class="tb" x="183.0" y="73.0" text-anchor="middle" font-size="10.5">a1</text><circle class="tc" cx="50" cy="205" r="15"/><text class="tt" x="50" y="209" text-anchor="middle">4</text><text class="tb" x="50" y="235" text-anchor="middle" font-size="9.5">b1</text><circle class="tc" cx="110" cy="205" r="15"/><text class="tt" x="110" y="209" text-anchor="middle">7</text><text class="tb" x="110" y="235" text-anchor="middle" font-size="9.5">b2</text><circle class="tc" cx="170" cy="205" r="15"/><text class="tt" x="170" y="209" text-anchor="middle">3</text><text class="tb" x="170" y="235" text-anchor="middle" font-size="9.5">b3</text><circle class="tc" cx="300" cy="118" r="17"/><text class="tt" x="300" y="122" text-anchor="middle">C</text><text class="tb" x="324" y="112" text-anchor="start" font-size="11">MIN → ≤ 2</text><text class="tb" x="316.0" y="73.0" text-anchor="middle" font-size="10.5">a2</text><circle class="tc" cx="240" cy="205" r="15"/><text class="tt" x="240" y="209" text-anchor="middle">2</text><text class="tb" x="240" y="235" text-anchor="middle" font-size="9.5">c1</text><circle class="tc-bad" cx="300" cy="205" r="15"/><text class="tt" x="300" y="209" text-anchor="middle">12</text><text class="tb" x="300" y="235" text-anchor="middle" font-size="9.5">c2 pruned</text><circle class="tc-bad" cx="360" cy="205" r="15"/><text class="tt" x="360" y="209" text-anchor="middle">6</text><text class="tb" x="360" y="235" text-anchor="middle" font-size="9.5">c3 pruned</text><circle class="tc" cx="490" cy="118" r="17"/><text class="tt" x="490" y="122" text-anchor="middle">D</text><text class="tb" x="514" y="112" text-anchor="start" font-size="11">MIN → 2</text><text class="tb" x="417.0" y="73.0" text-anchor="middle" font-size="10.5">a3</text><circle class="tc" cx="430" cy="205" r="15"/><text class="tt" x="430" y="209" text-anchor="middle">10</text><text class="tb" x="430" y="235" text-anchor="middle" font-size="9.5">d1</text><circle class="tc" cx="490" cy="205" r="15"/><text class="tt" x="490" y="209" text-anchor="middle">11</text><text class="tb" x="490" y="235" text-anchor="middle" font-size="9.5">d2</text><circle class="tc" cx="550" cy="205" r="15"/><text class="tt" x="550" y="209" text-anchor="middle">2</text><text class="tb" x="550" y="235" text-anchor="middle" font-size="9.5">d3</text></svg></div>
+    <ol>
+      <li>Search <b>a1</b> depth-first: worst case <b>3</b>.</li>
+      <li>Search <b>a2</b>: the first leaf is <b>2</b>, already worse than 3. Stop. c2 and c3 are pruned.</li>
+      <li>Search <b>a3</b>: 10 and 11 are not worse than 3, so all three leaves must be examined before the 2 is found.</li>
+    </ol>
+    <div class="box notes"><span class="tag">Efficiency</span>With good move ordering (likely-best successors first) only about <code>O(b<sup>d/2</sup>)</code> nodes are examined. Even random ordering helps. It still may not be fast enough for real play.</div>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-red"></span>5 · Imperfect, real-time decisions</h2>
+    <p>The program must decide within a time limit, so the search is <b>cut off at a non-terminal state</b> and that state is scored with a <b>heuristic evaluation function</b>.</p>
+    <table class="simple">
+      <tr><th style="width:190px">Chess feature</th><th>How it scores</th></tr>
+      <tr><td><b>Material value</b></td><td>Each piece has a value, e.g. pawn = 1, queen = 8.</td></tr>
+      <tr><td><b>Pawn structure</b></td><td>A good pawn layout is worth more.</td></tr>
+      <tr><td><b>King safety</b></td><td>A well-protected king is worth a few points.</td></tr>
+      <tr><td><b>Piece combinations</b></td><td>Two bishops together are worth a little more than 2 × one bishop; bishops are worth more in the end game.</td></tr>
+    </table>
+    <p>Features are <b>weighted by importance</b>, possibly using the probability of success from past experience.</p>
+    <div class="box mistakes"><span class="tag">Horizon effect</span>With the wrong cut-off point, a bad worst case can sit just beyond the horizon of the search, where the program cannot see it.</div>
+    <h3>Games with chance</h3>
+    <p>Backgammon mixes skill with dice. We do not know the opponent's possible moves, only their <b>likely</b> ones, so the game tree is expanded to include the <b>probabilities</b> of each dice roll.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq"></span>6 · Acting under uncertainty</h2>
+    <p>To catch a flight: plan <b>A60</b> leaves 60 minutes before check-in, <b>B90</b> leaves 90 minutes before. We can never say "A60 will get us there on time", only "…as long as there is enough fuel, no accident, no breakdown…". B90 raises the <b>degree of belief</b> of arriving on time but adds a long unproductive wait. Both goals matter: getting to the airport and avoiding a long wait.</p>
+    <table class="simple">
+      <tr><th style="width:190px">Theory</th><th>Meaning</th></tr>
+      <tr><td><b>Probability theory</b></td><td>Degrees of belief based on what the agent knows. Probabilities change when more evidence arrives (a card is the Ace of Spades with chance 1/52 until you look; then it is 0 or 1).</td></tr>
+      <tr><td><b>Utility theory</b></td><td>Represents <b>preferences between states</b>, how useful a state is. Leaving 24 hours early (C1440) is 99.999% safe but the wait has very poor utility.</td></tr>
+      <tr><td><b>Decision theory</b></td><td><b>Decision theory = probability theory + utility theory.</b></td></tr>
+      <tr><td><b>MEU</b></td><td><b>Maximum Expected Utility</b>: an agent is rational if it chooses the action with the highest utility averaged over all possible outcomes of that action.</td></tr>
+      <tr><td><b>Diagnosis</b></td><td>Uses probability to build a degree of belief ("the car won't start, so 80% the battery is dead"). Probability summarises the uncertainty that comes from our <b>laziness and ignorance</b>.</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-yel"></span>7 · Probability basics</h2>
+    <table class="simple">
+      <tr><th style="width:190px">Term</th><th>Meaning / example</th></tr>
+      <tr><td><b>Boolean random variable</b></td><td><code>Late&lt;True, False&gt;</code></td></tr>
+      <tr><td><b>Discrete random variable</b></td><td><code>Weather&lt;Sunny, Rainy, Snowy, Cloudy&gt;</code></td></tr>
+      <tr><td><b>Continuous random variable</b></td><td><code>Temperature = 30.2</code></td></tr>
+      <tr><td><b>Atomic event</b></td><td>One particular combination of values: <code>Late = True, Weather = Cloudy</code>.</td></tr>
+      <tr><td><b>Prior (unconditional) probability</b></td><td>Degree of belief with no other information: <code>P(Weather = Sunny) = 0.8</code>.</td></tr>
+      <tr><td><b>Joint probability</b></td><td>Probabilities for combinations of variables, stored in a grid with one dimension per variable. All entries sum to 1.</td></tr>
+    </table>
+    <h3>Joint probability table: Late, Male, AM</h3>
+    <table class="simple">
+      <tr><th></th><th>Late · Male</th><th>Late · Not male</th><th>Not late · Male</th><th>Not late · Not male</th></tr>
+      <tr><td><b>AM</b></td><td>0.22</td><td>0.25</td><td>0.08</td><td>0.02</td></tr>
+      <tr><td><b>Not AM</b></td><td>0.10</td><td>0.18</td><td>0.10</td><td>0.05</td></tr>
+    </table>
+    <p><b>P(Male OR Late)</b> = 0.22 + 0.25 + 0.10 + 0.18 + 0.08 + 0.10 = <b>0.93</b> (every cell that is male or late).</p>
+    <p><b>P(Male AND Late)</b> = 0.22 + 0.10 = <b>0.32</b>.</p>
+    <h3>Product rule</h3>
+<pre class="code">P(a ∧ b) = P(a | b) · P(b)
+P(a ∧ b) = P(b | a) · P(a)</pre>
+    <p>Both forms are true, but one usually makes more sense: "a man being late in the morning <b>given that it is sunny</b>" is sensible; "it being sunny given that a man is late" is not, because lateness does not cause the weather.</p>
+    <div class="box idea"><span class="tag">Independence</span>Transport might influence lateness, but favourite food can be treated as <b>independent</b>. When independence is found, the amount of data to analyse shrinks a lot.</div>
+    <h3>Bayes' law</h3>
+<pre class="code">P(b | a) · P(a) = P(a | b) · P(b)
+
+P(b | a) = P(a | b) · P(b) / P(a)</pre>
+    <p>It needs two unconditional probabilities and one conditional probability to give one more conditional probability.</p>
+    <div class="box notes"><span class="tag">Worked example: meningitis</span>Meningitis causes a stiff neck 50% of the time: <code>P(s|m) = 0.5</code>. <code>P(m) = 1/50000</code>, <code>P(s) = 1/20</code>.<br><code>P(m|s) = P(s|m)·P(m) / P(s) = (0.5 × 1/50000) / (1/20) = 0.0002</code>, which is <b>1 in 5,000</b>.</div>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-grn"></span>8 · Wumpus World</h2>
+    <p>A 4×4 cave. The <b>Wumpus</b> eats anyone who enters its room; <b>pits</b> trap anyone who enters; there is one heap of <b>gold</b>. The agent turns left or right by 90° or walks forward, and can shoot one arrow in a straight line.</p>
+    <table class="simple">
+      <tr><th style="width:190px">Percept</th><th>Means</th></tr>
+      <tr><td><b>Stench</b></td><td>The Wumpus is in a neighbouring room.</td></tr>
+      <tr><td><b>Breeze</b></td><td>A pit is in a neighbouring room.</td></tr>
+      <tr><td><b>Glitter</b></td><td>The gold is in a neighbouring room.</td></tr>
+    </table>
+    <div class="wgrid" role="img" aria-label="Wumpus World map">
+      <div><span class="w-s">Stench</span></div><div><span class="w-g">Glitter</span></div><div><span class="w-b">Breeze</span></div><div class="w-pit">PIT</div>
+      <div class="w-wump">WUMPUS<span class="w-g">Glitter</span></div><div class="w-gold">GOLD<span class="w-b">Breeze</span><span class="w-s">Stench</span></div><div class="w-pit">PIT</div><div><span class="w-b">Breeze</span></div>
+      <div><span class="w-s">Stench</span></div><div><span class="w-g">Glitter</span></div><div><span class="w-b">Breeze</span></div><div></div>
+      <div class="w-start">START</div><div><span class="w-b">Breeze</span></div><div class="w-pit">PIT</div><div><span class="w-b">Breeze</span></div>
+    </div>
+    <p class="small">The full map (the agent cannot see this). Rooms are written (column, row) from the bottom-left start (1,1).</p>
+    <h3>How the agent reasons</h3>
+    <ol>
+      <li><b>At (1,1):</b> no stench, no breeze → (1,2) and (2,1) are <b>OK</b>.</li>
+      <li><b>Move to (2,1):</b> breeze → a pit is in (2,2) or (3,1). Mark both <b>?P</b> and go back.</li>
+      <li><b>Move to (1,2):</b> stench but no breeze. No breeze → (2,2) has no pit, so the pit is in <b>(3,1)</b>. There was no stench at (2,1), so the Wumpus is not in (2,2) → it is in <b>(1,3)</b>. (2,2) is OK.</li>
+      <li><b>Move to (2,2):</b> glitter → the gold is in (2,3) or (3,2).</li>
+    </ol>
+    <h3>Question: breeze in both (1,2) and (2,1)</h3>
+    <p>Now logic alone cannot say where the pit is. The unknown neighbours are (1,3), (2,2) and (3,1). A breeze in (1,2) needs a pit in (1,3) or (2,2); a breeze in (2,1) needs a pit in (2,2) or (3,1). A single pit in <b>(2,2)</b> explains both breezes, so it is the most likely.</p>
+    <div class="box notes"><span class="tag">With numbers</span>Assume each unknown room holds a pit with probability 0.2 (3 pits in the 15 rooms other than the start). Conditioning on the two breezes gives <b>P(pit in (2,2)) ≈ 0.86</b> and <b>P(pit in (1,3)) = P(pit in (3,1)) ≈ 0.31</b>. The evidence raised one room far above the prior and that is the room to avoid.</div>
+  </div>
+
+  <div class="box idea"><span class="tag">Week 12 one-line map</span><b>Game → game tree → minimax (best worst case) → alpha-beta pruning → cut-off + heuristic → chance → probability + utility = decision theory → Bayes.</b></div>
+</section>
+
+<!-- ===== WEEK13 ===== -->
+<section class="page" id="page-week13">
+<div class="lvlchip">Week 13 · Data Compression</div>
+  <h1>Data compression</h1>
+  <p class="sub">Encode frequent symbols with short codes and rare symbols with long codes. Smaller data takes less space and less time to move around a program.</p>
+
+  <div class="card">
+    <h2><span class="sq"></span>1 · Encoding and its assumptions</h2>
+    <p>The same value can be written many ways. The number 128 is <code>128</code>, <code>๑๒๘</code>, <code>80</code> (hex), <code>10000000</code> (binary), <code>CXXVIII</code>, <code>ρκη</code>, or 128 tally marks. Storing <code>M</code>/<code>F</code> instead of <code>Male</code>/<code>Female</code> is already compression.</p>
+    <ul>
+      <li>There are <b>n different symbols</b> available for the code. Morse code: n = 3 (technically 5). Binary: n = 2.</li>
+      <li>Each message symbol <code>m<sub>i</sub></code> has a probability of occurrence <code>P(m<sub>i</sub>)</code>, and all the probabilities <b>add up to 1</b>.</li>
+      <li><b>Infrequent</b> symbols get a <b>long</b> codeword; <b>short</b> codewords are kept for <b>frequent</b> symbols.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-yel"></span>2 · Coding objectives and the prefix property</h2>
+    <ol>
+      <li>Each codeword corresponds to <b>exactly one symbol</b>.</li>
+      <li>Decoding should <b>not require any look-ahead</b>. This is the <b>prefix property</b>: no codeword is the beginning of another codeword.</li>
+    </ol>
+    <table class="simple">
+      <tr><th>Codes for A, B, C</th><th>Message</th><th>What happens</th></tr>
+      <tr><td><code>0, 1, 01</code></td><td><code>01</code></td><td><b>Ambiguous.</b> Is it AB or C?</td></tr>
+      <tr><td><code>0, 11, 01</code></td><td><code>0111</code></td><td>Decodable, but only with look-ahead: read 0 (A?), 1 (was it C?), 1 (AB?), 1 → finally <b>CB</b>. <code>0</code> is a prefix of <code>01</code>.</td></tr>
+      <tr><td><code>00, 01, 10</code></td><td>any</td><td><b>No ambiguity.</b> No code is a prefix of another.</td></tr>
+    </table>
+    <h3>Code optimisation</h3>
+    <ul>
+      <li>A more likely symbol must not have a longer code than a less likely one: if <code>P(m<sub>i</sub>) ≤ P(m<sub>j</sub>)</code> then <code>L(m<sub>i</sub>) ≥ L(m<sub>j</sub>)</code>.</li>
+      <li>There should be <b>no unused short codes</b>, either as codes or as prefixes of longer codes. <code>01, 000, 001, 100, 101</code> is not ideal because <code>11</code> is never used.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-grn"></span>3 · Huffman coding</h2>
+    <p>Huffman coding chooses a bit string for each symbol so that the result is a <b>prefix-free code</b>, with the most common symbols using the fewest bits.</p>
+    <ol>
+      <li>Start from the <b>frequencies</b> of the symbols. Every symbol is a <b>leaf</b>.</li>
+      <li>Repeatedly join the <b>two lowest-frequency</b> nodes under a new parent whose value is their <b>sum</b>.</li>
+      <li>Stop when one node is left. The root equals the total (1.0 as a probability, 120 here).</li>
+      <li>Read each code from the root: <b>0 for a left branch, 1 for a right branch</b>.</li>
+    </ol>
+    <table class="simple">
+      <tr><th>Symbol</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>H</th><th>I</th></tr>
+      <tr><td><b>Frequency (of 120)</b></td><td>10</td><td>15</td><td>5</td><td>15</td><td>20</td><td>5</td><td>15</td><td>30</td><td>5</td></tr>
+    </table>
+    <p>One valid order of joins: F+I = 10 · C+10 = 15 · A+15 = 25 · B+D = 30 · G+E = 35 · 25+30 = 55 · H+35 = 65 · 55+65 = 120. Ties can be broken differently, so several trees are possible.</p>
+    <div class="treebox"><div class="tcap">Huffman tree for the lecture example (frequencies out of 120). Left branch = 0, right branch = 1.</div><svg viewBox="0 0 600 356" width="100%" style="max-width:640px;margin:0 auto" role="img" aria-label="Huffman tree for the lecture example (frequencies out of 120). Left branch = 0, right branch = 1."><line class="tln" x1="300" y1="26" x2="170" y2="84"/><text class="tb" x="226.0" y="53.0" text-anchor="middle" font-size="11">0</text><line class="tln" x1="300" y1="26" x2="450" y2="84"/><text class="tb" x="384.0" y="53.0" text-anchor="middle" font-size="11">1</text><line class="tln" x1="170" y1="84" x2="100" y2="142"/><text class="tb" x="126.0" y="111.0" text-anchor="middle" font-size="11">0</text><line class="tln" x1="170" y1="84" x2="240" y2="142"/><text class="tb" x="214.0" y="111.0" text-anchor="middle" font-size="11">1</text><line class="tln" x1="450" y1="84" x2="400" y2="142"/><text class="tb" x="416.0" y="111.0" text-anchor="middle" font-size="11">0</text><line class="tln" x1="450" y1="84" x2="500" y2="142"/><text class="tb" x="484.0" y="111.0" text-anchor="middle" font-size="11">1</text><line class="tln" x1="100" y1="142" x2="60" y2="200"/><text class="tb" x="71.0" y="169.0" text-anchor="middle" font-size="11">0</text><line class="tln" x1="100" y1="142" x2="140" y2="200"/><text class="tb" x="129.0" y="169.0" text-anchor="middle" font-size="11">1</text><line class="tln" x1="240" y1="142" x2="210" y2="200"/><text class="tb" x="216.0" y="169.0" text-anchor="middle" font-size="11">0</text><line class="tln" x1="240" y1="142" x2="270" y2="200"/><text class="tb" x="264.0" y="169.0" text-anchor="middle" font-size="11">1</text><line class="tln" x1="500" y1="142" x2="470" y2="200"/><text class="tb" x="476.0" y="169.0" text-anchor="middle" font-size="11">0</text><line class="tln" x1="500" y1="142" x2="530" y2="200"/><text class="tb" x="524.0" y="169.0" text-anchor="middle" font-size="11">1</text><line class="tln" x1="140" y1="200" x2="110" y2="258"/><text class="tb" x="116.0" y="227.0" text-anchor="middle" font-size="11">0</text><line class="tln" x1="140" y1="200" x2="170" y2="258"/><text class="tb" x="164.0" y="227.0" text-anchor="middle" font-size="11">1</text><line class="tln" x1="170" y1="258" x2="140" y2="316"/><text class="tb" x="146.0" y="285.0" text-anchor="middle" font-size="11">0</text><line class="tln" x1="170" y1="258" x2="200" y2="316"/><text class="tb" x="194.0" y="285.0" text-anchor="middle" font-size="11">1</text><circle class="tc" cx="300" cy="26" r="15"/><text class="tt" x="300" y="30" text-anchor="middle">120</text><circle class="tc" cx="170" cy="84" r="15"/><text class="tt" x="170" y="88" text-anchor="middle">55</text><circle class="tc" cx="450" cy="84" r="15"/><text class="tt" x="450" y="88" text-anchor="middle">65</text><circle class="tc" cx="100" cy="142" r="15"/><text class="tt" x="100" y="146" text-anchor="middle">25</text><circle class="tc" cx="240" cy="142" r="15"/><text class="tt" x="240" y="146" text-anchor="middle">30</text><circle class="tc-hl" cx="400" cy="142" r="15"/><text class="tt-onhl" x="400" y="146" text-anchor="middle">H</text><text class="tb" x="400" y="172" text-anchor="middle" font-size="10">30</text><circle class="tc" cx="500" cy="142" r="15"/><text class="tt" x="500" y="146" text-anchor="middle">35</text><circle class="tc-hl" cx="60" cy="200" r="15"/><text class="tt-onhl" x="60" y="204" text-anchor="middle">A</text><text class="tb" x="60" y="230" text-anchor="middle" font-size="10">10</text><circle class="tc" cx="140" cy="200" r="15"/><text class="tt" x="140" y="204" text-anchor="middle">15</text><circle class="tc-hl" cx="210" cy="200" r="15"/><text class="tt-onhl" x="210" y="204" text-anchor="middle">B</text><text class="tb" x="210" y="230" text-anchor="middle" font-size="10">15</text><circle class="tc-hl" cx="270" cy="200" r="15"/><text class="tt-onhl" x="270" y="204" text-anchor="middle">D</text><text class="tb" x="270" y="230" text-anchor="middle" font-size="10">15</text><circle class="tc-hl" cx="470" cy="200" r="15"/><text class="tt-onhl" x="470" y="204" text-anchor="middle">G</text><text class="tb" x="470" y="230" text-anchor="middle" font-size="10">15</text><circle class="tc-hl" cx="530" cy="200" r="15"/><text class="tt-onhl" x="530" y="204" text-anchor="middle">E</text><text class="tb" x="530" y="230" text-anchor="middle" font-size="10">20</text><circle class="tc-hl" cx="110" cy="258" r="15"/><text class="tt-onhl" x="110" y="262" text-anchor="middle">C</text><text class="tb" x="110" y="288" text-anchor="middle" font-size="10">5</text><circle class="tc" cx="170" cy="258" r="15"/><text class="tt" x="170" y="262" text-anchor="middle">10</text><circle class="tc-hl" cx="140" cy="316" r="15"/><text class="tt-onhl" x="140" y="320" text-anchor="middle">F</text><text class="tb" x="140" y="346" text-anchor="middle" font-size="10">5</text><circle class="tc-hl" cx="200" cy="316" r="15"/><text class="tt-onhl" x="200" y="320" text-anchor="middle">I</text><text class="tb" x="200" y="346" text-anchor="middle" font-size="10">5</text></svg></div>
+    <table class="simple">
+      <tr><th>Symbol</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>H</th><th>I</th></tr>
+      <tr><td><b>Code</b></td><td><code>000</code></td><td><code>010</code></td><td><code>0010</code></td><td><code>011</code></td><td><code>111</code></td><td><code>00110</code></td><td><code>110</code></td><td><code>10</code></td><td><code>00111</code></td></tr>
+      <tr><td><b>Bits</b></td><td>3</td><td>3</td><td>4</td><td>3</td><td>3</td><td>5</td><td>3</td><td>2</td><td>5</td></tr>
+    </table>
+    <div class="box notes"><span class="tag">How much is saved</span>Total bits for 120 symbols = Σ frequency × code length = <b>355</b>, an average of <b>2.96 bits per symbol</b>. A fixed-length code for 9 symbols needs 4 bits each (480 bits). H, the most frequent symbol, has the shortest code; F and I, the rarest, have the longest.</div>
+    <h3>Decoding practice</h3>
+    <p>Read bits left to right; as soon as the bits match a code, output that symbol and start again. No look-ahead is needed, so the code meets the prefix requirement.</p>
+    <table class="simple">
+      <tr><th>Message</th><th>Decoded</th></tr>
+      <tr><td><code>0010000010010000110111</code></td><td><details><summary>show</summary><b>CABBAGE</b> · 0010 000 010 010 000 110 111</details></td></tr>
+      <tr><td><code>000011011111011</code></td><td><details><summary>show</summary><b>ADDED</b> · 000 011 011 111 011</details></td></tr>
+      <tr><td><code>01111100000110</code></td><td><details><summary>show</summary><b>DEAF</b> · 011 111 000 00110</details></td></tr>
+      <tr><td><code>0100011111010111000011111011</code></td><td><details><summary>show</summary><b>BIGHEADED</b> · 010 00111 110 10 111 000 011 111 011</details></td></tr>
+      <tr><td><code>10111000011000001010111</code></td><td><details><summary>show</summary><b>HEADACHE</b> · 10 111 000 011 000 0010 10 111</details></td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-blue"></span>4 · Adaptive Huffman</h2>
+    <p>Huffman coding (1950s) assumes the <b>frequency of each symbol is known in advance</b>. Frequencies could come from a large corpus such as the BNC, but that tree may not suit every text: a technical computing paper has far more non-alphabet symbols than <i>War and Peace</i>.</p>
+    <p><b>Adaptive Huffman</b> rebuilds the tree <b>as the data is read in</b>:</p>
+    <ul>
+      <li>At the start every symbol is unused and stored together in one leaf with value <b>0</b>.</li>
+      <li>When a symbol is used it is split out of that leaf and its count increases, so it <b>moves up the tree</b>.</li>
+      <li>As counts grow, a node is compared with its <b>siblings</b> and <b>swapped (transposed)</b> if necessary to keep the tree ordered.</li>
+      <li>Sibling comparison is easy when the tree is also stored as a <b>doubly linked list</b>.</li>
+    </ul>
+    <table class="simple">
+      <tr><th>Encoding "cabbages are bad"</th><th>Tree after the step</th></tr>
+      <tr><td>Start</td><td>One leaf: <code>0 · abcdegrs</code></td></tr>
+      <tr><td>add c</td><td>root 1 → [ 0 · abdegrs ] [ c:1 ]</td></tr>
+      <tr><td>add a</td><td>root 2 → [ 1 → (0 · bdegrs) (a:1) ] [ c:1 ]</td></tr>
+      <tr><td>add b</td><td>root 3 → [ 2 → (1 → (0 · degrs) (b:1)) (a:1) ] [ c:1 ]</td></tr>
+      <tr><td>transpose</td><td>root 3 → [ c:1 ] [ 2 → (1 → (0 · degrs) (b:1)) (a:1) ]</td></tr>
+    </table>
+    <div class="box idea"><span class="tag">Key points</span>Adaptive Huffman needs only <b>one pass</b> through the message. As a symbol rises up the tree its code gets <b>shorter</b>: in the lecture example the first <code>b</code> is sent as <code>101</code> and the second time its code is shorter (the slide gives <code>0</code>). The decoder can follow along as long as it applies <b>the same procedure</b>.</div>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-red"></span>5 · Run-length encoding</h2>
+    <p>Replace a run of repeated symbols with a <b>count and the symbol</b>. The word <i>cabbage</i> has a repeated b, so the code can say "2 b's". The Thai repeat mark <b>ๆ</b> works the same way.</p>
+<pre class="code">AAAABBBCCD   →   4A3B2C1D</pre>
+    <div class="box mistakes"><span class="tag">Limit</span>Run-length encoding does not work if the sequence itself contains <b>numbers</b>, because counts and data cannot be told apart. It also only helps when there are runs.</div>
+  </div>
+
+  <div class="box idea"><span class="tag">Week 13 one-line map</span><b>Symbol probabilities → prefix property → Huffman tree (join the two smallest) → codes from 0/1 branches → adaptive Huffman when frequencies are unknown → run-length for repeats.</b></div>
+</section>
+
 <!-- ===== MIDTERM ===== -->
 <section class="page" id="page-midterm">
   <div class="lvlchip c-red">Midterm · Exam Definition Bank</div>
@@ -1689,6 +2204,251 @@ for i = 1 to |V|
   <div class="box notes"><span class="tag">★ Exam technique</span>Write the one-sentence definition first. Add one key property or tiny example only after the definition.</div>
   <div class="card" style="padding:0;overflow:hidden">
     <iframe src="midterm.html" title="ALGO Midterm Exam Definitions" style="display:block;width:100%;height:78vh;min-height:720px;border:0;background:var(--bg)"></iframe>
+  </div>
+</section>
+
+<!-- ===== FINAL: DEFINITIONS ===== -->
+<section class="page" id="page-final">
+  <div class="lvlchip c-red">Final · Exam Definition Bank</div>
+  <h1>Final — Exam Definitions</h1>
+  <p class="sub">Weeks 7, 10, 12 and 13 — short formal definitions written for exam answers.</p>
+  <div class="box notes"><span class="tag">★ Exam technique</span>Write the one-sentence definition first. Add one key property or tiny example only after the definition.</div>
+  <div class="card" style="padding:0;overflow:hidden">
+    <iframe src="final.html" title="ALGO Final Exam Definitions" loading="lazy" style="display:block;width:100%;height:78vh;min-height:720px;border:0;background:var(--bg)"></iframe>
+  </div>
+</section>
+
+<!-- ===== FINAL: PRACTICE ===== -->
+<section class="page" id="page-finalprac">
+  <div class="lvlchip c-red">Final · Practice Problems</div>
+  <h1>Final — Practice problems</h1>
+  <p class="sub">Exam-style questions on Weeks 7, 10, 12 and 13. Work each one on paper, then open the answer.</p>
+
+  <div class="chiprow" id="fp-filters">
+    <button class="chip on" onclick="fpFilter(0,this)">All</button>
+    <button class="chip" onclick="fpFilter(7,this)">Week 7</button>
+    <button class="chip" onclick="fpFilter(10,this)">Week 10</button>
+    <button class="chip" onclick="fpFilter(12,this)">Week 12</button>
+    <button class="chip" onclick="fpFilter(13,this)">Week 13</button>
+  </div>
+
+  <div class="card fp" data-w="7">
+    <h2><span class="sq s-blue"></span>1 · Kruskal on a small graph</h2>
+    <p>A graph has vertices A–F and these weighted edges:</p>
+    <p class="fp-data">A–B 4 · A–C 2 · B–C 1 · B–D 5 · C–D 8 · C–E 10 · D–E 2 · D–F 6 · E–F 3</p>
+    <p>Use Kruskal's algorithm. List the edges in the order they are added and give the total weight.</p>
+    <details><summary>Answer</summary>
+      <p>Sorted: B–C 1, A–C 2, D–E 2, E–F 3, A–B 4, B–D 5, D–F 6, C–D 8, C–E 10.</p>
+      <p><b>Add</b> B–C (1) → <b>add</b> A–C (2) → <b>add</b> D–E (2) → <b>add</b> E–F (3) → <b>skip</b> A–B (4): A and B are already connected through C → <b>add</b> B–D (5). That is 5 edges for 6 vertices, so stop.</p>
+      <p><b>Total weight = 1 + 2 + 2 + 3 + 5 = 13.</b></p>
+    </details>
+  </div>
+
+  <div class="card fp" data-w="7">
+    <h2><span class="sq s-blue"></span>2 · Prim on the same graph, starting from A</h2>
+    <p>Use the graph from question 1. Starting at A, list the edges in the order Prim's algorithm adds them.</p>
+    <details><summary>Answer</summary>
+      <p>Tree {A}: edges out are A–C 2, A–B 4 → <b>A–C (2)</b>.<br>
+      Tree {A, C}: A–B 4, C–B 1, C–D 8, C–E 10 → <b>C–B (1)</b>.<br>
+      Tree {A, B, C}: B–D 5, C–D 8, C–E 10 → <b>B–D (5)</b>.<br>
+      Tree {A, B, C, D}: D–E 2, D–F 6, C–E 10 → <b>D–E (2)</b>.<br>
+      Tree {A, B, C, D, E}: E–F 3, D–F 6 → <b>E–F (3)</b>.</p>
+      <p><b>Total = 13</b>, the same tree as Kruskal, found in a different order.</p>
+    </details>
+  </div>
+
+  <div class="card fp" data-w="7">
+    <h2><span class="sq s-blue"></span>3 · Dijkstra from A</h2>
+    <p>Use the graph from question 1. Find the shortest distance from A to every other vertex and the shortest path from A to F.</p>
+    <details><summary>Answer</summary>
+      <table class="simple">
+        <tr><th>Vertex removed</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th></tr>
+        <tr><td>start</td><td>0</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td></tr>
+        <tr><td><b>A</b> (0)</td><td>0</td><td>4</td><td>2</td><td>∞</td><td>∞</td><td>∞</td></tr>
+        <tr><td><b>C</b> (2)</td><td>0</td><td>3</td><td>2</td><td>10</td><td>12</td><td>∞</td></tr>
+        <tr><td><b>B</b> (3)</td><td>0</td><td>3</td><td>2</td><td>8</td><td>12</td><td>∞</td></tr>
+        <tr><td><b>D</b> (8)</td><td>0</td><td>3</td><td>2</td><td>8</td><td>10</td><td>14</td></tr>
+        <tr><td><b>E</b> (10)</td><td>0</td><td>3</td><td>2</td><td>8</td><td>10</td><td>13</td></tr>
+      </table>
+      <p><b>Distances:</b> B = 3, C = 2, D = 8, E = 10, F = 13. <b>Path to F:</b> A → C → B → D → E → F.</p>
+    </details>
+  </div>
+
+  <div class="card fp" data-w="7">
+    <h2><span class="sq s-blue"></span>4 · Eulerian or not?</h2>
+    <p>A connected graph has vertex degrees A = 2, B = 3, C = 3, D = 2, E = 4. Does it have an Eulerian cycle? An Eulerian trail?</p>
+    <details><summary>Answer</summary>
+      <p>B and C have odd degree, the others are even. An Eulerian <b>cycle</b> needs every degree to be even → <b>no</b>. An Eulerian <b>trail</b> needs exactly two odd-degree vertices → <b>yes</b>, and it must start at B and end at C (or the reverse).</p>
+    </details>
+  </div>
+
+  <div class="card fp" data-w="10">
+    <h2><span class="sq s-grn"></span>5 · Classify the environment</h2>
+    <p>Describe each environment using the six dimensions: (a) chess with a clock, (b) medical diagnosis, (c) an autonomous vehicle.</p>
+    <details><summary>Answer</summary>
+      <table class="simple">
+        <tr><th></th><th>Chess with a clock</th><th>Medical diagnosis</th><th>Autonomous vehicle</th></tr>
+        <tr><td><b>Observable</b></td><td>Fully</td><td>Partially</td><td>Partially</td></tr>
+        <tr><td><b>Deterministic</b></td><td>Strategic</td><td>Stochastic</td><td>Stochastic</td></tr>
+        <tr><td><b>Episodic</b></td><td>Sequential</td><td>Sequential</td><td>Sequential</td></tr>
+        <tr><td><b>Static</b></td><td>Semidynamic</td><td>Dynamic</td><td>Dynamic</td></tr>
+        <tr><td><b>Discrete</b></td><td>Discrete</td><td>Continuous</td><td>Continuous</td></tr>
+        <tr><td><b>Agents</b></td><td>Multi (competitive)</td><td>Single</td><td>Multi</td></tr>
+      </table>
+      <p>Chess is <b>strategic</b> because it is deterministic except for the opponent's moves, and <b>semidynamic</b> because the board waits but the clock does not.</p>
+    </details>
+  </div>
+
+  <div class="card fp" data-w="10">
+    <h2><span class="sq s-grn"></span>6 · Which kind of agent?</h2>
+    <p>Name the agent type: (a) a thermostat that switches the heater on whenever the reading is below 20 °C; (b) a robot vacuum that remembers which rooms it has already cleaned; (c) a navigation app that finds a route to a destination; (d) a navigation app that chooses between routes by weighing time, tolls and safety.</p>
+    <details><summary>Answer</summary>
+      <p>(a) <b>Simple reflex</b>: current percept only. (b) <b>Model-based reflex</b>: keeps internal state about parts of the world it cannot currently see. (c) <b>Goal-based</b>: searches for a sequence of actions that reaches the goal. (d) <b>Utility-based</b>: compares several ways of reaching the goal by how desirable they are.</p>
+    </details>
+  </div>
+
+  <div class="card fp" data-w="10">
+    <h2><span class="sq s-grn"></span>7 · Breadth-first vs depth-first order</h2>
+    <p>A search tree has root R with children X, Y, Z (left to right). X has children X1, X2; Y has child Y1; Z has children Z1, Z2. Give the order nodes are expanded by (a) breadth-first and (b) depth-first search. Which data structure does each use?</p>
+    <details><summary>Answer</summary>
+      <p>(a) <b>Breadth-first</b> (FIFO queue): R, X, Y, Z, X1, X2, Y1, Z1, Z2.</p>
+      <p>(b) <b>Depth-first</b> (LIFO stack): R, X, X1, X2, Y, Y1, Z, Z1, Z2.</p>
+    </details>
+  </div>
+
+  <div class="card fp" data-w="10">
+    <h2><span class="sq s-grn"></span>8 · Compare the uninformed searches</h2>
+    <p>For branching factor <code>b</code> and goal depth <code>d</code>: (a) what is the memory requirement of breadth-first search? (b) What is the cost of iterative deepening and why is repeating the top levels not a serious waste? (c) Give one way depth-first search can fail.</p>
+    <details><summary>Answer</summary>
+      <p>(a) Exponential: <code>O(b<sup>d+1</sup>)</code>. Space, not time, is the main concern.</p>
+      <p>(b) <code>O(b<sup>d</sup>)</code>. Most nodes are in the bottom level, which is generated only once; the upper levels that are repeated contain few nodes. It also never generates nodes below the goal.</p>
+      <p>(c) If a branch is unbounded it never finishes; it can also return a deep goal when a shallower one exists.</p>
+    </details>
+  </div>
+
+  <div class="card fp" data-w="10">
+    <h2><span class="sq s-grn"></span>9 · Greedy best-first vs A*</h2>
+    <p>Two nodes are waiting to be expanded. X: cost so far <code>g = 2</code>, heuristic <code>h = 5</code>. Y: cost so far <code>g = 8</code>, heuristic <code>h = 3</code>. Which node does greedy best-first expand next? Which does A* expand next?</p>
+    <details><summary>Answer</summary>
+      <p><b>Greedy</b> looks only at <code>h</code>: Y (3 &lt; 5).</p>
+      <p><b>A*</b> uses <code>f = g + h</code>: X has 2 + 5 = 7, Y has 8 + 3 = 11 → X.</p>
+      <p>Greedy ignores how expensive it was to get to Y. That is the kind of mistake the Chonburi → Pattaya example shows.</p>
+    </details>
+  </div>
+
+  <div class="card fp" data-w="10">
+    <h2><span class="sq s-grn"></span>10 · Hill climbing</h2>
+    <p>Explain the main weakness of hill climbing and how simulated annealing deals with it.</p>
+    <details><summary>Answer</summary>
+      <p>Hill climbing only compares a state with its <b>immediate neighbours</b>, so it stops at the first peak it reaches. That peak may be a <b>local maximum</b> rather than the best state overall. Simulated annealing <b>shakes</b> the state, strongly at first and then more gently, which lets it leave a local maximum and find a higher slope nearby.</p>
+    </details>
+  </div>
+
+  <div class="card fp" data-w="12">
+    <h2><span class="sq s-red"></span>11 · Minimax and alpha-beta</h2>
+    <p>MAX is to move at the root and has three moves, L, M and R. The opponent (MIN) then chooses a leaf.</p>
+    <p class="fp-data">L → 5, 9, 4 &nbsp;·&nbsp; M → 6, 3, 8 &nbsp;·&nbsp; R → 7, 5, 6</p>
+    <p>(a) What is the minimax value of the root and which move is chosen? (b) Searching left to right with alpha-beta pruning, which leaves are never examined?</p>
+    <details><summary>Answer</summary>
+      <p>(a) MIN values: L = min(5, 9, 4) = <b>4</b>, M = min(6, 3, 8) = <b>3</b>, R = min(7, 5, 6) = <b>5</b>. MAX takes the largest: <b>value 5, move R</b>.</p>
+      <p>(b) After L the best so far is 4. In M the leaves 6 then 3 are read; 3 is already worse than 4, so the last leaf <b>8 is pruned</b>. In R every leaf (7, 5, 6) stays above 4, so all three must be examined. <b>One leaf is pruned.</b></p>
+    </details>
+  </div>
+
+  <div class="card fp" data-w="12">
+    <h2><span class="sq s-red"></span>12 · Prisoner's Dilemma</h2>
+    <p>Both silent: 6 months each. One betrays and the other stays silent: the betrayer goes free and the other gets 10 years. Both betray: 2 years each. What will two rational prisoners do, and why is that a "dilemma"?</p>
+    <details><summary>Answer</summary>
+      <p>If the other stays silent, betraying is better (free instead of 6 months). If the other betrays, betraying is still better (2 years instead of 10). So each prisoner betrays whatever the other does, and both get <b>2 years</b>. The dilemma is that if both had stayed silent they would each have served only 6 months: individually rational choices give a worse result for both.</p>
+    </details>
+  </div>
+
+  <div class="card fp" data-w="12">
+    <h2><span class="sq s-red"></span>13 · Joint probability table</h2>
+    <table class="simple">
+      <tr><th></th><th>Late · Male</th><th>Late · Not male</th><th>Not late · Male</th><th>Not late · Not male</th></tr>
+      <tr><td><b>AM</b></td><td>0.22</td><td>0.25</td><td>0.08</td><td>0.02</td></tr>
+      <tr><td><b>Not AM</b></td><td>0.10</td><td>0.18</td><td>0.10</td><td>0.05</td></tr>
+    </table>
+    <p>Find (a) P(Late), (b) P(AM), (c) P(Male AND Late), (d) P(Male OR Late), (e) P(Late | AM).</p>
+    <details><summary>Answer</summary>
+      <p>(a) P(Late) = 0.22 + 0.25 + 0.10 + 0.18 = <b>0.75</b></p>
+      <p>(b) P(AM) = 0.22 + 0.25 + 0.08 + 0.02 = <b>0.57</b></p>
+      <p>(c) P(Male AND Late) = 0.22 + 0.10 = <b>0.32</b></p>
+      <p>(d) P(Male OR Late) = 0.75 + 0.08 + 0.10 = <b>0.93</b> (all late cells plus the male cells that are not late)</p>
+      <p>(e) P(Late | AM) = P(Late AND AM) / P(AM) = (0.22 + 0.25) / 0.57 = 0.47 / 0.57 ≈ <b>0.82</b></p>
+    </details>
+  </div>
+
+  <div class="card fp" data-w="12">
+    <h2><span class="sq s-red"></span>14 · Bayes' law</h2>
+    <p>A test is positive for 90% of people who have a disease. 1% of people have the disease, and 5% of all people test positive. What is the probability that a person who tests positive has the disease?</p>
+    <details><summary>Answer</summary>
+      <p><code>P(pos | d) = 0.9</code>, <code>P(d) = 0.01</code>, <code>P(pos) = 0.05</code>.</p>
+      <p><code>P(d | pos) = P(pos | d) · P(d) / P(pos) = 0.9 × 0.01 / 0.05 = 0.18</code></p>
+      <p><b>18%.</b> A positive test is far from certain because the disease is rare.</p>
+    </details>
+  </div>
+
+  <div class="card fp" data-w="12">
+    <h2><span class="sq s-red"></span>15 · Maximum expected utility</h2>
+    <p>Catching the flight is worth +100 and missing it is worth −200. Plan A60 catches the flight with probability 0.95 and costs 5 in waiting time. Plan B90 catches it with probability 0.99 and costs 20 in waiting time. Which plan does a rational agent choose?</p>
+    <details><summary>Answer</summary>
+      <p>EU(A60) = 0.95 × 100 + 0.05 × (−200) − 5 = 95 − 10 − 5 = <b>80</b></p>
+      <p>EU(B90) = 0.99 × 100 + 0.01 × (−200) − 20 = 99 − 2 − 20 = <b>77</b></p>
+      <p>By the principle of maximum expected utility the agent chooses <b>A60</b>. B90 is more likely to succeed, but the extra waiting costs more than the extra safety is worth. (The utility numbers here are made up for practice.)</p>
+    </details>
+  </div>
+
+  <div class="card fp" data-w="12">
+    <h2><span class="sq s-red"></span>16 · Horizon effect</h2>
+    <p>What is the horizon effect and why does it happen?</p>
+    <details><summary>Answer</summary>
+      <p>A game-playing program cannot search to the end of the game, so it cuts the search off at some depth and scores the position with a heuristic. If a bad outcome lies just past the cut-off, the program cannot see it and may choose a move that looks good but leads to that outcome. The bad result is "over the horizon" of the search.</p>
+    </details>
+  </div>
+
+  <div class="card fp" data-w="13">
+    <h2><span class="sq s-yel"></span>17 · Prefix property</h2>
+    <p>Which of these codes has the prefix property? (a) A = 0, B = 10, C = 110, D = 111. (b) A = 1, B = 10, C = 00.</p>
+    <details><summary>Answer</summary>
+      <p>(a) <b>Yes.</b> No codeword is the start of another, so decoding needs no look-ahead.</p>
+      <p>(b) <b>No.</b> <code>1</code> (A) is a prefix of <code>10</code> (B). After reading <code>1</code> the decoder cannot tell whether it has an A or the start of a B.</p>
+    </details>
+  </div>
+
+  <div class="card fp" data-w="13">
+    <h2><span class="sq s-yel"></span>18 · Build a Huffman code</h2>
+    <p>Six symbols occur with these frequencies (out of 100): A 45, B 13, C 12, D 16, E 9, F 5. Build the Huffman tree, give the code length of each symbol and the average number of bits per symbol.</p>
+    <details><summary>Answer</summary>
+      <p>Join the two smallest each time: F + E = 14 → C + B = 25 → 14 + D = 30 → 25 + 30 = 55 → A + 55 = 100.</p>
+      <table class="simple">
+        <tr><th>Symbol</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th></tr>
+        <tr><td><b>Code length</b></td><td>1</td><td>3</td><td>3</td><td>3</td><td>4</td><td>4</td></tr>
+        <tr><td><b>One valid code</b></td><td><code>0</code></td><td><code>101</code></td><td><code>100</code></td><td><code>111</code></td><td><code>1101</code></td><td><code>1100</code></td></tr>
+      </table>
+      <p>Average = (45×1 + 13×3 + 12×3 + 16×3 + 9×4 + 5×4) / 100 = 224 / 100 = <b>2.24 bits</b>, against 3 bits for a fixed-length code. The exact 0/1 labels can differ; the lengths are what matter.</p>
+    </details>
+  </div>
+
+  <div class="card fp" data-w="13">
+    <h2><span class="sq s-yel"></span>19 · Encode and decode with the lecture code</h2>
+    <p class="fp-data">A 000 · B 010 · C 0010 · D 011 · E 111 · F 00110 · G 110 · H 10 · I 00111</p>
+    <p>(a) Encode <b>BADGE</b>. (b) Decode <code>1000111011111</code>.</p>
+    <details><summary>Answer</summary>
+      <p>(a) B 010 · A 000 · D 011 · G 110 · E 111 → <code>010000011110111</code> (15 bits).</p>
+      <p>(b) 10 · 00111 · 011 · 111 → <b>HIDE</b>.</p>
+    </details>
+  </div>
+
+  <div class="card fp" data-w="13">
+    <h2><span class="sq s-yel"></span>20 · Huffman vs adaptive Huffman, and run-length</h2>
+    <p>(a) What assumption does Huffman coding make that adaptive Huffman does not? (b) Run-length encode <code>AAAABBBCCD</code>. (c) When does run-length encoding fail?</p>
+    <details><summary>Answer</summary>
+      <p>(a) Huffman coding assumes the <b>frequency of every symbol is known in advance</b>. Adaptive Huffman starts with all symbols unused and <b>updates the tree as symbols are read</b>, so it needs only one pass and no prior frequencies.</p>
+      <p>(b) <code>4A3B2C1D</code></p>
+      <p>(c) When the data itself contains <b>numbers</b> (counts cannot be told apart from data), and it gives no benefit when there are no repeated runs.</p>
+    </details>
   </div>
 </section>
 
@@ -1816,8 +2576,6 @@ for i = 1 to |V|
     <p class="small">🔑 One line to rule all rotations: <b>the middle subtree switches parents.</b></p>
   </div>
 
-</section>
-
 
   <div class="card">
     <h2><span class="sq s-blue"></span>Graphs — Week 7 quick reference</h2>
@@ -1831,6 +2589,7 @@ for i = 1 to |V|
       <tr><td>Cycle detection</td><td>DFS plus a check for an already-visited neighbour reached by a non-tree edge (digraphs need extra care).</td></tr>
       <tr><td>Union-Find</td><td>Find a set, then union sets; useful for connectivity.</td></tr>
       <tr><td>Kruskal</td><td>Sort edges by weight; add the smallest edge that does not form a cycle; stop at <code>|V|-1</code> tree edges.</td></tr>
+      <tr><td>Prim</td><td>Start from one vertex; repeatedly add the cheapest edge joining the tree to a vertex outside it.</td></tr>
       <tr><td>Topological sort</td><td>For ordering tasks in a digraph; repeatedly remove a minimal vertex.</td></tr>
       <tr><td>Eulerian</td><td>Every edge once. Eulerian graph: all vertex degrees even. Eulerian trail: exactly two odd-degree vertices.</td></tr>
       <tr><td>Hamiltonian</td><td>A cycle through all vertices. All complete graphs are Hamiltonian.</td></tr>
@@ -1838,6 +2597,56 @@ for i = 1 to |V|
     </table>
   </div>
 
+  <div class="card">
+    <h2><span class="sq s-grn"></span>Agents &amp; search — Week 10 quick reference</h2>
+    <table class="simple">
+      <tr><th style="width:190px">Idea</th><th>Remember</th></tr>
+      <tr><td>Agent</td><td>Perceives through sensors, acts through actuators.</td></tr>
+      <tr><td>Rational agent</td><td>Maximises <b>expected</b> performance given the performance measure, prior knowledge, actions and percept sequence.</td></tr>
+      <tr><td>Environment</td><td>Observable · deterministic (strategic) · episodic · static (semidynamic) · discrete · single/multi-agent.</td></tr>
+      <tr><td>Agent programs</td><td>Simple reflex → model-based reflex → goal-based → utility-based → learning.</td></tr>
+      <tr><td>Breadth-first</td><td>FIFO queue · memory <code>O(b<sup>d+1</sup>)</code>.</td></tr>
+      <tr><td>Depth-first</td><td>LIFO stack · low memory · can fail on an unbounded branch.</td></tr>
+      <tr><td>Iterative deepening</td><td>Depth limit 0, 1, 2, … · <code>O(b<sup>d</sup>)</code>.</td></tr>
+      <tr><td>Uniform cost</td><td>Cheapest step first; equals breadth-first when all steps cost the same.</td></tr>
+      <tr><td>Greedy best-first</td><td>Expand what the heuristic says is closest to the goal.</td></tr>
+      <tr><td>A*</td><td><code>f(n) = g(n) + h(n)</code>: cost so far + estimated cost to go.</td></tr>
+      <tr><td>Hill climbing</td><td>Best neighbour until none is better · local maxima.</td></tr>
+      <tr><td>Simulated annealing</td><td>Shake hard, then gently, to escape local maxima.</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-red"></span>Games &amp; probability — Week 12 quick reference</h2>
+    <table class="simple">
+      <tr><th style="width:190px">Idea</th><th>Remember</th></tr>
+      <tr><td>Game</td><td>Deterministic, turn-taking, two-player, zero-sum, perfect information.</td></tr>
+      <tr><td>Formal definition</td><td>Initial state · successor function · terminal test · utility function.</td></tr>
+      <tr><td>Minimax</td><td>Assume an optimal opponent; pick the best worst case. Time <code>O(b<sup>m</sup>)</code>, space <code>O(bm)</code>.</td></tr>
+      <tr><td>Alpha-beta pruning</td><td>Skip branches that cannot change the decision. About <code>O(b<sup>d/2</sup>)</code> with good ordering.</td></tr>
+      <tr><td>Horizon effect</td><td>A bad outcome just past the search cut-off.</td></tr>
+      <tr><td>Decision theory</td><td>Probability theory + utility theory → choose the <b>maximum expected utility</b> (MEU).</td></tr>
+      <tr><td>Product rule</td><td><code>P(a ∧ b) = P(a | b) · P(b) = P(b | a) · P(a)</code></td></tr>
+      <tr><td>Bayes' law</td><td><code>P(b | a) = P(a | b) · P(b) / P(a)</code></td></tr>
+      <tr><td>Joint probability</td><td>Table over all variable combinations; entries sum to 1. OR = add every cell where either holds.</td></tr>
+      <tr><td>Wumpus World</td><td>Stench → Wumpus adjacent · Breeze → pit adjacent · Glitter → gold adjacent.</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2><span class="sq s-yel"></span>Compression — Week 13 quick reference</h2>
+    <table class="simple">
+      <tr><th style="width:190px">Idea</th><th>Remember</th></tr>
+      <tr><td>Prefix property</td><td>No codeword is the start of another → decode with no look-ahead.</td></tr>
+      <tr><td>Optimisation rule</td><td>Rarer symbol → code at least as long. No unused short codes.</td></tr>
+      <tr><td>Huffman</td><td>Join the two lowest frequencies; parent = sum; left 0, right 1. Needs frequencies in advance.</td></tr>
+      <tr><td>Lecture code</td><td><code>A 000 · B 010 · C 0010 · D 011 · E 111 · F 00110 · G 110 · H 10 · I 00111</code></td></tr>
+      <tr><td>Adaptive Huffman</td><td>Tree updated while reading; unused symbols share a 0 leaf; swap with siblings as counts grow; one pass.</td></tr>
+      <tr><td>Run-length</td><td>Count + symbol (<code>AAAA → 4A</code>). Fails if the data contains numbers.</td></tr>
+    </table>
+  </div>
+
+</section>
 
 <!-- ===== CARDS ===== -->
 <section class="page" id="page-cards">
@@ -1853,6 +2662,9 @@ for i = 1 to |V|
     <button class="chip" data-fw="4" onclick="fcFilter(4,this)">Week 4</button>
     <button class="chip" data-fw="6" onclick="fcFilter(6,this)">Week 6</button>
     <button class="chip" data-fw="7" onclick="fcFilter(7,this)">Week 7</button>
+    <button class="chip" data-fw="10" onclick="fcFilter(10,this)">Week 10</button>
+    <button class="chip" data-fw="12" onclick="fcFilter(12,this)">Week 12</button>
+    <button class="chip" data-fw="13" onclick="fcFilter(13,this)">Week 13</button>
   </div>
 
   <div class="fc-stage">
@@ -1893,6 +2705,9 @@ for i = 1 to |V|
     <button class="chip" onclick="qzStart(4,this)">Week 4</button>
     <button class="chip" onclick="qzStart(6,this)">Week 6</button>
     <button class="chip" onclick="qzStart(7,this)">Week 7</button>
+    <button class="chip" onclick="qzStart(10,this)">Week 10</button>
+    <button class="chip" onclick="qzStart(12,this)">Week 12</button>
+    <button class="chip" onclick="qzStart(13,this)">Week 13</button>
   </div>
 
   <div class="card" id="qz-card">
@@ -1951,6 +2766,31 @@ function go(id){
 function toggleSide(){
   $('side').classList.toggle('open');
   $('scrim').classList.toggle('show', $('side').classList.contains('open'));
+}
+
+/* ================= sidebar hide / show (desktop) ================= */
+function setSideHidden(hidden, quiet){
+  document.documentElement.classList.toggle('side-hidden', hidden);
+  try { localStorage.setItem('algoSideHidden', hidden ? '1' : '0'); } catch(e) {}
+  if (quiet) return;
+  const next = $(hidden ? 'sideShow' : 'sideHide');
+  if (next) next.focus({preventScroll:true});
+}
+function toggleSideHidden(){
+  setSideHidden(!document.documentElement.classList.contains('side-hidden'));
+}
+document.addEventListener('keydown', function(e){
+  if (e.key !== '[' || e.ctrlKey || e.metaKey || e.altKey) return;
+  const t = e.target;
+  if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
+  if (!matchMedia('(min-width: 961px)').matches) return;
+  toggleSideHidden();
+});
+
+/* ================= final practice filter ================= */
+function fpFilter(w, el){
+  document.querySelectorAll('#fp-filters .chip').forEach(c => c.classList.toggle('on', c === el));
+  document.querySelectorAll('#page-finalprac .fp').forEach(c => { c.style.display = (w === 0 || +c.dataset.w === w) ? '' : 'none'; });
 }
 
 /* ================= light / dark theme ================= */
@@ -2674,7 +3514,54 @@ const CARDS = [
 [4,`The key mechanic inside EVERY rotation?`,`<b>The middle subtree switches parents</b> — the rising child's inner subtree becomes the old parent's child.`],
 [4,`The DSW (Day, Stout, Warren) algorithm — two phases?`,`1) Stretch the tree into a <b>backbone</b> (right-leaning list).<br>2) Rotate <b>every other node</b> around its parent, repeatedly. Whole tree balanced in O(n).`],
 [4,`Splay tree — the three splaying cases?`,`1) Parent is root → rotate node around parent.<br>2) Homogeneous → rotate parent around grandparent, then node.<br>3) Heterogeneous → rotate node around parent, then around grandparent.`],
-[4,`Expression tree traversals give which notations?`,`Pre-order → <b>Polish</b> (prefix).<br>In-order → infix (normal).<br>Post-order → <b>Reverse Polish</b> (postfix).`]
+[4,`Expression tree traversals give which notations?`,`Pre-order → <b>Polish</b> (prefix).<br>In-order → infix (normal).<br>Post-order → <b>Reverse Polish</b> (postfix).`],
+[7,`Kruskal vs Prim in one sentence`,`<b>Kruskal</b>: take the smallest edge anywhere that does not make a cycle. <b>Prim</b>: grow one tree from a start vertex by adding the cheapest edge that leaves it.`],
+[7,`How many edges does a spanning tree of n vertices have?`,`Exactly <b>n − 1</b>. More means a cycle; fewer means it is not connected.`],
+[10,`What is an agent?`,`Anything that <b>perceives</b> its environment through <b>sensors</b> and <b>acts</b> on it through <b>actuators</b>.`],
+[10,`Percept vs percept sequence`,`A <b>percept</b> is the input at one instant. The <b>percept sequence</b> is the complete history of everything perceived.`],
+[10,`What is a performance measure, and what is the rule for designing one?`,`An <b>objective</b> test of the agent's success set by the designer. Base it on <b>what you want in the environment</b>, not on how you expect the agent to act.`],
+[10,`Rationality depends on which four things?`,`The <b>performance measure</b>, the agent's <b>prior knowledge</b> of the environment, the <b>actions</b> it can perform, and the <b>percept sequence</b> to date.`],
+[10,`Rationality vs omniscience`,`Rationality maximises <b>expected</b> performance; perfection maximises <b>actual</b> performance. Agents are not expected to be omniscient.`],
+[10,`Name the six dimensions of a task environment`,`Fully/partially <b>observable</b> · <b>deterministic</b>/stochastic · <b>episodic</b>/sequential · <b>static</b>/dynamic · <b>discrete</b>/continuous · <b>single</b>/multi-agent.`],
+[10,`What is a strategic environment? A semidynamic one?`,`<b>Strategic</b>: deterministic except for the actions of other agents. <b>Semidynamic</b>: the environment does not change while the agent thinks, but its performance score does.`],
+[10,`The four basic agent programs, simplest first`,`<b>Simple reflex</b> (current percept only) → <b>model-based reflex</b> (keeps internal state) → <b>goal-based</b> (search and planning) → <b>utility-based</b> (how good is each state). Plus <b>learning</b> agents.`],
+[10,`Why is a lookup-table agent impractical?`,`The table is far too large: chess would need about <b>10<sup>150</sup></b> entries.`],
+[10,`Goal formulation vs problem formulation`,`<b>Goal formulation</b> identifies the goal states. <b>Problem formulation</b> picks the states and actions worth considering.`],
+[10,`Breadth-first search: structure and main cost`,`<b>FIFO queue</b>, level by level. The problem is <b>memory</b>: O(b<sup>d+1</sup>).`],
+[10,`Depth-first search: structure and main risks`,`<b>LIFO stack</b>, low memory. It may find a deep goal instead of a shallow one and <b>never finishes on an unbounded branch</b>.`],
+[10,`What is iterative deepening and what does it cost?`,`Depth-limited search repeated with limit 0, 1, 2, … It costs <b>O(b<sup>d</sup>)</b> and never generates nodes below the goal.`],
+[10,`Uniform-cost search`,`Like breadth-first but always takes the <b>cheapest step</b>. Equal to breadth-first when all steps cost the same. A zero-cost NoOp can cause an infinite loop.`],
+[10,`What does a heuristic function do?`,`It estimates how promising a state is, so the search can try better-looking directions first. 16 puzzle: tiles in the right place, or total distance to goal positions.`],
+[10,`Greedy best-first vs A*`,`<b>Greedy</b> expands the node that looks closest to the goal (h only). <b>A*</b> uses cost so far plus estimated cost to go: <b>f(n) = g(n) + h(n)</b>.`],
+[10,`Hill climbing and its key problem`,`Move to a better neighbour until none is better. It only sees immediate neighbours, so it can stop at a <b>local maximum</b>.`],
+[10,`How does simulated annealing escape a local maximum?`,`It <b>shakes</b> the state, roughly at first and then more gently, to find a nearby higher slope.`],
+[12,`What does game theory study?`,`Any <b>multi-agent environment</b> where one agent's actions affect another agent, cooperatively or competitively.`],
+[12,`How is a "game" defined in AI?`,`A <b>deterministic, turn-taking, two-player, zero-sum</b> game with <b>perfect information</b>.`],
+[12,`The four parts of a formal game definition`,`<b>Initial state</b>, <b>successor function</b>, <b>terminal test</b>, <b>utility function</b>.`],
+[12,`What does the minimax algorithm assume and choose?`,`It assumes the opponent plays <b>optimally</b> and chooses the move with the <b>best worst-case</b> outcome.`],
+[12,`Minimax time and space complexity`,`Time <b>O(b<sup>m</sup>)</b>, space <b>O(bm)</b> for depth m and b legal moves per position.`],
+[12,`What is alpha-beta pruning?`,`Skip any node that can never be reached because a <b>better choice already exists</b> at its parent or higher up. With good ordering only about <b>O(b<sup>d/2</sup>)</b> nodes are examined.`],
+[12,`Lecture minimax example: leaves (4,7,3), (2,12,6), (10,11,2). Which move?`,`<b>a1</b>. The worst cases are 3, 2 and 2, and minimax takes the largest worst case.`],
+[12,`What is the horizon effect?`,`A bad outcome lies just beyond the <b>cut-off depth</b> of the search, so the program cannot see it.`],
+[12,`How are games with chance handled?`,`The game tree is expanded to include the <b>probabilities</b> of each chance outcome, such as dice rolls in backgammon.`],
+[12,`Decision theory = ?`,`<b>Probability theory + utility theory.</b>`],
+[12,`State the principle of Maximum Expected Utility (MEU)`,`A rational agent chooses the action with the <b>highest utility averaged over all possible outcomes</b> of that action.`],
+[12,`Prior probability vs joint probability`,`A <b>prior</b> is the belief in one proposition with no other information. A <b>joint</b> probability covers a combination of variables; the whole table sums to 1.`],
+[12,`State the product rule`,`<b>P(a ∧ b) = P(a | b) · P(b) = P(b | a) · P(a)</b>`],
+[12,`State Bayes' law`,`<b>P(b | a) = P(a | b) · P(b) / P(a)</b>`],
+[12,`Meningitis example: P(s|m) = 0.5, P(m) = 1/50000, P(s) = 1/20. P(m|s) = ?`,`(0.5 × 1/50000) / (1/20) = <b>0.0002</b>, or 1 in 5,000.`],
+[12,`Prisoner's Dilemma: what do rational prisoners do?`,`<b>Both betray.</b> Betraying is better whatever the other does, yet both end up worse off than if both had stayed silent.`],
+[12,`Wumpus World percepts`,`<b>Stench</b> = Wumpus next door · <b>Breeze</b> = pit next door · <b>Glitter</b> = gold next door.`],
+[13,`What is the prefix property?`,`<b>No codeword is a prefix of another codeword</b>, so a message can be decoded with no look-ahead.`],
+[13,`Why is the code A = 0, B = 1, C = 01 a bad code?`,`The message <code>01</code> is <b>ambiguous</b>: it could be AB or C.`],
+[13,`The rule linking probability and code length`,`If P(m<sub>i</sub>) ≤ P(m<sub>j</sub>) then L(m<sub>i</sub>) ≥ L(m<sub>j</sub>): <b>rarer symbols get codes at least as long</b>. No short code should be left unused.`],
+[13,`How is a Huffman tree built?`,`Every symbol is a leaf. Repeatedly <b>join the two lowest-frequency nodes</b> under a parent holding their sum, until one root is left.`],
+[13,`How are Huffman codes read from the tree?`,`Follow the path from the root: <b>0 for a left branch, 1 for a right branch</b>.`],
+[13,`Lecture Huffman code: which symbol has the shortest code and why?`,`<b>H = 10</b>. It has the highest frequency (30 of 120), so it sits nearest the root.`],
+[13,`What assumption does Huffman coding make?`,`That the <b>frequency of each symbol is known in advance</b>.`],
+[13,`What is adaptive Huffman coding?`,`The tree is <b>rebuilt as the data is read</b>. Unused symbols start in a 0 leaf; used symbols move up and swap with siblings. One pass, no known frequencies needed.`],
+[13,`Why can a decoder follow adaptive Huffman?`,`It applies <b>the same update procedure</b> as the encoder, so both trees stay identical.`],
+[13,`What is run-length encoding, and when does it fail?`,`A run of repeated symbols becomes <b>count + symbol</b> (AAAA → 4A). It fails when the data itself contains <b>numbers</b>.`]
 ];
 
 /* ================= QUIZ data ================= */
@@ -2851,7 +3738,106 @@ const QUIZ = [
  `Left root takes over, and the rightmost node of the left subtree adopts the right subtree.`],
 [4,`A balanced tree with 10,000 nodes needs at most about how many tests to find a value?`,
  [`10,000`,`500`,`14`,`2`],2,
- `Height = lg(10,001) ≈ 13.3 → 14 tests. That's why balancing matters.`]
+ `Height = lg(10,001) ≈ 13.3 → 14 tests. That's why balancing matters.`],
+[7,`A connected graph has 10 vertices. How many edges are in its minimum spanning tree?`,
+ [`10`,`18`,`9`,`It depends on the weights`],2,
+ `A spanning tree of n vertices always has n − 1 edges.`],
+[7,`Starting Prim's algorithm from A, which edge can be added first?`,
+ [`The smallest edge that touches A`,`The smallest edge in the whole graph`,`Any edge that does not form a cycle`,`The largest edge touching A`],0,
+ `Prim grows one tree, so the first edge must leave the start vertex. Taking the smallest edge anywhere is Kruskal.`],
+[10,`An agent perceives through ___ and acts through ___.`,
+ [`actuators, sensors`,`models, utilities`,`percepts, goals`,`sensors, actuators`],3,
+ `Sensors bring percepts in; actuators carry actions out.`],
+[10,`Which is the better performance measure for Vacuum Cleaner Man?`,
+ [`Amount of dirt cleaned in a shift`,`Number of clean squares at each time step`,`How well the agent thinks it did`,`Number of moves made`],1,
+ `Measure what you want in the environment. "Dirt cleaned" can be gamed by dumping dirt and cleaning it again.`],
+[10,`Rationality maximises ___ performance.`,
+ [`expected`,`actual`,`worst-case`,`average human`],0,
+ `Rationality maximises expected performance; perfection would maximise actual performance.`],
+[10,`Chess (ignoring the clock) is deterministic except for the opponent's moves. That makes it…`,
+ [`stochastic`,`episodic`,`strategic`,`continuous`],2,
+ `An environment that is deterministic except for the actions of other agents is called strategic.`],
+[10,`Which agent uses only the current percept?`,
+ [`Model-based reflex agent`,`Simple reflex agent`,`Goal-based agent`,`Utility-based agent`],1,
+ `A simple reflex agent ignores the percept sequence.`],
+[10,`Which agent compares different ways of reaching the goal by how desirable they are?`,
+ [`Simple reflex agent`,`Model-based reflex agent`,`Goal-based agent`,`Utility-based agent`],3,
+ `Goals are a binary happy/unhappy split; utility puts a number on how good each outcome is.`],
+[10,`Breadth-first search is usually implemented with a…`,
+ [`LIFO stack`,`hash table`,`priority heap of heuristics`,`FIFO queue`],3,
+ `Breadth-first uses a FIFO queue; depth-first uses a LIFO stack.`],
+[10,`What is the main concern with breadth-first search?`,
+ [`Memory: O(b^(d+1))`,`It never terminates`,`It cannot find shallow goals`,`It needs a heuristic`],0,
+ `Time is not the big problem; the exponential memory requirement is.`],
+[10,`Iterative deepening depth-first search has cost…`,
+ [`O(d)`,`O(b^(d+1))`,`O(b^d)`,`O(d^b)`],2,
+ `O(b^d): slightly better than breadth-first, and it never generates nodes below the goal.`],
+[10,`A* ranks nodes by…`,
+ [`h(n) only`,`g(n) + h(n)`,`g(n) only`,`depth in the tree`],1,
+ `A* adds the cost of reaching the node to the estimated cost from it to the goal.`],
+[10,`Greedy best-first from Chonburi picks Pattaya because…`,
+ [`A* says so`,`it has the lowest road cost so far`,`it is closer to Phuket in a straight line`,`it is the first city alphabetically`],2,
+ `Greedy looks only at the heuristic. Pattaya looks closer, but there is no route onward.`],
+[10,`Hill climbing can get stuck on a…`,
+ [`local maximum`,`global maximum`,`repeated state`,`goal state`],0,
+ `It only looks at immediate neighbours, so a nearby peak looks like the top.`],
+[12,`In AI, a "game" is deterministic, turn-taking, two-player, perfect information and…`,
+ [`cooperative`,`episodic`,`stochastic`,`zero-sum`],3,
+ `Zero-sum: the utilities at the end are equal and opposite.`],
+[12,`Which function decides whether the game is over?`,
+ [`Successor function`,`Terminal test`,`Utility function`,`Heuristic function`],1,
+ `The terminal test identifies terminal states.`],
+[12,`MAX has moves with opponent replies (4,7,3), (2,12,6) and (10,11,2). Minimax chooses the move worth…`,
+ [`3`,`7.67`,`12`,`2`],0,
+ `Worst cases are 3, 2 and 2. Minimax takes the best worst case: 3.`],
+[12,`Minimax has time complexity…`,
+ [`O(bm)`,`O(m^b)`,`O(b^m)`,`O(log m)`],2,
+ `Time is O(b^m); space is O(bm).`],
+[12,`With good move ordering, alpha-beta pruning examines about…`,
+ [`O(b^d) nodes`,`O(b^(d/2)) nodes`,`O(d) nodes`,`O(b·d) nodes`],1,
+ `Pruning roughly halves the exponent.`],
+[12,`The horizon effect is caused by…`,
+ [`a bad heuristic weight`,`dice rolls`,`too many players`,`cutting off the search just before a bad outcome`],3,
+ `The bad worst case lies just over the horizon of the search.`],
+[12,`Decision theory combines…`,
+ [`game theory and search`,`Bayes' law and Huffman coding`,`minimax and pruning`,`probability theory and utility theory`],3,
+ `Decision theory = probability theory + utility theory.`],
+[12,`Using the lecture's joint table, P(Male AND Late) = 0.22 + 0.10 = …`,
+ [`0.32`,`0.93`,`0.50`,`0.75`],0,
+ `Add the two cells where Male and Late are both true.`],
+[12,`Bayes' law is…`,
+ [`P(b|a) = P(a|b) / P(b)`,`P(b|a) = P(a)·P(b)`,`P(b|a) = P(a|b)·P(b) / P(a)`,`P(a ∧ b) = P(a) + P(b)`],2,
+ `It follows from writing the product rule both ways round.`],
+[12,`P(s|m) = 0.5, P(m) = 1/50000, P(s) = 1/20. P(m|s) = ?`,
+ [`0.5`,`0.0002`,`0.05`,`0.00002`],1,
+ `(0.5 × 1/50000) ÷ (1/20) = 0.0002, or 1 in 5,000.`],
+[12,`In Wumpus World a breeze means…`,
+ [`the Wumpus is next door`,`the gold is next door`,`a pit is in a neighbouring room`,`the room is safe`],2,
+ `Breeze → pit nearby. Stench → Wumpus nearby. Glitter → gold nearby.`],
+[13,`A code has the prefix property when…`,
+ [`no codeword is the start of another codeword`,`every codeword has the same length`,`every codeword starts with 0`,`frequent symbols have long codes`],0,
+ `That is what lets a decoder work without look-ahead.`],
+[13,`Which set of codes for A, B, C is unambiguous with no look-ahead?`,
+ [`0, 1, 01`,`0, 11, 01`,`1, 10, 100`,`00, 01, 10`],3,
+ `In 00, 01, 10 no code is a prefix of another.`],
+[13,`In Huffman coding the most frequent symbol gets…`,
+ [`the longest code`,`the shortest code`,`a code of average length`,`no code`],1,
+ `Frequent symbols sit near the root, so their codes are short.`],
+[13,`Each step of building a Huffman tree joins…`,
+ [`the two lowest-frequency nodes`,`the two highest-frequency nodes`,`the first two symbols alphabetically`,`one high and one low node`],0,
+ `Join the two smallest; the parent holds their sum.`],
+[13,`With the lecture code (A=000, B=010, C=0010, D=011, E=111, G=110), 0010000010010000110111 decodes to…`,
+ [`DEAF`,`BAGGAGE`,`CABBAGE`,`ADDED`],2,
+ `0010 C · 000 A · 010 B · 010 B · 000 A · 110 G · 111 E.`],
+[13,`Adaptive Huffman is useful when…`,
+ [`all symbols are equally likely`,`symbol frequencies are not known in advance`,`the message contains numbers`,`the message is very short`],1,
+ `It rebuilds the tree as the data is read, in one pass.`],
+[13,`Run-length encoding of AAAABBBCC is…`,
+ [`A4B3C2 only`,`9ABC`,`ABC432`,`4A3B2C`],3,
+ `Each run becomes a count followed by the symbol.`],
+[13,`Run-length encoding fails when…`,
+ [`the data is binary`,`the data contains repeated letters`,`the data is long`,`the data contains numbers`],3,
+ `Counts cannot be told apart from numbers in the data.`]
 ];
 
 /* ================= CODE PRACTICE data ================= */
@@ -3280,6 +4266,7 @@ prFilter(0);
 
 <script src="./tree-mastery.js?v=20260823b"></script>
 <script src="./assignment3.js?v=20260823b"></script>
+<script src="./assignment4.js?v=20261006a"></script>
 <script src="./tree-mastery-upgrade.js?v=20260823b"></script>
 <script src="./tree-mastery-learn-expanded.js?v=20260827a"></script>
 
