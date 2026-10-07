@@ -64,6 +64,10 @@ The same weeks are represented in the sidebar, home page, Cheat Sheet, Flashcard
 
 Where a slide asks a question without answering it, the console now gives a worked answer and says what it assumes (for example the Wumpus World pit probability uses a pit prior of 0.2).
 
+## Final Mock
+
+`index.html` has a Final Mock page built from a past final paper (4 questions, 70 marks). The question wording follows the paper; the model answers are written for this console and checked by script (`final-mock.js` draws the graph, the walkthroughs and the AVL trees). The source PDFs and other students' answers are not stored in the repository.
+
 ## Existing material retained
 
 - `legacy.html`

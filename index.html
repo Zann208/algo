@@ -435,6 +435,7 @@ main{transition:margin-left .22s ease}
   <div class="navgroup">Final</div>
   <button class="navbtn" data-page="final" onclick="go('final')"><span class="dot" style="background:var(--rd)"></span>Exam definitions<span class="num">FIN</span></button>
   <button class="navbtn" data-page="finalprac" onclick="go('finalprac')"><span class="dot" style="background:var(--rd)"></span>Practice problems<span class="num">20 Q</span></button>
+  <button class="navbtn" data-page="finalmock" onclick="go('finalmock')"><span class="dot" style="background:var(--rd)"></span>Final Mock<span class="num">MOCK</span></button>
 
   <div class="navgroup">Assignments</div>
   <button class="navbtn" data-page="a1" onclick="go('a1')"><span class="dot" style="background:var(--cy)"></span>Worksheet 1</button>
@@ -481,7 +482,7 @@ main{transition:margin-left .22s ease}
     <p><b>Week 10:</b> Intelligent agents. Rationality and task environments. Uninformed search (breadth-first, depth-first, iterative deepening). Heuristic search, A*. Hill climbing and simulated annealing.</p>
     <p><b>Week 12:</b> Game theory. Minimax and alpha-beta pruning. Horizon effect. Decision theory, MEU. Joint probability, product rule, Bayes' law. Wumpus World.</p>
     <p><b>Week 13:</b> Data compression. Prefix property. Huffman and adaptive Huffman coding. Run-length encoding.</p>
-    <p style="margin-top:15px"><button class="btn b-red" onclick="go('final')">FINAL · EXAM DEFINITIONS →</button> <button class="btn b-blue" onclick="go('finalprac')">FINAL · PRACTICE PROBLEMS →</button> <button class="btn b-yel" onclick="go('midterm')">MIDTERM · EXAM DEFINITIONS →</button></p>
+    <p style="margin-top:15px"><button class="btn b-red" onclick="go('finalmock')">FINAL · MOCK EXAM →</button> <button class="btn b-red" onclick="go('final')">FINAL · EXAM DEFINITIONS →</button> <button class="btn b-blue" onclick="go('finalprac')">FINAL · PRACTICE PROBLEMS →</button> <button class="btn b-yel" onclick="go('midterm')">MIDTERM · EXAM DEFINITIONS →</button></p>
     <p class="small">Marks (from the syllabus): assignments 10% · midterm 40% · final 50%. You need 80% attendance to sit the exams.</p>
   </div>
 
@@ -2452,6 +2453,406 @@ P(b | a) = P(a | b) · P(b) / P(a)</pre>
   </div>
 </section>
 
+<!-- ===== FINAL: MOCK (past paper) ===== -->
+<section class="page" id="page-finalmock">
+  <div class="lvlchip c-red">Final · Mock Exam</div>
+  <h1>Final — Mock exam</h1>
+  <p class="sub">A past final paper: 4 questions, 70 marks. Try each part on paper first, then open the model answer and step through the working.</p>
+
+  <div class="card">
+    <h2><span class="sq"></span>The paper at a glance</h2>
+    <table class="simple">
+      <tr><th>Question</th><th>Topic</th><th>Parts</th><th>Marks</th></tr>
+      <tr><td><b>1</b></td><td>Graphs: traversal, Dijkstra, Kruskal, Prim, Eulerian, Hamiltonian, Chinese Postman, TSP, NP-complete</td><td>a–i</td><td><b>33</b></td></tr>
+      <tr><td><b>2</b></td><td>AVL tree: properties, insertions with rotations, AVL vs splay</td><td>a–c</td><td><b>10</b></td></tr>
+      <tr><td><b>3</b></td><td>Connect 4: task environment, IDDFS vs BFS, heuristics, simulated annealing, minimax</td><td>a–e</td><td><b>17</b></td></tr>
+      <tr><td><b>4</b></td><td>Algorithm design: find a duplicate in O(n)</td><td>a–b</td><td><b>10</b></td></tr>
+    </table>
+    <div class="box idea"><span class="tag">How to score</span>Marks tell you how much to write: roughly <b>one clear point per mark</b>. A 3-mark "what is…" needs the definition plus two supporting points, not a paragraph. For "demonstrate" questions the marks are in the <b>working</b>, so show every step.</div>
+    <p class="fm-prog" id="fm-progress"></p>
+    <div class="fm-bar"><i id="fm-bar"></i></div>
+    <div class="chiprow">
+      <button class="chip on" data-fmq="0">All</button>
+      <button class="chip" data-fmq="1">Q1 · Graphs</button>
+      <button class="chip" data-fmq="2">Q2 · AVL</button>
+      <button class="chip" data-fmq="3">Q3 · Connect 4</button>
+      <button class="chip" data-fmq="4">Q4 · Duplicates</button>
+    </div>
+    <div class="btnrow"><button class="btn" data-fmopen="1">Open all answers</button><button class="btn" data-fmopen="0">Close all answers</button></div>
+  </div>
+
+  <!-- ================= QUESTION 1 ================= -->
+  <div class="card" data-q="1">
+    <h2><span class="sq s-blue"></span>Question 1 · The graph<span class="fm-marks">33 marks</span></h2>
+    <p>Every part of Question 1 uses this graph: <b>11 vertices</b> (A–K) and <b>21 weighted edges</b>.</p>
+    <div class="treebox"><div class="tcap">The given graph</div><div data-fm-graph="given"></div></div>
+    <table class="simple">
+      <tr><th>Weight</th><th>Edges</th></tr>
+      <tr><td><b>2 – 4</b></td><td>E–G 2 · D–E 3 · H–J 3 · B–E 4 · C–F 4 · I–K 4</td></tr>
+      <tr><td><b>5 – 7</b></td><td>B–D 5 · E–H 5 · D–F 6 · G–I 6 · A–B 7 · F–H 7 · G–H 7 · J–K 7</td></tr>
+      <tr><td><b>8 – 15</b></td><td>A–C 8 · F–J 8 · C–D 9 · H–I 9 · A–D 10 · H–K 12 · B–G 15</td></tr>
+    </table>
+    <p class="small">Sorting the edges like this before you start saves time in parts c and d.</p>
+  </div>
+
+  <div class="card fm" data-q="1" data-id="1a" data-marks="3">
+    <h2><span class="sq s-blue"></span>1a · Depth-first vs breadth-first<span class="fm-marks">3 marks</span></h2>
+    <p class="fm-q">Beginning from node A, compare a Depth First Traversal of the graph with a Breadth First Traversal. What extra considerations need to be taken into account when traversing a graph, rather than a tree?</p>
+    <details class="fm-ans"><summary>Model answer</summary>
+      <div class="fm-write"><span class="fm-lab">Write this</span>
+        <ul>
+          <li><b>Depth-first</b> follows one neighbour as deep as possible and only backtracks at a dead end. It uses recursion (a stack). From A, taking neighbours alphabetically: <b>A, B, D, C, F, H, E, G, I, K, J</b>.</li>
+          <li><b>Breadth-first</b> visits all neighbours of a vertex before moving on to their neighbours, level by level. It uses a queue. From A: <b>A, B, C, D, E, G, F, H, I, J, K</b>.</li>
+          <li><b>Extra considerations for a graph:</b> a graph can contain <b>cycles</b>, so each vertex must be <b>marked as visited</b> or the traversal loops forever. A graph has no root, so a start vertex must be chosen, and it may have isolated or unconnected parts, so an outer loop restarts from any vertex that is still unvisited.</li>
+        </ul>
+      </div>
+      <div id="fm-traverse"></div>
+      <div class="box notes"><span class="tag">Order note</span>The visiting order depends on which neighbour you pick first. State your rule (here: alphabetical). A different rule gives a different, equally valid order.</div>
+    </details>
+  </div>
+
+  <div class="card fm" data-q="1" data-id="1b" data-marks="8">
+    <h2><span class="sq s-blue"></span>1b · Dijkstra from A<span class="fm-marks">8 marks</span></h2>
+    <p class="fm-q">Beginning from node A, demonstrate how Dijkstra's algorithm can find the shortest distance to any other node.</p>
+    <details class="fm-ans"><summary>Model answer</summary>
+      <div class="fm-write"><span class="fm-lab">Write this</span>
+        <ol>
+          <li>Set the distance of A to <b>0</b> and every other vertex to <b>∞</b>. All vertices are unchecked.</li>
+          <li>Choose the unchecked vertex with the <b>smallest current distance</b>. Its distance is now final.</li>
+          <li>For each unchecked neighbour, if <code>dist(chosen) + edge weight</code> is smaller than its current distance, replace it and record the chosen vertex as its predecessor.</li>
+          <li>Repeat until every vertex has been checked.</li>
+        </ol>
+        <div class="fm-tablewrap"><table class="fm-dj"><tr><th>Vertex chosen</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>H</th><th>I</th><th>J</th><th>K</th></tr><tr><td class="pick">start</td><td class="">0</td><td class="inf">∞</td><td class="inf">∞</td><td class="inf">∞</td><td class="inf">∞</td><td class="inf">∞</td><td class="inf">∞</td><td class="inf">∞</td><td class="inf">∞</td><td class="inf">∞</td><td class="inf">∞</td></tr><tr><td class="pick">A (0)</td><td class="fix">0</td><td class="new">7</td><td class="new">8</td><td class="new">10</td><td class="inf">∞</td><td class="inf">∞</td><td class="inf">∞</td><td class="inf">∞</td><td class="inf">∞</td><td class="inf">∞</td><td class="inf">∞</td></tr><tr><td class="pick">B (7)</td><td class="fix">0</td><td class="fix">7</td><td class="">8</td><td class="">10</td><td class="new">11</td><td class="inf">∞</td><td class="new">22</td><td class="inf">∞</td><td class="inf">∞</td><td class="inf">∞</td><td class="inf">∞</td></tr><tr><td class="pick">C (8)</td><td class="fix">0</td><td class="fix">7</td><td class="fix">8</td><td class="">10</td><td class="">11</td><td class="new">12</td><td class="">22</td><td class="inf">∞</td><td class="inf">∞</td><td class="inf">∞</td><td class="inf">∞</td></tr><tr><td class="pick">D (10)</td><td class="fix">0</td><td class="fix">7</td><td class="fix">8</td><td class="fix">10</td><td class="">11</td><td class="">12</td><td class="">22</td><td class="inf">∞</td><td class="inf">∞</td><td class="inf">∞</td><td class="inf">∞</td></tr><tr><td class="pick">E (11)</td><td class="fix">0</td><td class="fix">7</td><td class="fix">8</td><td class="fix">10</td><td class="fix">11</td><td class="">12</td><td class="new">13</td><td class="new">16</td><td class="inf">∞</td><td class="inf">∞</td><td class="inf">∞</td></tr><tr><td class="pick">F (12)</td><td class="fix">0</td><td class="fix">7</td><td class="fix">8</td><td class="fix">10</td><td class="fix">11</td><td class="fix">12</td><td class="">13</td><td class="">16</td><td class="inf">∞</td><td class="new">20</td><td class="inf">∞</td></tr><tr><td class="pick">G (13)</td><td class="fix">0</td><td class="fix">7</td><td class="fix">8</td><td class="fix">10</td><td class="fix">11</td><td class="fix">12</td><td class="fix">13</td><td class="">16</td><td class="new">19</td><td class="">20</td><td class="inf">∞</td></tr><tr><td class="pick">H (16)</td><td class="fix">0</td><td class="fix">7</td><td class="fix">8</td><td class="fix">10</td><td class="fix">11</td><td class="fix">12</td><td class="fix">13</td><td class="fix">16</td><td class="">19</td><td class="new">19</td><td class="new">28</td></tr><tr><td class="pick">I (19)</td><td class="fix">0</td><td class="fix">7</td><td class="fix">8</td><td class="fix">10</td><td class="fix">11</td><td class="fix">12</td><td class="fix">13</td><td class="fix">16</td><td class="fix">19</td><td class="">19</td><td class="new">23</td></tr><tr><td class="pick">J (19)</td><td class="fix">0</td><td class="fix">7</td><td class="fix">8</td><td class="fix">10</td><td class="fix">11</td><td class="fix">12</td><td class="fix">13</td><td class="fix">16</td><td class="fix">19</td><td class="fix">19</td><td class="">23</td></tr><tr><td class="pick">K (23)</td><td class="fix">0</td><td class="fix">7</td><td class="fix">8</td><td class="fix">10</td><td class="fix">11</td><td class="fix">12</td><td class="fix">13</td><td class="fix">16</td><td class="fix">19</td><td class="fix">19</td><td class="fix">23</td></tr></table></div>
+        <p style="margin-top:10px">Each row shows the distances after the chosen vertex has been processed. Gold cells are final.</p>
+        <table class="simple">
+          <tr><th>To</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>H</th><th>I</th><th>J</th><th>K</th></tr>
+          <tr><td><b>Shortest distance</b></td><td><b>7</b></td><td><b>8</b></td><td><b>10</b></td><td><b>11</b></td><td><b>12</b></td><td><b>13</b></td><td><b>16</b></td><td><b>19</b></td><td><b>19</b></td><td><b>23</b></td></tr>
+          <tr><td><b>Path from A</b></td><td>A–B</td><td>A–C</td><td>A–D</td><td>A–B–E</td><td>A–C–F</td><td>A–B–E–G</td><td>A–B–E–H</td><td>A–B–E–G–I</td><td>A–B–E–H–J</td><td>A–B–E–G–I–K</td></tr>
+        </table>
+      </div>
+      <h3>Step through it</h3>
+      <div id="fm-dijkstra"></div>
+      <div class="box mistakes"><span class="tag">Where marks are lost</span>Stopping updates too early. G is first reached as 22 (through B) and later improves to <b>13</b> (through E); K goes ∞ → 28 → <b>23</b>. Always re-check the neighbours of the vertex you just chose. I and J tie at 19, so either can be chosen first.</div>
+    </details>
+  </div>
+
+  <div class="card fm" data-q="1" data-id="1c" data-marks="3">
+    <h2><span class="sq s-blue"></span>1c · Kruskal's algorithm<span class="fm-marks">3 marks</span></h2>
+    <p class="fm-q">Demonstrate Kruskal's algorithm.</p>
+    <details class="fm-ans"><summary>Model answer</summary>
+      <div class="fm-write"><span class="fm-lab">Write this</span>
+        <p>Sort the edges by weight. Take the smallest edge each time and add it unless it forms a cycle. Stop at |V| − 1 = <b>10 edges</b>.</p>
+        <p class="fm-paper">E–G (2) → D–E (3) → H–J (3) → B–E (4) → C–F (4) → I–K (4) → <span style="color:var(--rd)">B–D (5) skipped: cycle B–E–D</span> → E–H (5) → D–F (6) → G–I (6) → A–B (7)</p>
+        <p><b>Total weight = 2 + 3 + 3 + 4 + 4 + 4 + 5 + 6 + 6 + 7 = 44.</b></p>
+        <div class="treebox"><div class="tcap">The minimum spanning tree (draw this as your final answer)</div><div data-fm-graph="mst"></div></div>
+      </div>
+      <h3>Step through it</h3>
+      <div id="fm-kruskal"></div>
+      <div class="box notes"><span class="tag">Ties</span>Edges of equal weight can be taken in any order (H–J before D–E, I–K before C–F, and so on). Showing the rejected edge B–D with the reason is what proves you know the cycle rule.</div>
+    </details>
+  </div>
+
+  <div class="card fm" data-q="1" data-id="1d" data-marks="3">
+    <h2><span class="sq s-blue"></span>1d · Prim's algorithm<span class="fm-marks">3 marks</span></h2>
+    <p class="fm-q">Demonstrate Prim's algorithm.</p>
+    <details class="fm-ans"><summary>Model answer</summary>
+      <div class="fm-write"><span class="fm-lab">Write this</span>
+        <p>Start from one vertex (A). Repeatedly add the <b>cheapest edge that joins a vertex in the tree to a vertex outside it</b>, until all 11 vertices are in the tree.</p>
+        <p class="fm-paper">A–B (7) → B–E (4) → E–G (2) → E–D (3) → E–H (5) → H–J (3) → D–F (6) → F–C (4) → G–I (6) → I–K (4)</p>
+        <p><b>Total weight = 44</b>, the same tree as Kruskal. This graph has only one minimum spanning tree.</p>
+      </div>
+      <h3>Step through it</h3>
+      <div id="fm-prim"></div>
+      <div class="box mistakes"><span class="tag">Kruskal vs Prim</span>Prim must stay connected: the first edge has to touch A, so it is A–B (7), not E–G (2). Kruskal takes the smallest edge anywhere and may build separate pieces that join later. D–F and G–I tie at 6, so either may come first.</div>
+    </details>
+  </div>
+
+  <div class="card fm" data-q="1" data-id="1e" data-marks="3">
+    <h2><span class="sq s-blue"></span>1e · Eulerian trail<span class="fm-marks">3 marks</span></h2>
+    <p class="fm-q">What is an Eulerian Trail? How could you test if a graph is Eulerian?</p>
+    <details class="fm-ans"><summary>Model answer</summary>
+      <div class="fm-write"><span class="fm-lab">Write this</span>
+        <ul>
+          <li>An <b>Eulerian trail</b> is a route through a graph that includes <b>every edge exactly once</b>. If it also returns to its start it is an <b>Eulerian cycle</b>, and a graph that has one is an <b>Eulerian graph</b>.</li>
+          <li><b>Test:</b> count the degree (number of incident edges) of every vertex. A connected graph is <b>Eulerian if every vertex has an even degree</b>.</li>
+          <li>If <b>exactly two</b> vertices have an odd degree, the graph is not Eulerian but it still has an Eulerian trail, which must start at one odd vertex and end at the other.</li>
+        </ul>
+      </div>
+      <div class="treebox"><div class="tcap">Degrees in this graph. Red = odd degree</div><div data-fm-graph="degrees"></div></div>
+      <p>Here <b>six</b> vertices are odd (A 3, C 3, D 5, I 3, J 3, K 3), so this graph is <b>not Eulerian</b> and has <b>no Eulerian trail</b>.</p>
+      <div class="box mistakes"><span class="tag">Common slip</span>"Two odd vertices" does <b>not</b> make a graph Eulerian. It gives a trail only. Eulerian needs all degrees even.</div>
+    </details>
+  </div>
+
+  <div class="card fm" data-q="1" data-id="1f" data-marks="2">
+    <h2><span class="sq s-blue"></span>1f · Hamiltonian graph<span class="fm-marks">2 marks</span></h2>
+    <p class="fm-q">What is a Hamiltonian Graph?</p>
+    <details class="fm-ans"><summary>Model answer</summary>
+      <div class="fm-write"><span class="fm-lab">Write this</span>
+        <ul>
+          <li>A <b>Hamiltonian cycle</b> is a cycle that passes through <b>every vertex of the graph exactly once</b> and returns to the start.</li>
+          <li>A <b>Hamiltonian graph</b> is a graph that contains <b>at least one</b> Hamiltonian cycle. All complete graphs are Hamiltonian.</li>
+        </ul>
+      </div>
+      <div class="treebox"><div class="tcap">This graph is Hamiltonian: A–B–D–E–G–I–K–J–H–F–C–A</div><div data-fm-graph="hamilton"></div></div>
+      <div class="box mistakes"><span class="tag">Common slip</span>Euler = every <b>edge</b> once. Hamilton = every <b>vertex</b> once, and it must be a <b>cycle</b>, not just a path.</div>
+    </details>
+  </div>
+
+  <div class="card fm" data-q="1" data-id="1g" data-marks="4">
+    <h2><span class="sq s-blue"></span>1g · Chinese Postman<span class="fm-marks">4 marks</span></h2>
+    <p class="fm-q">In the Chinese Postman problem, a postman needs to traverse each edge once. There are several possible routes through the graph above. Discuss how you could find the shortest solution.</p>
+    <details class="fm-ans"><summary>Model answer</summary>
+      <div class="fm-write"><span class="fm-lab">Write this</span>
+        <ol>
+          <li>The postman must walk <b>every edge at least once</b> and return to the start, using the shortest total distance.</li>
+          <li>Find the degree of every vertex. If all are even the graph is <b>Eulerian</b>: follow an Eulerian cycle, and the length is simply the sum of all edges.</li>
+          <li>If not, some edges must be walked twice. List the <b>odd-degree vertices</b>, pair them up, and <b>repeat the shortest path</b> between each pair. Compare the possible pairings and choose the one that adds the least distance.</li>
+          <li>With those edges repeated every vertex is even, so an Eulerian cycle now exists. That cycle is the shortest postman route.</li>
+        </ol>
+      </div>
+      <h3>Applied to this graph</h3>
+      <p>Odd vertices: <b>A, C, D, I, J, K</b>. Six odd vertices can be paired in 15 ways. The cheapest pairing is:</p>
+      <table class="simple">
+        <tr><th>Pair</th><th>Shortest path between them</th><th>Extra distance</th></tr>
+        <tr><td><b>A – C</b></td><td>A–C</td><td>8</td></tr>
+        <tr><td><b>I – K</b></td><td>I–K</td><td>4</td></tr>
+        <tr><td><b>D – J</b></td><td>D–E–H–J</td><td>3 + 5 + 3 = 11</td></tr>
+        <tr><td colspan="2"><b>Total repeated</b></td><td><b>23</b></td></tr>
+      </table>
+      <div class="treebox"><div class="tcap">Red double lines are the edges walked twice</div><div data-fm-graph="postman"></div></div>
+      <p>All edges once = <b>141</b>. Shortest postman route = 141 + 23 = <b>164</b>.</p>
+      <p class="small">In the exam the method (steps 1–4) earns the marks. The numbers are here so you can practise it.</p>
+    </details>
+  </div>
+
+  <div class="card fm" data-q="1" data-id="1h" data-marks="4">
+    <h2><span class="sq s-blue"></span>1h · Travelling Salesperson<span class="fm-marks">4 marks</span></h2>
+    <p class="fm-q">In the Travelling Salesperson problem, a salesperson needs to visit each node. Discuss how you could find the shortest route for him to take.</p>
+    <details class="fm-ans"><summary>Model answer</summary>
+      <div class="fm-write"><span class="fm-lab">Write this</span>
+        <ol>
+          <li>The TSP asks for the <b>shortest Hamiltonian cycle</b>: visit every node once and return to the start.</li>
+          <li>The exact method is to <b>try every possible tour</b> and keep the shortest. The number of tours grows factorially ((n − 1)!/2, about 1.8 million for 11 nodes), so this is only possible for small graphs.</li>
+          <li><b>Approximation 1, minimum spanning tree:</b> build the MST, walk around it, and take a <b>shortcut</b> straight to the next unvisited node whenever the walk would revisit a node. The tour is no more than <b>2 × the MST length</b>.</li>
+          <li><b>Approximation 2, nearest neighbour:</b> start at a root, join its nearest neighbour to form a loop, then keep inserting the next nearest node between its two closest neighbours until every node is in the loop.</li>
+        </ol>
+      </div>
+      <h3>Applied to this graph</h3>
+      <p>The MST is 44, so every tour is longer than 44, and twice the MST is 88. Checking every tour by computer gives the best one:</p>
+      <div class="treebox"><div class="tcap">Shortest tour: A–B–D–E–G–I–K–J–H–F–C–A = 56</div><div data-fm-graph="tsp"></div></div>
+      <p class="small">7 + 5 + 3 + 2 + 6 + 4 + 7 + 3 + 7 + 4 + 8 = 56.</p>
+      <div class="box mistakes"><span class="tag">Where marks are lost</span>Writing only "list all routes and pick the shortest". Say why that is impractical and give at least one approximate method.</div>
+    </details>
+  </div>
+
+  <div class="card fm" data-q="1" data-id="1i" data-marks="3">
+    <h2><span class="sq s-blue"></span>1i · NP-complete problems<span class="fm-marks">3 marks</span></h2>
+    <p class="fm-q">What is an NP-Complete problem? Why are the Chinese Postman and the Travelling Salesperson examples of NP-Complete problems?</p>
+    <details class="fm-ans"><summary>Model answer</summary>
+      <div class="fm-write"><span class="fm-lab">Write this</span>
+        <ul>
+          <li><b>NP</b> (non-deterministic polynomial time) problems are those where a <b>proposed solution can be checked quickly</b>, in polynomial time.</li>
+          <li>An <b>NP-complete</b> problem is one of the <b>hardest problems in NP</b>: no algorithm is known that <b>solves</b> it in polynomial time, even though a given answer is quick to check.</li>
+          <li>The Chinese Postman and the TSP both ask for the <b>shortest route among a huge number of possible routes</b>. The number of candidates grows factorially with the size of the graph, so checking them all to find the best is not practical, but the length of any one proposed route is easy to add up and check.</li>
+        </ul>
+      </div>
+      <div class="box notes"><span class="tag">For your own understanding</span>The TSP is the standard example of a hard problem. The basic Chinese Postman on an undirected graph can in fact be solved efficiently (shortest paths plus the best pairing, as in part g); it is its harder variants that are NP-complete. The question treats both as NP-complete, so answer it that way.</div>
+    </details>
+  </div>
+
+  <!-- ================= QUESTION 2 ================= -->
+  <div class="card" data-q="2">
+    <h2><span class="sq s-grn"></span>Question 2 · The AVL tree<span class="fm-marks">10 marks</span></h2>
+    <div class="treebox" data-tree="fm_avl0" data-bf="1"></div>
+    <p class="small">Balance factor = height(left) − height(right), written beside each node. All are −1, 0 or +1, so the tree is a valid AVL tree.</p>
+  </div>
+
+  <div class="card fm" data-q="2" data-id="2a" data-marks="3">
+    <h2><span class="sq s-grn"></span>2a · Properties of an AVL tree<span class="fm-marks">3 marks</span></h2>
+    <p class="fm-q">Briefly describe the properties of an AVL tree.</p>
+    <details class="fm-ans"><summary>Model answer</summary>
+      <div class="fm-write"><span class="fm-lab">Write this</span>
+        <ul>
+          <li>An AVL tree is a <b>self-balancing binary search tree</b>: left subtree &lt; node &lt; right subtree.</li>
+          <li>For <b>every node</b>, the heights of its left and right subtrees differ by <b>at most 1</b>. The balance factor is always −1, 0 or +1.</li>
+          <li>After an insertion or deletion, if a balance factor becomes ±2 the tree is <b>rebalanced by rotations</b> (single for LL and RR, double for LR and RL). The height therefore stays about log n, so search, insert and delete are <b>O(log n)</b>.</li>
+        </ul>
+      </div>
+    </details>
+  </div>
+
+  <div class="card fm" data-q="2" data-id="2b" data-marks="4">
+    <h2><span class="sq s-grn"></span>2b · Insert 2, then insert 15<span class="fm-marks">4 marks</span></h2>
+    <p class="fm-q">Discuss what would happen with the following operations, and redraw the tree after the operation: i. Insert 2 &nbsp; ii. Insert 15.</p>
+    <details class="fm-ans"><summary>Model answer</summary>
+      <div class="fm-write"><span class="fm-lab">Write this</span>
+        <p><b>i. Insert 2.</b> 2 &lt; 10, &lt; 5, &lt; 4, &lt; 3, so it becomes the left child of 3. Node <b>4</b> now has balance factor <b>+2</b> (5 is also +2, but always fix the <b>lowest</b> unbalanced node). The new key is in the <b>left subtree of the left child</b>: the <b>LL case</b>, fixed by one <b>right rotation</b> at 4. Node 3 moves up, with 2 and 4 as its children.</p>
+        <div class="fm-trees">
+          <div class="mini"><span class="mnum">After inserting 2</span><div class="treebox" data-tree="fm_ins2" data-small="1" data-bf="1"></div><div class="small">4 is +2: unbalanced</div></div>
+          <div class="mini"><span class="mnum">Answer i</span><div class="treebox" data-tree="fm_fix2" data-small="1" data-bf="1"></div><div class="small">Right rotation at 4</div></div>
+        </div>
+        <p><b>ii. Insert 15.</b> 15 &gt; 10, &gt; 13, &lt; 17, so it becomes the left child of 17. Node <b>13</b> now has balance factor <b>−2</b>. The new key is in the <b>left subtree of the right child</b>: the <b>RL case</b>, fixed by a <b>double rotation</b>. Rotate 15 right around 17, then rotate 15 left around 13. Node 15 ends up as the parent of 13 and 17.</p>
+        <div class="fm-trees">
+          <div class="mini"><span class="mnum">After inserting 15</span><div class="treebox" data-tree="fm_ins15" data-small="1" data-bf="1"></div><div class="small">13 is −2: unbalanced</div></div>
+          <div class="mini"><span class="mnum">Step 1 of 2</span><div class="treebox" data-tree="fm_rl1" data-small="1" data-bf="1"></div><div class="small">15 rotated right around 17</div></div>
+          <div class="mini"><span class="mnum">Answer ii</span><div class="treebox" data-tree="fm_fix15" data-small="1" data-bf="1"></div><div class="small">15 rotated left around 13</div></div>
+        </div>
+      </div>
+      <div class="box notes"><span class="tag">For 4 marks</span>For each insert give four things: where the key lands, which node becomes unbalanced, the case and rotation, and the redrawn tree. If you treat ii as starting from the original tree instead, the right side is identical (13 still becomes −2 and 15 still ends up above 13 and 17).</div>
+    </details>
+  </div>
+
+  <div class="card fm" data-q="2" data-id="2c" data-marks="3">
+    <h2><span class="sq s-grn"></span>2c · AVL vs splay tree<span class="fm-marks">3 marks</span></h2>
+    <p class="fm-q">Compare an AVL tree's approach to maintaining a balanced tree with a splay tree.</p>
+    <details class="fm-ans"><summary>Model answer</summary>
+      <div class="fm-write"><span class="fm-lab">Write this</span>
+        <table class="simple">
+          <tr><th></th><th>AVL tree</th><th>Splay tree</th></tr>
+          <tr><td><b>Goal</b></td><td>Keep the <b>height</b> balanced at all times.</td><td>Keep <b>recently / frequently used</b> nodes near the root. It does not try to stay height-balanced.</td></tr>
+          <tr><td><b>When it restructures</b></td><td>Only after an <b>insert or delete</b>, and only if a balance factor reaches ±2.</td><td>On <b>every access</b>, including a search: the accessed node is <b>splayed</b> (rotated) up to the root.</td></tr>
+          <tr><td><b>Cost</b></td><td>Guaranteed O(log n) for every operation. Must store or compute balance information.</td><td>O(log n) <b>amortized</b>; a single operation can be O(n) because the tree may be unbalanced. No balance information stored.</td></tr>
+        </table>
+      </div>
+      <p class="small">One line to remember: AVL balances by <b>shape</b>, splay balances by <b>use</b>.</p>
+    </details>
+  </div>
+
+  <!-- ================= QUESTION 3 ================= -->
+  <div class="card" data-q="3">
+    <h2><span class="sq s-red"></span>Question 3 · Connect 4<span class="fm-marks">17 marks</span></h2>
+    <p>Connect 4: two players take turns dropping a disc into one of <b>7 columns</b> of a 6-row grid. The first to line up four discs wins. On each turn there are at most 7 possible moves.</p>
+  </div>
+
+  <div class="card fm" data-q="3" data-id="3a" data-marks="5">
+    <h2><span class="sq s-red"></span>3a · Task environment<span class="fm-marks">5 marks</span></h2>
+    <p class="fm-q">Describe the task environment in terms of (explain your reasoning): i. Fully / Partially Observable · ii. Deterministic / Stochastic / Strategic · iii. Episodic / Sequential · iv. Static / Dynamic · v. Discrete / Continuous.</p>
+    <details class="fm-ans"><summary>Model answer</summary>
+      <div class="fm-write"><span class="fm-lab">Write this</span>
+        <table class="simple">
+          <tr><th style="width:38px"></th><th style="width:170px">Answer</th><th>Reason</th></tr>
+          <tr><td>i</td><td><b>Fully observable</b></td><td>Both players can see the whole board, every disc of both colours, at all times. Nothing is hidden.</td></tr>
+          <tr><td>ii</td><td><b>Strategic</b></td><td>There is no chance: a move always has the same result. The only thing the agent cannot predict is the <b>other player's move</b>, and deterministic-except-for-other-agents is called strategic.</td></tr>
+          <tr><td>iii</td><td><b>Sequential</b></td><td>Each move changes the board for all later moves, so the agent has to think ahead. Decisions are not independent episodes.</td></tr>
+          <tr><td>iv</td><td><b>Static</b></td><td>The board does not change while a player is deciding; it waits for the move. (With a clock it would be semidynamic.)</td></tr>
+          <tr><td>v</td><td><b>Discrete</b></td><td>There is a limited set of moves (at most 7 columns) and a finite number of board states.</td></tr>
+        </table>
+      </div>
+      <div class="box mistakes"><span class="tag">Where marks are lost</span>One mark each, and the question says <b>explain your reasoning</b>: a bare word scores little. For ii, "deterministic" is defensible, but "strategic" is the precise term when another agent is involved.</div>
+    </details>
+  </div>
+
+  <div class="card fm" data-q="3" data-id="3b" data-marks="3">
+    <h2><span class="sq s-red"></span>3b · IDDFS vs BFS for the bot<span class="fm-marks">3 marks</span></h2>
+    <p class="fm-q">Suppose you need to write an algorithm for an AI bot to choose which column to play. Compare using Iterative Deepening Depth First Search (IDDFS) with Breadth First Search (BFS) when searching the game tree.</p>
+    <details class="fm-ans"><summary>Model answer</summary>
+      <div class="fm-write"><span class="fm-lab">Write this</span>
+        <ul>
+          <li><b>BFS</b> searches the game tree level by level using a queue. It finds the shallowest win first, but it must hold a whole level in memory: <code>O(b<sup>d+1</sup>)</code> with b = 7, which becomes impossible after a few moves. It can also generate nodes below the goal.</li>
+          <li><b>IDDFS</b> runs a depth-limited depth-first search with the limit 0, 1, 2, … It also finds the shallowest win, but only keeps the current path in memory. It costs <code>O(b<sup>d</sup>)</code> and never generates nodes below the goal. The upper levels are repeated, but they contain few nodes, so little is wasted.</li>
+          <li><b>Conclusion:</b> IDDFS is the better choice for the bot. It gives BFS's result with depth-first memory, and it can be stopped at any time, playing the best move from the deepest level it finished.</li>
+        </ul>
+      </div>
+    </details>
+  </div>
+
+  <div class="card fm" data-q="3" data-id="3c" data-marks="3">
+    <h2><span class="sq s-red"></span>3c · Using a heuristic<span class="fm-marks">3 marks</span></h2>
+    <p class="fm-q">How could using a heuristic function improve your algorithm in part b?</p>
+    <details class="fm-ans"><summary>Model answer</summary>
+      <div class="fm-write"><span class="fm-lab">Write this</span>
+        <ul>
+          <li>IDDFS and BFS are <b>uninformed</b>: they treat every column the same. A <b>heuristic function</b> estimates how good a board position is without searching to the end of the game, for example by counting open lines of two or three discs, or discs in the centre columns.</li>
+          <li>The search can then expand the <b>most promising moves first</b> (best-first / A* style) instead of every move in turn, so good moves are found sooner and weak branches are explored less.</li>
+          <li>The search can also be <b>cut off at a depth limit</b> and the position scored by the heuristic, so the bot can answer within a time limit even though the full game tree is far too large.</li>
+        </ul>
+      </div>
+    </details>
+  </div>
+
+  <div class="card fm" data-q="3" data-id="3d" data-marks="2">
+    <h2><span class="sq s-red"></span>3d · Simulated annealing<span class="fm-marks">2 marks</span></h2>
+    <p class="fm-q">How can simulated annealing resolve the problem of local maxima?</p>
+    <details class="fm-ans"><summary>Model answer</summary>
+      <div class="fm-write"><span class="fm-lab">Write this</span>
+        <ul>
+          <li>Hill climbing only moves to a better neighbour, so it stops on the first peak it reaches, which may be a <b>local maximum</b> and not the best state.</li>
+          <li>Simulated annealing <b>shakes the state</b>: it sometimes accepts a move to a worse state, a lot at first and then less and less. This lets the search leave a local peak and find a higher one before it settles.</li>
+        </ul>
+      </div>
+      <p class="small">Lecture picture: standing on Doi Suthep thinking it is Everest; shake hard at first, then gently, to roll towards Doi Inthanon.</p>
+    </details>
+  </div>
+
+  <div class="card fm" data-q="3" data-id="3e" data-marks="4">
+    <h2><span class="sq s-red"></span>3e · Minimax and alpha-beta<span class="fm-marks">4 marks</span></h2>
+    <p class="fm-q">What is the Minimax algorithm? Explain how alpha beta pruning can assist with the Minimax algorithm.</p>
+    <details class="fm-ans"><summary>Model answer</summary>
+      <div class="fm-write"><span class="fm-lab">Write this</span>
+        <ul>
+          <li><b>Minimax</b> chooses a move in a two-player, zero-sum game by searching the game tree and assuming the <b>opponent always plays optimally</b>.</li>
+          <li>Utilities at the leaves are passed back up: at the opponent's (MIN) levels take the <b>minimum</b>, at our (MAX) levels take the <b>maximum</b>. The chosen move is the one with the <b>best worst-case outcome</b>. Its time is O(b<sup>m</sup>), which is exponential.</li>
+          <li><b>Alpha-beta pruning</b> skips branches that cannot change the result: if a player already has a better choice higher up the tree, the rest of the current branch will never be reached, so it is not searched.</li>
+          <li>It returns <b>exactly the same move</b> as minimax but examines far fewer nodes, about O(b<sup>d/2</sup>) with good move ordering, so the bot can search roughly twice as deep in the same time.</li>
+        </ul>
+      </div>
+      <div class="box notes"><span class="tag">Tiny example to quote</span>MAX has three moves whose replies are (4, 7, 3), (2, 12, 6) and (10, 11, 2). The worst cases are 3, 2 and 2, so minimax picks the first move. With pruning, after seeing 3 from the first move, the second move's first reply of 2 is already worse, so 12 and 6 are never looked at.</div>
+      <p><button class="btn b-blue" onclick="go('week12')">WEEK 12 · MINIMAX DIAGRAMS →</button></p>
+    </details>
+  </div>
+
+  <!-- ================= QUESTION 4 ================= -->
+  <div class="card fm" data-q="4" data-id="4a" data-marks="7">
+    <h2><span class="sq s-yel"></span>4a · Find a duplicate: pseudo-code<span class="fm-marks">10 marks with 4b</span></h2>
+    <p class="fm-q">You have a very large unsorted array of N integers {i<sub>1</sub>, i<sub>2</sub>, i<sub>3</sub>, … i<sub>n</sub>}. Write an algorithm that finds whether the same value appears twice. It should return true if a duplicate is found and false if there are none. Write pseudo-code for your algorithm. (To get full marks you need a solution with O(n) time complexity.)</p>
+    <details class="fm-ans"><summary>Model answer</summary>
+      <div class="fm-write"><span class="fm-lab">Write this</span>
+        <p>Remember every value already seen in a <b>hash set</b>. Looking a value up in a hash set and adding to it both take O(1) time on average, so one pass over the array is enough.</p>
+<pre class="code pseudo">hasDuplicate(array A of N integers)
+    seen = empty hash set
+    for each value x in A
+        if x is in seen
+            return true          // x appeared earlier
+        add x to seen
+    return false                 // reached the end, no repeats</pre>
+      </div>
+      <h3>The same thing in C++</h3>
+<pre class="code" id="fm-code">#include &lt;unordered_set&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+bool hasDuplicate(const vector&lt;int&gt;&amp; a) {
+    unordered_set&lt;int&gt; seen;
+    for (int x : a) {
+        if (seen.count(x)) return true;   // already seen: duplicate
+        seen.insert(x);
+    }
+    return false;
+}</pre>
+      <div class="box notes"><span class="tag">What the marker wants to see</span>A correct loop, an early <code>return true</code>, a final <code>return false</code>, and a data structure whose lookup is O(1). If you are told the values lie in a known small range, a boolean array indexed by the value does the same job.</div>
+    </details>
+  </div>
+
+  <div class="card fm" data-q="4" data-id="4b" data-marks="3">
+    <h2><span class="sq s-yel"></span>4b · Big-O of your algorithm</h2>
+    <p class="fm-q">What is Big-O for your algorithm?</p>
+    <details class="fm-ans"><summary>Model answer</summary>
+      <div class="fm-write"><span class="fm-lab">Write this</span>
+        <p><b>O(n) time.</b> The loop visits each of the N items at most once, and each visit does one hash-set lookup and one insert, both O(1) on average. In the worst case (no duplicates) the whole array is read once: N × O(1) = O(n).</p>
+        <p><b>O(n) extra space</b> for the set. That is the price paid for the speed.</p>
+      </div>
+      <table class="simple">
+        <tr><th>Approach</th><th>Time</th><th>Extra space</th><th>Marks</th></tr>
+        <tr><td>Compare every pair (two nested loops)</td><td>O(n²)</td><td>O(1)</td><td>Partial</td></tr>
+        <tr><td>Sort, then compare neighbours</td><td>O(n log n)</td><td>O(1) – O(n)</td><td>Partial</td></tr>
+        <tr><td><b>Hash set, one pass</b></td><td><b>O(n)</b></td><td>O(n)</td><td><b>Full</b></td></tr>
+      </table>
+      <div class="box mistakes"><span class="tag">Common slip</span>Using a list or array for "seen" and searching it each time. That search is O(n), which makes the whole algorithm O(n²) even though it looks like one loop.</div>
+    </details>
+  </div>
+</section>
+
 <!-- ===== CHEAT ===== -->
 <section class="page" id="page-cheat">
 <div class="lvlchip c-red">Reference · Read this the night before</div>
@@ -3517,6 +3918,12 @@ const CARDS = [
 [4,`Expression tree traversals give which notations?`,`Pre-order → <b>Polish</b> (prefix).<br>In-order → infix (normal).<br>Post-order → <b>Reverse Polish</b> (postfix).`],
 [7,`Kruskal vs Prim in one sentence`,`<b>Kruskal</b>: take the smallest edge anywhere that does not make a cycle. <b>Prim</b>: grow one tree from a start vertex by adding the cheapest edge that leaves it.`],
 [7,`How many edges does a spanning tree of n vertices have?`,`Exactly <b>n − 1</b>. More means a cycle; fewer means it is not connected.`],
+[7,`Chinese Postman: how do you find the shortest route?`,`If every degree is even, follow an Eulerian cycle. Otherwise <b>pair the odd-degree vertices</b>, repeat the <b>shortest path</b> between each pair using the cheapest pairing, then follow the Eulerian cycle of the new graph.`],
+[7,`Two ways to approximate the Travelling Salesman Problem`,`<b>MST method</b>: walk around the minimum spanning tree and shortcut past visited nodes (at most 2 × MST). <b>Nearest neighbour</b>: keep inserting the nearest node into the loop.`],
+[7,`What is an NP-complete problem?`,`One of the <b>hardest problems in NP</b>: a proposed solution can be <b>checked quickly</b>, but no polynomial-time algorithm is known to <b>find</b> one.`],
+[7,`Exactly two vertices have odd degree. Is the graph Eulerian?`,`<b>No.</b> It has an Eulerian <b>trail</b> (from one odd vertex to the other) but not an Eulerian cycle. Eulerian needs every degree even.`],
+[4,`AVL tree vs splay tree`,`<b>AVL</b> keeps the height balanced and rotates only when a balance factor hits ±2: guaranteed O(log n). <b>Splay</b> moves every accessed node to the root: O(log n) amortized, good for repeated access.`],
+[1,`Fastest way to check an unsorted array for a duplicate?`,`One pass with a <b>hash set</b> of values already seen: <b>O(n)</b> time, O(n) extra space. Nested loops are O(n²); sorting first is O(n log n).`],
 [10,`What is an agent?`,`Anything that <b>perceives</b> its environment through <b>sensors</b> and <b>acts</b> on it through <b>actuators</b>.`],
 [10,`Percept vs percept sequence`,`A <b>percept</b> is the input at one instant. The <b>percept sequence</b> is the complete history of everything perceived.`],
 [10,`What is a performance measure, and what is the rule for designing one?`,`An <b>objective</b> test of the agent's success set by the designer. Base it on <b>what you want in the environment</b>, not on how you expect the agent to act.`],
@@ -3837,7 +4244,19 @@ const QUIZ = [
  `Each run becomes a count followed by the symbol.`],
 [13,`Run-length encoding fails when…`,
  [`the data is binary`,`the data contains repeated letters`,`the data is long`,`the data contains numbers`],3,
- `Counts cannot be told apart from numbers in the data.`]
+ `Counts cannot be told apart from numbers in the data.`],
+[7,`A connected graph has six vertices of odd degree. For the Chinese Postman route you must…`,
+ [`remove the odd vertices`,`start at an odd vertex and stop at another`,`repeat the shortest paths that pair up the odd vertices`,`visit every vertex exactly once`],2,
+ `Repeating edges between paired odd vertices makes every degree even, so an Eulerian cycle exists.`],
+[7,`Which statement about an NP-complete problem is correct?`,
+ [`A proposed solution can be checked quickly, but no fast way to find one is known`,`It can never be solved`,`It can always be solved in O(n log n)`,`Its solutions cannot be checked`],0,
+ `Checking is polynomial; finding has no known polynomial-time algorithm.`],
+[7,`In Dijkstra's algorithm, which vertex is chosen next?`,
+ [`The neighbour with the smallest edge weight`,`Any unchecked vertex`,`The vertex added most recently`,`The unchecked vertex with the smallest current distance`],3,
+ `It is the smallest total distance from the start, not the smallest single edge.`],
+[4,`A splay tree differs from an AVL tree because it…`,
+ [`stores a balance factor in every node`,`moves each accessed node to the root`,`never rotates`,`is not a binary search tree`],1,
+ `Splaying brings the accessed node to the root; AVL only rotates when a balance factor reaches ±2.`]
 ];
 
 /* ================= CODE PRACTICE data ================= */
@@ -4267,6 +4686,7 @@ prFilter(0);
 <script src="./tree-mastery.js?v=20260823b"></script>
 <script src="./assignment3.js?v=20260823b"></script>
 <script src="./assignment4.js?v=20261006a"></script>
+<script src="./final-mock.js?v=20261007a"></script>
 <script src="./tree-mastery-upgrade.js?v=20260823b"></script>
 <script src="./tree-mastery-learn-expanded.js?v=20260827a"></script>
 

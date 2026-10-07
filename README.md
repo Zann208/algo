@@ -14,7 +14,7 @@ Vanilla HTML/CSS/JavaScript with no framework or external runtime dependencies.
 | **Assignments** | Assignments 1–4 worked through step by step: BST, AVL, Splay Tree operations, and minimum spanning trees (Kruskal and Prim) |
 | **Tree Mastery** | Full Week 4 + Week 6 Learn path, visual labs, assignment-mode drills and exam questions |
 | **Midterm Mock** | Supplied mock questions with verified, concise model answers and tree/graph working |
-| **Final** | Definition bank for Weeks 7, 10, 12 and 13, plus 20 exam-style practice problems with worked answers |
+| **Final** | Definition bank for Weeks 7, 10, 12 and 13, 20 exam-style practice problems, and a 70-mark mock exam with model answers and step-by-step walkthroughs (Dijkstra, Kruskal, Prim, traversal, AVL rotations) |
 | **Flashcards** | Filterable recall practice by week |
 | **Quiz** | Immediate feedback with explanations |
 | **Code practice** | Fill-in-the-blank C++ exercises in the same style as course exercises |

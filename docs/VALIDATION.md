@@ -63,6 +63,17 @@ Verified mock distances from F: `F=0, E=3, G=5, C=9, A=10, H=10, D=11, I=11, B=1
 - Final practice answers (Kruskal/Prim total 13, Dijkstra distances, minimax value 5, Bayes 0.18, Huffman average 2.24 bits) recomputed by script: **PASS**
 - Page loads with no script errors at desktop and phone widths, light and dark: **PASS**
 
+## Final Mock checks
+
+- Question 1 graph transcribed as 11 vertices / 21 edges, total weight 141: **PASS**
+- Depth-first order A, B, D, C, F, H, E, G, I, K, J and breadth-first order A, B, C, D, E, G, F, H, I, J, K (alphabetical neighbours): **PASS**
+- Dijkstra distances from A: B 7, C 8, D 10, E 11, F 12, G 13, H 16, I 19, J 19, K 23: **PASS**
+- Kruskal and Prim (from A) both give 10 edges, total weight 44; the minimum spanning tree is unique: **PASS**
+- Six odd-degree vertices (A, C, D, I, J, K); cheapest pairing adds 23, postman route 164: **PASS**
+- Shortest Hamiltonian cycle A–B–D–E–G–I–K–J–H–F–C–A = 56, found by checking every tour: **PASS**
+- AVL insert 2 (LL, right rotation at 4) and insert 15 (RL, double rotation at 13): **PASS**
+- Marks add up to 70 across 19 parts: **PASS**
+
 ## Browser/device note
 
 Responsive rules keep wide technical artifacts inside local scroll containers. A full physical-device Safari/Android/Firefox render pass is not available in this execution environment, so this report does not claim hardware/browser screenshots.

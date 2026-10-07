@@ -16,6 +16,7 @@ jobs:
           node --check tree-mastery.js
           node --check assignment3.js
           node --check assignment4.js
+          node --check final-mock.js
           node --check tree-mastery-upgrade.js
           node --check tree-mastery-learn-expanded.js
           node --check midterm-mock.js
