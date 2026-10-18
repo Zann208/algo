@@ -20,6 +20,7 @@ jobs:
           node --check tree-mastery-upgrade.js
           node --check tree-mastery-learn-expanded.js
           node --check midterm-mock.js
+          node --check i18n/my.js
       - name: Verify required pages
         run: |
           test -f index.html
@@ -27,3 +28,4 @@ jobs:
           test -f midterm-mock.html
           test -f final.html
           test -f study-console-adapter.css
+          test -f i18n/my.js

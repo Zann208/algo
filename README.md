@@ -34,6 +34,12 @@ The dedicated midterm pages remain limited to the currently posted midterm scope
 - Assignment 4: minimum spanning tree of a 10-vertex graph with Kruskal and with Prim from A, as two step-by-step walkthroughs.
 - Tree Mastery includes a BST builder/traversal lab, AVL rotation trainer, B-Tree order trainer, Splay access walkthrough, assignment-style drills and persistent mastery tracking.
 
+## Languages
+
+The **EN / MY** button in the header switches the final-scope material to Burmese: Weeks 7, 10, 12 and 13, the Final definition bank, the 20 practice problems, the Final Mock, the course home page, and the 69 flashcards and 49 quiz questions for those weeks. Code, pseudo-code, formulas and the step-by-step walkthrough widgets stay in English. Technical terms (graph, vertex, DFS, heuristic, Huffman…) are kept in English inside the Burmese text.
+
+Translations live in `i18n/my.js` and load only when MY is selected; tagged elements carry `data-i18n` keys.
+
 ## Tech
 
 Vanilla HTML · CSS custom properties · plain JavaScript · SVG · localStorage. Light and dark themes. The sidebar can be hidden and shown on desktop (button in the sidebar, or the `[` key).
