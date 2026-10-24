@@ -122,7 +122,8 @@ M.dijkstra={id:'dijkstra',name:"Dijkstra's shortest paths",kind:'vertex',
   rule:'Click the unchecked vertex with the SMALLEST current distance (ties: either is fine).',
   note:'Start: every distance ∞, start = 0. Repeatedly remove the unchecked vertex with minimal currDist and relax its neighbours. Fails with negative edges. O(|V|²) with a plain array.',
   init:function(g,start){var s={dist:{},pred:{},done:[],cur:null,start:start,log:'currDist('+start+') = 0, every other vertex = ∞.'};
-    nodeIds(g).forEach(function(v){s.dist[v]=INF;s.pred[v]=null});s.dist[start]=0;return s},
+    nodeIds(g).forEach(function(v){s.dist[v]=INF;s.pred[v]=null});s.dist[start]=0;
+    s.rows=[{pick:null,d:clone(s.dist),fixed:[],changed:[]}];return s},
   cands:function(s,g){
     var best=INF,out=[];
     nodeIds(g).forEach(function(v){if(s.done.indexOf(v)<0&&s.dist[v]<INF){if(s.dist[v]<best){best=s.dist[v];out=[v]}else if(s.dist[v]===best)out.push(v)}});
@@ -132,6 +133,7 @@ M.dijkstra={id:'dijkstra',name:"Dijkstra's shortest paths",kind:'vertex',
     s=clone(s);var a=L.adj(g);s.done.push(v);s.cur=v;var ch=[];
     a[v].forEach(function(p){var u=p[0],w=p[1];
       if(s.done.indexOf(u)<0&&s.dist[v]+w<s.dist[u]){s.dist[u]=s.dist[v]+w;s.pred[u]=v;ch.push(u+' → '+s.dist[u])}});
+    s.rows.push({pick:v,d:clone(s.dist),fixed:s.done.slice(),changed:ch.map(function(c){return c.split(' ')[0]})});
     s.log='Remove '+v+' (distance '+s.dist[v]+'). '+(ch.length?'Improved: '+ch.join(', ')+'.':'No distance improved.');
     return s;
   },
@@ -144,9 +146,15 @@ M.dijkstra={id:'dijkstra',name:"Dijkstra's shortest paths",kind:'vertex',
     return {v:v,e:e,lab:lab};
   },
   panel:function(s,g){
-    var h='<table class="fl-t"><tr><th>Vertex</th><th>currDist</th><th>pred</th><th>status</th></tr>';
-    nodeIds(g).forEach(function(x){h+='<tr><td><b>'+x+'</b></td><td>'+fmt(s.dist[x])+'</td><td>'+(s.pred[x]||'–')+'</td><td>'+(s.done.indexOf(x)>=0?'done':'to be checked')+'</td></tr>'});
-    return h+'</table>';
+    var ids=nodeIds(g);
+    var h='<div class="fl-djw"><table class="fl-dj"><tr><th>Vertex chosen</th>'+ids.map(function(v){return '<th>'+v+'</th>'}).join('')+'</tr>';
+    s.rows.forEach(function(r){
+      h+='<tr><td class="pick">'+(r.pick?r.pick+' ('+fmt(r.d[r.pick])+')':'start')+'</td>'+ids.map(function(v){
+        var c=r.fixed.indexOf(v)>=0?'fix':r.changed.indexOf(v)>=0?'new':r.d[v]>=INF?'inf':'';
+        return '<td class="'+c+'">'+fmt(r.d[v])+'</td>'}).join('')+'</tr>';
+    });
+    h+='</table></div><div class="fl-kv"><b>pred</b>: '+ids.map(function(v){return v+'\u2190'+(s.pred[v]||'\u2013')}).join(' , ')+'</div>';
+    return h;
   },
   summary:function(s,g){return 'Final distances from '+s.start+': '+nodeIds(g).map(function(x){return x+' = '+fmt(s.dist[x])}).join(', ')+'.'}
 };

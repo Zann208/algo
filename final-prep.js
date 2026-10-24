@@ -44,6 +44,13 @@ html:not(.dark) #fl-root{--am:#b45309;--gr:#047857;--cy:#0369a1;--vi:#6d28d9;--r
 .fl-msg.ok{border-color:var(--gr)}.fl-msg.bad{border-color:var(--rd)}.fl-msg.done{border-color:var(--am)}
 .fl-note{font-size:13px;color:var(--dim);margin-top:10px;line-height:1.55}
 .fl-kv{font-size:14px;margin:6px 0;line-height:1.55}
+.fl-djw{overflow-x:auto}.fl-dj{border-collapse:collapse;width:100%;min-width:480px;font:600 12.5px var(--mono)}
+.fl-dj th,.fl-dj td{border:1px solid var(--line2);padding:6px 7px;text-align:center}
+.fl-dj th{color:var(--dim);font-size:10.5px;letter-spacing:.6px}
+.fl-dj td.fix{color:var(--am);font-weight:800;background:color-mix(in srgb,var(--am) 12%,transparent)}
+.fl-dj td.new{color:var(--cy);font-weight:800}
+.fl-dj td.pick{color:var(--ink);font-weight:800;text-align:left;white-space:nowrap}
+.fl-dj td.inf{color:var(--faint)}
 .fl-t{width:100%;border-collapse:collapse;font-size:13px;margin:4px 0 6px}
 .fl-t th,.fl-t td{text-align:left;padding:5px 8px;border-bottom:1px solid var(--line)}
 .fl-t th{font:700 10px var(--mono);letter-spacing:1px;text-transform:uppercase;color:var(--faint)}
