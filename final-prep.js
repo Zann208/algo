@@ -97,6 +97,57 @@ style.textContent=`
 .fl-prog{font:800 13px var(--mono);color:var(--am);margin:6px 0 4px}
 .fl-h3{font:800 11px var(--mono);letter-spacing:1.5px;text-transform:uppercase;color:var(--am);margin:20px 0 4px}
 .fl-code{font:600 13px var(--mono);word-break:break-all;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin:6px 0}
+/* ---- state palette: one clear colour per meaning ----
+   green = chosen / in the result, cyan = current step, violet = waiting candidate,
+   red = skipped / rejected, amber = hint */
+.fl-card{background:color-mix(in srgb,var(--ink) 3%,var(--panel))}
+.fl-e{stroke:color-mix(in srgb,var(--dim) 62%,var(--panel));stroke-width:2.8}
+.fl-e.in{stroke:var(--gr);stroke-width:6}
+.fl-e.now{stroke:var(--cy);stroke-width:6.5}
+.fl-e.cand{stroke:var(--vi);stroke-width:3.6;stroke-dasharray:8 5}
+.fl-e.skip{stroke:var(--rd);stroke-width:3.2;stroke-dasharray:2 7;opacity:1}
+.fl-e.dim{opacity:.16}
+.fl-e.hint{stroke:var(--am);stroke-width:6.5}
+.fl-e.rep{stroke:var(--rd);stroke-width:5.5}
+.fl-e.wrong{stroke:var(--rd);stroke-width:6.5}
+.fl-gw{fill:none;stroke-linecap:round;stroke-width:14;opacity:.28;pointer-events:none}.fl-gw.in{stroke:var(--gr)}.fl-gw.now{stroke:var(--cy)}.fl-gw.hint{stroke:var(--am)}.fl-gw.rep{stroke:var(--rd)}
+.fl-ar{fill:color-mix(in srgb,var(--dim) 62%,var(--panel))}.fl-ar.in{fill:var(--gr)}.fl-ar.now{fill:var(--cy)}.fl-ar.cand{fill:var(--vi)}.fl-ar.dim{opacity:.16}
+.fl-wb{fill:var(--panel);stroke:color-mix(in srgb,var(--dim) 45%,transparent);stroke-width:1}
+.fl-wt{fill:var(--ink);font-size:12px}
+.in .fl-wt{fill:var(--gr)}.now .fl-wt{fill:var(--cy)}.cand .fl-wt{fill:var(--vi)}.skip .fl-wt,.rep .fl-wt{fill:var(--rd)}.hint .fl-wt{fill:var(--am)}
+.fl-n{fill:color-mix(in srgb,var(--ink) 7%,var(--panel));stroke:color-mix(in srgb,var(--dim) 80%,var(--panel));stroke-width:2.6}
+.fl-n.in{fill:color-mix(in srgb,var(--gr) 34%,var(--panel));stroke:var(--gr);stroke-width:3.8;filter:drop-shadow(0 0 4px color-mix(in srgb,var(--gr) 45%,transparent))}
+.fl-n.now{fill:color-mix(in srgb,var(--cy) 42%,var(--panel));stroke:var(--cy);stroke-width:4.2;filter:drop-shadow(0 0 7px color-mix(in srgb,var(--cy) 75%,transparent))}
+.fl-n.cand{fill:color-mix(in srgb,var(--vi) 26%,var(--panel));stroke:var(--vi);stroke-width:3.2;stroke-dasharray:5 3}
+.fl-n.hint{fill:color-mix(in srgb,var(--am) 28%,var(--panel));stroke:var(--am);stroke-width:5;filter:drop-shadow(0 0 7px color-mix(in srgb,var(--am) 70%,transparent))}
+.fl-n.odd{fill:color-mix(in srgb,var(--rd) 34%,var(--panel));stroke:var(--rd);stroke-width:3.8}
+.fl-n.wrong{fill:color-mix(in srgb,var(--rd) 30%,var(--panel));stroke:var(--rd);stroke-width:5}
+.fl-n.sel{fill:color-mix(in srgb,var(--vi) 32%,var(--panel));stroke:var(--vi);stroke-width:5}
+.fl-nt{font-size:16px;font-weight:800}
+.fl-lbg{fill:var(--panel);stroke:color-mix(in srgb,var(--cy) 55%,transparent);stroke-width:1.2}
+.fl-lab{font-size:13px}
+.fl-bad{font-size:12px}
+.fl-gl{fill:color-mix(in srgb,var(--ink) 7%,var(--panel));stroke:color-mix(in srgb,var(--dim) 80%,var(--panel));stroke-width:2.4}
+.fl-gl.seen{fill:color-mix(in srgb,var(--gr) 34%,var(--panel));stroke:var(--gr);stroke-width:3.4}
+.fl-gl.now{fill:color-mix(in srgb,var(--cy) 42%,var(--panel));stroke:var(--cy);stroke-width:4;filter:drop-shadow(0 0 6px color-mix(in srgb,var(--cy) 75%,transparent))}
+.fl-gl.cut{fill:color-mix(in srgb,var(--rd) 20%,var(--panel));stroke:var(--rd);stroke-width:3}
+.fl-gl.mark{fill:color-mix(in srgb,var(--vi) 30%,var(--panel));stroke:var(--vi);stroke-width:4.5}
+.fl-gl.right{fill:color-mix(in srgb,var(--gr) 34%,var(--panel));stroke:var(--gr);stroke-width:4}
+.fl-gl.wrongm{fill:color-mix(in srgb,var(--rd) 34%,var(--panel));stroke:var(--rd);stroke-width:4}
+.fl-sh{fill:color-mix(in srgb,var(--ink) 7%,var(--panel));stroke:color-mix(in srgb,var(--dim) 80%,var(--panel));stroke-width:2.4}
+.fl-sh.done{fill:color-mix(in srgb,var(--gr) 34%,var(--panel));stroke:var(--gr);stroke-width:3.6}
+.fl-sh.cut{fill:color-mix(in srgb,var(--rd) 18%,var(--panel));stroke:var(--rd);stroke-dasharray:5 3;stroke-width:3}
+.fl-curve{stroke-width:3.5}
+.fl-fill{fill:color-mix(in srgb,var(--vi) 22%,transparent)}
+.fl-dot{fill:var(--am);stroke:var(--panel);stroke-width:2}.fl-dot.t{fill:var(--cy);opacity:.8}.fl-dot.best{fill:var(--gr)}
+.fl-lg{gap:14px;font-size:12.5px;color:var(--ink)}
+.fl-lg i{width:14px;height:14px;border-width:3px}
+.fl-msg{border-left-width:5px}
+.fl-msg.ok{background:color-mix(in srgb,var(--gr) 12%,var(--panel2))}
+.fl-msg.bad{background:color-mix(in srgb,var(--rd) 12%,var(--panel2))}
+.fl-msg.done{background:color-mix(in srgb,var(--am) 10%,var(--panel2))}
+.fl-ng.fl-click:hover .fl-n{stroke:var(--am);stroke-width:5}
+.fl-eg.fl-click:hover .fl-e{stroke:var(--am);stroke-width:5}
 `;
 document.head.appendChild(style);
 
@@ -132,6 +183,7 @@ function drawGraph(g,view,o){
     if(g.directed){x1+=ux*R;y1+=uy*R;x2-=ux*(R+1);y2-=uy*(R+1)}
     s+='<g class="fl-eg'+(o.clickEdges?' fl-click':'')+' '+cls+'" data-e="'+k+'">';
     s+='<line class="fl-hit" x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'"/>';
+    if(/\b(in|now|hint|rep)\b/.test(cls))s+='<line class="fl-gw '+cls+'" x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'"/>';
     s+='<line class="fl-e '+cls+'" x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'"/>';
     if(g.directed){
       var px=-uy,py=ux,bx=x2-ux*12,by=y2-uy*12;
@@ -152,7 +204,7 @@ function drawGraph(g,view,o){
   });
   return s+'</svg>';
 }
-var LEGEND='<div class="fl-lg"><span><i style="border-color:var(--am);background:color-mix(in srgb,var(--am) 25%,transparent)"></i>done / in the result</span><span><i style="border-color:var(--cy);background:color-mix(in srgb,var(--cy) 28%,transparent)"></i>current step</span><span><i style="border-color:var(--cy);border-style:dashed"></i>waiting / candidate</span><span><i style="border-color:var(--rd);border-style:dashed"></i>skipped</span></div>';
+var LEGEND='<div class="fl-lg"><span><i style="border-color:var(--gr);background:color-mix(in srgb,var(--gr) 40%,transparent)"></i>chosen / in the result</span><span><i style="border-color:var(--cy);background:color-mix(in srgb,var(--cy) 50%,transparent)"></i>current step</span><span><i style="border-color:var(--vi);border-style:dashed;background:color-mix(in srgb,var(--vi) 30%,transparent)"></i>waiting / candidate</span><span><i style="border-color:var(--rd);border-style:dashed;background:color-mix(in srgb,var(--rd) 30%,transparent)"></i>skipped / rejected</span><span><i style="border-color:var(--am);background:color-mix(in srgb,var(--am) 35%,transparent)"></i>hint</span></div>';
 
 /* ---------------- generic stepping lab (graph algorithms + search) ---------------- */
 function makeLab(box,cfg){
@@ -218,7 +270,7 @@ function makeLab(box,cfg){
   bt.next.onclick=function(){if(mach.done(cur(),g))return;step(autoChoice());draw(cur().log,'')};
   bt.prev.onclick=function(){stopAuto();if(st.hist.length>1){st.hist.pop();st.hint=false;draw(st.hist.length>1?cur().log:'Back at the start.','')}};
   bt.reset.onclick=reset;
-  bt.hint.onclick=function(){st.hint=true;draw('Hint: the green choice'+(mach.cands(cur(),g).length>1?'s are all valid (a tie)':' is correct')+'. '+mach.rule,'')};
+  bt.hint.onclick=function(){st.hint=true;draw('Hint: the amber choice'+(mach.cands(cur(),g).length>1?'s are all valid (a tie)':' is correct')+'. '+mach.rule,'')};
   bt.auto.onclick=function(){
     if(st.timer){stopAuto();return}
     if(mach.done(cur(),g))return;
