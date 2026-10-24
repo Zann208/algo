@@ -23,6 +23,7 @@ jobs:
           node --check i18n/my.js
           node --check final-prep-logic.js
           node --check final-prep.js
+          node --check final-prac-figs.js
       - name: Test Final Prep Lab logic
         run: node tests/final-prep-logic.test.js
       - name: Verify required pages
@@ -32,6 +33,7 @@ jobs:
           test -f midterm-mock.html
           test -f final.html
           test -f final-prep.js
+          test -f final-prac-figs.js
           test -f final-prep-logic.js
           test -f study-console-adapter.css
           test -f i18n/my.js

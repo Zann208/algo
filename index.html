@@ -2246,8 +2246,10 @@ P(b | a) = P(a | b) · P(b) / P(a)</pre>
     <h2 data-i18n="finalprac.004"><span class="sq s-blue"></span>1 · Kruskal on a small graph</h2>
     <p data-i18n="finalprac.005">A graph has vertices A–F and these weighted edges:</p>
     <p class="fp-data">A–B 4 · A–C 2 · B–C 1 · B–D 5 · C–D 8 · C–E 10 · D–E 2 · D–F 6 · E–F 3</p>
+<div data-fig="q1"></div>
     <p data-i18n="finalprac.006">Use Kruskal's algorithm. List the edges in the order they are added and give the total weight.</p>
     <details><summary data-i18n="finalprac.007">Answer</summary>
+<div data-fig="q1a"></div>
       <p data-i18n="finalprac.008">Sorted: B–C 1, A–C 2, D–E 2, E–F 3, A–B 4, B–D 5, D–F 6, C–D 8, C–E 10.</p>
       <p data-i18n="finalprac.009"><b>Add</b> B–C (1) → <b>add</b> A–C (2) → <b>add</b> D–E (2) → <b>add</b> E–F (3) → <b>skip</b> A–B (4): A and B are already connected through C → <b>add</b> B–D (5). That is 5 edges for 6 vertices, so stop.</p>
       <p data-i18n="finalprac.010"><b>Total weight = 1 + 2 + 2 + 3 + 5 = 13.</b></p>
@@ -2257,7 +2259,9 @@ P(b | a) = P(a | b) · P(b) / P(a)</pre>
   <div class="card fp" data-w="7">
     <h2 data-i18n="finalprac.011"><span class="sq s-blue"></span>2 · Prim on the same graph, starting from A</h2>
     <p data-i18n="finalprac.012">Use the graph from question 1. Starting at A, list the edges in the order Prim's algorithm adds them.</p>
+<div data-fig="q2"></div>
     <details><summary data-i18n="finalprac.013">Answer</summary>
+<div data-fig="q2a"></div>
       <p data-i18n="finalprac.014">Tree {A}: edges out are A–C 2, A–B 4 → <b>A–C (2)</b>.<br>
       Tree {A, C}: A–B 4, C–B 1, C–D 8, C–E 10 → <b>C–B (1)</b>.<br>
       Tree {A, B, C}: B–D 5, C–D 8, C–E 10 → <b>B–D (5)</b>.<br>
@@ -2270,7 +2274,9 @@ P(b | a) = P(a | b) · P(b) / P(a)</pre>
   <div class="card fp" data-w="7">
     <h2 data-i18n="finalprac.016"><span class="sq s-blue"></span>3 · Dijkstra from A</h2>
     <p data-i18n="finalprac.017">Use the graph from question 1. Find the shortest distance from A to every other vertex and the shortest path from A to F.</p>
+<div data-fig="q3"></div>
     <details><summary data-i18n="finalprac.018">Answer</summary>
+<div data-fig="q3a"></div>
       <table class="simple">
         <tr><th data-i18n="finalprac.019">Vertex removed</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th></tr>
         <tr><td data-i18n="finalprac.020">start</td><td>0</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td></tr>
@@ -2320,7 +2326,9 @@ P(b | a) = P(a | b) · P(b) / P(a)</pre>
   <div class="card fp" data-w="10">
     <h2 data-i18n="finalprac.061"><span class="sq s-grn"></span>7 · Breadth-first vs depth-first order</h2>
     <p data-i18n="finalprac.062">A search tree has root R with children X, Y, Z (left to right). X has children X1, X2; Y has child Y1; Z has children Z1, Z2. Give the order nodes are expanded by (a) breadth-first and (b) depth-first search. Which data structure does each use?</p>
+<div data-fig="q7"></div>
     <details><summary data-i18n="finalprac.063">Answer</summary>
+<div data-fig="q7a"></div>
       <p data-i18n="finalprac.064">(a) <b>Breadth-first</b> (FIFO queue): R, X, Y, Z, X1, X2, Y1, Z1, Z2.</p>
       <p data-i18n="finalprac.065">(b) <b>Depth-first</b> (LIFO stack): R, X, X1, X2, Y, Y1, Z, Z1, Z2.</p>
     </details>
@@ -2339,6 +2347,7 @@ P(b | a) = P(a | b) · P(b) / P(a)</pre>
   <div class="card fp" data-w="10">
     <h2 data-i18n="finalprac.072"><span class="sq s-grn"></span>9 · Greedy best-first vs A*</h2>
     <p data-i18n="finalprac.073">Two nodes are waiting to be expanded. X: cost so far <code>g = 2</code>, heuristic <code>h = 5</code>. Y: cost so far <code>g = 8</code>, heuristic <code>h = 3</code>. Which node does greedy best-first expand next? Which does A* expand next?</p>
+<div data-fig="q9"></div>
     <details><summary data-i18n="finalprac.074">Answer</summary>
       <p data-i18n="finalprac.075"><b>Greedy</b> looks only at <code>h</code>: Y (3 &lt; 5).</p>
       <p data-i18n="finalprac.076"><b>A*</b> uses <code>f = g + h</code>: X has 2 + 5 = 7, Y has 8 + 3 = 11 → X.</p>
@@ -2349,6 +2358,7 @@ P(b | a) = P(a | b) · P(b) / P(a)</pre>
   <div class="card fp" data-w="10">
     <h2 data-i18n="finalprac.078"><span class="sq s-grn"></span>10 · Hill climbing</h2>
     <p data-i18n="finalprac.079">Explain the main weakness of hill climbing and how simulated annealing deals with it.</p>
+<div data-fig="q10"></div>
     <details><summary data-i18n="finalprac.080">Answer</summary>
       <p data-i18n="finalprac.081">Hill climbing only compares a state with its <b>immediate neighbours</b>, so it stops at the first peak it reaches. That peak may be a <b>local maximum</b> rather than the best state overall. Simulated annealing <b>shakes</b> the state, strongly at first and then more gently, which lets it leave a local maximum and find a higher slope nearby.</p>
     </details>
@@ -2358,8 +2368,10 @@ P(b | a) = P(a | b) · P(b) / P(a)</pre>
     <h2 data-i18n="finalprac.082"><span class="sq s-red"></span>11 · Minimax and alpha-beta</h2>
     <p data-i18n="finalprac.083">MAX is to move at the root and has three moves, L, M and R. The opponent (MIN) then chooses a leaf.</p>
     <p class="fp-data">L → 5, 9, 4 &nbsp;·&nbsp; M → 6, 3, 8 &nbsp;·&nbsp; R → 7, 5, 6</p>
+<div data-fig="q11"></div>
     <p data-i18n="finalprac.084">(a) What is the minimax value of the root and which move is chosen? (b) Searching left to right with alpha-beta pruning, which leaves are never examined?</p>
     <details><summary data-i18n="finalprac.085">Answer</summary>
+<div data-fig="q11a"></div>
       <p data-i18n="finalprac.086">(a) MIN values: L = min(5, 9, 4) = <b>4</b>, M = min(6, 3, 8) = <b>3</b>, R = min(7, 5, 6) = <b>5</b>. MAX takes the largest: <b>value 5, move R</b>.</p>
       <p data-i18n="finalprac.087">(b) After L the best so far is 4. In M the leaves 6 then 3 are read; 3 is already worse than 4, so the last leaf <b>8 is pruned</b>. In R every leaf (7, 5, 6) stays above 4, so all three must be examined. <b>One leaf is pruned.</b></p>
     </details>
@@ -2431,6 +2443,7 @@ P(b | a) = P(a | b) · P(b) / P(a)</pre>
     <h2 data-i18n="finalprac.125"><span class="sq s-yel"></span>18 · Build a Huffman code</h2>
     <p data-i18n="finalprac.126">Six symbols occur with these frequencies (out of 100): A 45, B 13, C 12, D 16, E 9, F 5. Build the Huffman tree, give the code length of each symbol and the average number of bits per symbol.</p>
     <details><summary data-i18n="finalprac.127">Answer</summary>
+<div data-fig="q18a"></div>
       <p data-i18n="finalprac.128">Join the two smallest each time: F + E = 14 → C + B = 25 → 14 + D = 30 → 25 + 30 = 55 → A + 55 = 100.</p>
       <table class="simple">
         <tr><th data-i18n="finalprac.129">Symbol</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th></tr>
@@ -4704,8 +4717,9 @@ prFilter(0);
 <script src="./assignment3.js?v=20260823b"></script>
 <script src="./assignment4.js?v=20261006a"></script>
 <script src="./final-mock.js?v=20261007a"></script>
-<script src="./final-prep-logic.js?v=20261024i"></script>
-<script src="./final-prep.js?v=20261024i"></script>
+<script src="./final-prep-logic.js?v=20261024k"></script>
+<script src="./final-prep.js?v=20261024k"></script>
+<script src="./final-prac-figs.js?v=20261024k"></script>
 <script src="./tree-mastery-upgrade.js?v=20260823b"></script>
 <script src="./tree-mastery-learn-expanded.js?v=20260827a"></script>
 

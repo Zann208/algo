@@ -231,7 +231,7 @@ function drawGraph(g,view,o){
       s+='<polygon class="fl-ar '+cls+'" style="fill:'+col+' !important;opacity:'+(dimE?.2:1)+' !important" points="'+x2+','+y2+' '+(bx+px*5)+','+(by+py*5)+' '+(bx-px*5)+','+(by-py*5)+'"/>';
     }else{
       var lp=labelPos(g)[k],mx=lp[0],my=lp[1];
-      s+='<rect class="fl-wb" style="fill:'+C.panel+' !important;stroke:'+(st?col:mixc(C.dim,C.panel,.5))+' !important" x="'+(mx-12)+'" y="'+(my-9)+'" width="24" height="18" rx="5"/><text class="fl-wt" x="'+mx+'" y="'+my+'">'+e[2]+'</text>';
+      s+='<rect class="fl-wb" style="fill:'+C.panel+' !important;stroke:'+(st?col:mixc(C.dim,C.panel,.5))+' !important" x="'+(mx-12)+'" y="'+(my-9)+'" width="24" height="18" rx="5"/><text class="fl-wt" style="fill:'+C.ink+' !important" x="'+mx+'" y="'+my+'">'+e[2]+'</text>';
     }
     s+='</g>';
   });
@@ -727,6 +727,7 @@ function showTab(id){
 }
 qa('.fl-tab').forEach(function(b){b.onclick=function(){showTab(b.dataset.t)}});
 window.finalPrepOpen=showTab;
+window.FinalPrepDraw={graph:drawGraph,pal:PAL,mixc:mixc};
 var first='graphs';try{var sv=localStorage.getItem('algoFinalPrepTab');if(sv&&TABS.some(function(t){return t[0]===sv}))first=sv}catch(e){}
 showTab(first);
 })();
