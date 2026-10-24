@@ -31,6 +31,8 @@ html:not(.dark) #fl-root{--am:#b45309;--gr:#047857;--cy:#0369a1;--vi:#6d28d9;--r
 .fl-seg button:last-child{border-right:0}
 .fl-seg button.on{background:color-mix(in srgb,var(--am) 16%,var(--panel));color:var(--am)}
 .fl-seg button:disabled{opacity:.35;cursor:not-allowed}
+.fl-grid.fl-wide{grid-template-columns:minmax(0,1fr)}
+.fl-grid.fl-wide .fl-svg{max-height:560px}
 .fl-grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(260px,1fr);gap:16px;align-items:start}
 @media(max-width:900px){.fl-grid{grid-template-columns:1fr}}
 .fl-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px}
@@ -283,6 +285,7 @@ function makeLab(box,cfg){
     var practice=st.mode==='practice'&&!done&&!mach.noPractice;
     gw.innerHTML=drawGraph(g,vw,{clickNodes:practice&&mach.kind==='vertex',clickEdges:practice&&mach.kind==='edge'});
     pn.innerHTML=mach.panel(s,g);
+    q('.fl-grid',box).classList.toggle('fl-wide',!!mach.wide);
     if(done){m='<b>Done.</b> '+mach.summary(s,g)+(st.mode==='practice'?' <br>Score: <b>'+st.ok+'</b> correct, <b>'+st.miss+'</b> mistake'+(st.miss===1?'':'s')+'.':'');cls='done'}
     msg.className='fl-msg '+(cls||'');msg.innerHTML=m;
     modeBtns.forEach(function(b){b.classList.toggle('on',b.dataset.mode===st.mode);if(b.dataset.mode==='practice')b.disabled=!!mach.noPractice});

@@ -118,7 +118,7 @@ M.dfs={id:'dfs',name:'Depth-first search (DFS)',kind:'vertex',
 };
 
 /* ---------------- Dijkstra ---------------- */
-M.dijkstra={id:'dijkstra',name:"Dijkstra's shortest paths",kind:'vertex',
+M.dijkstra={id:'dijkstra',name:"Dijkstra's shortest paths",kind:'vertex',wide:true,
   rule:'Click the unchecked vertex with the SMALLEST current distance (ties: either is fine).',
   note:'Start: every distance ∞, start = 0. Repeatedly remove the unchecked vertex with minimal currDist and relax its neighbours. Fails with negative edges. O(|V|²) with a plain array.',
   init:function(g,start){var s={dist:{},pred:{},done:[],cur:null,start:start,log:'currDist('+start+') = 0, every other vertex = ∞.'};
