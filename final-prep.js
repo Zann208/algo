@@ -13,8 +13,8 @@ var style=document.createElement('style');
 style.textContent=`
 /* Lab-only palette. The shared Study Console stylesheet recolours the site variables, which
    washed the diagrams out, so the lab pins its own vivid colours (dark default, light variant). */
-#fl-root{--am:#ffc533;--gr:#2ee59d;--cy:#3cc8ff;--vi:#b490ff;--rd:#ff6270;
-  --ink:#f3f6ff;--dim:#b8c4dc;--faint:#8b99b5;--panel:#0d1424;--panel2:#141d33;--line:#27334f;--line2:#3b4a6b;--tline:#5b6c8c}
+#fl-root{--am:#ffd23f;--gr:#39ff9c;--cy:#22d3ff;--vi:#c58bff;--rd:#ff4d6d;
+  --ink:#ffffff;--dim:#c3cee6;--faint:#94a3c4;--panel:#0a1020;--panel2:#131c33;--line:#2a3756;--line2:#44557b;--tline:#6a7da3}
 html:not(.dark) #fl-root{--am:#b45309;--gr:#047857;--cy:#0369a1;--vi:#6d28d9;--rd:#b91c1c;
   --ink:#0f172a;--dim:#475569;--faint:#64748b;--panel:#ffffff;--panel2:#f1f5f9;--line:#e2e8f0;--line2:#cbd5e1;--tline:#94a3b8}
 .fl-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0 18px}
@@ -103,46 +103,47 @@ html:not(.dark) #fl-root{--am:#b45309;--gr:#047857;--cy:#0369a1;--vi:#6d28d9;--r
 .fl-prog{font:800 13px var(--mono);color:var(--am);margin:6px 0 4px}
 .fl-h3{font:800 11px var(--mono);letter-spacing:1.5px;text-transform:uppercase;color:var(--am);margin:20px 0 4px}
 .fl-code{font:600 13px var(--mono);word-break:break-all;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin:6px 0}
+#fl-root .fl-svg,#fl-root .fl-card{opacity:1!important;filter:none!important;mix-blend-mode:normal!important}
 /* ---- state palette: one clear colour per meaning ----
    green = chosen / in the result, cyan = current step, violet = waiting candidate,
    red = skipped / rejected, amber = hint */
 .fl-card{background:color-mix(in srgb,var(--ink) 3%,var(--panel))}
-.fl-e{stroke:color-mix(in srgb,var(--dim) 62%,var(--panel));stroke-width:2.8}
+.fl-e{stroke:color-mix(in srgb,var(--dim) 78%,var(--panel));stroke-width:2.8}
 .fl-e.in{stroke:var(--gr);stroke-width:6}
 .fl-e.now{stroke:var(--cy);stroke-width:6.5}
-.fl-e.cand{stroke:var(--vi);stroke-width:3.6;stroke-dasharray:8 5}
-.fl-e.skip{stroke:var(--rd);stroke-width:3.2;stroke-dasharray:2 7;opacity:1}
+.fl-e.cand{stroke:var(--vi);stroke-width:4.4;stroke-dasharray:9 5}
+.fl-e.skip{stroke:var(--rd);stroke-width:4;stroke-dasharray:3 6;opacity:1}
 .fl-e.dim{opacity:.16}
 .fl-e.hint{stroke:var(--am);stroke-width:6.5}
 .fl-e.rep{stroke:var(--rd);stroke-width:5.5}
 .fl-e.wrong{stroke:var(--rd);stroke-width:6.5}
-.fl-gw{fill:none;stroke-linecap:round;stroke-width:14;opacity:.4;pointer-events:none}.fl-gw.in{stroke:var(--gr)}.fl-gw.now{stroke:var(--cy)}.fl-gw.hint{stroke:var(--am)}.fl-gw.rep{stroke:var(--rd)}
-.fl-ar{fill:color-mix(in srgb,var(--dim) 62%,var(--panel))}.fl-ar.in{fill:var(--gr)}.fl-ar.now{fill:var(--cy)}.fl-ar.cand{fill:var(--vi)}.fl-ar.dim{opacity:.16}
+.fl-gw{fill:none;stroke-linecap:round;stroke-width:17;opacity:.55;pointer-events:none}.fl-gw.in{stroke:var(--gr)}.fl-gw.now{stroke:var(--cy)}.fl-gw.hint{stroke:var(--am)}.fl-gw.rep{stroke:var(--rd)}
+.fl-ar{fill:color-mix(in srgb,var(--dim) 78%,var(--panel))}.fl-ar.in{fill:var(--gr)}.fl-ar.now{fill:var(--cy)}.fl-ar.cand{fill:var(--vi)}.fl-ar.dim{opacity:.16}
 .fl-wb{fill:var(--panel);stroke:color-mix(in srgb,var(--dim) 45%,transparent);stroke-width:1}
 .fl-wt{fill:var(--ink);font-size:12px}
 .in .fl-wt{fill:var(--gr)}.now .fl-wt{fill:var(--cy)}.cand .fl-wt{fill:var(--vi)}.skip .fl-wt,.rep .fl-wt{fill:var(--rd)}.hint .fl-wt{fill:var(--am)}
 .fl-n{fill:color-mix(in srgb,var(--ink) 7%,var(--panel));stroke:color-mix(in srgb,var(--dim) 80%,var(--panel));stroke-width:2.6}
-.fl-n.in{fill:color-mix(in srgb,var(--gr) 55%,var(--panel));stroke:var(--gr);stroke-width:3.8;filter:drop-shadow(0 0 4px color-mix(in srgb,var(--gr) 45%,transparent))}
-.fl-n.now{fill:color-mix(in srgb,var(--cy) 62%,var(--panel));stroke:var(--cy);stroke-width:4.2;filter:drop-shadow(0 0 7px color-mix(in srgb,var(--cy) 75%,transparent))}
-.fl-n.cand{fill:color-mix(in srgb,var(--vi) 42%,var(--panel));stroke:var(--vi);stroke-width:3.2;stroke-dasharray:5 3}
-.fl-n.hint{fill:color-mix(in srgb,var(--am) 48%,var(--panel));stroke:var(--am);stroke-width:5;filter:drop-shadow(0 0 7px color-mix(in srgb,var(--am) 70%,transparent))}
-.fl-n.odd{fill:color-mix(in srgb,var(--rd) 55%,var(--panel));stroke:var(--rd);stroke-width:3.8}
-.fl-n.wrong{fill:color-mix(in srgb,var(--rd) 48%,var(--panel));stroke:var(--rd);stroke-width:5}
-.fl-n.sel{fill:color-mix(in srgb,var(--vi) 50%,var(--panel));stroke:var(--vi);stroke-width:5}
+.fl-n.in{fill:color-mix(in srgb,var(--gr) 68%,var(--panel));stroke:var(--gr);stroke-width:3.8;filter:drop-shadow(0 0 9px var(--gr))}
+.fl-n.now{fill:color-mix(in srgb,var(--cy) 78%,var(--panel));stroke:var(--cy);stroke-width:4.2;filter:drop-shadow(0 0 12px var(--cy))}
+.fl-n.cand{fill:color-mix(in srgb,var(--vi) 58%,var(--panel));stroke:var(--vi);stroke-width:3.2;stroke-dasharray:5 3}
+.fl-n.hint{fill:color-mix(in srgb,var(--am) 62%,var(--panel));stroke:var(--am);stroke-width:5;filter:drop-shadow(0 0 12px var(--am))}
+.fl-n.odd{fill:color-mix(in srgb,var(--rd) 68%,var(--panel));stroke:var(--rd);stroke-width:3.8}
+.fl-n.wrong{fill:color-mix(in srgb,var(--rd) 62%,var(--panel));stroke:var(--rd);stroke-width:5}
+.fl-n.sel{fill:color-mix(in srgb,var(--vi) 66%,var(--panel));stroke:var(--vi);stroke-width:5}
 .fl-nt{font-size:16px;font-weight:800}
 .fl-lbg{fill:var(--panel);stroke:color-mix(in srgb,var(--cy) 55%,transparent);stroke-width:1.2}
 .fl-lab{font-size:13px}
 .fl-bad{font-size:12px}
 .fl-gl{fill:color-mix(in srgb,var(--ink) 7%,var(--panel));stroke:color-mix(in srgb,var(--dim) 80%,var(--panel));stroke-width:2.4}
-.fl-gl.seen{fill:color-mix(in srgb,var(--gr) 55%,var(--panel));stroke:var(--gr);stroke-width:3.4}
-.fl-gl.now{fill:color-mix(in srgb,var(--cy) 62%,var(--panel));stroke:var(--cy);stroke-width:4;filter:drop-shadow(0 0 6px color-mix(in srgb,var(--cy) 75%,transparent))}
-.fl-gl.cut{fill:color-mix(in srgb,var(--rd) 36%,var(--panel));stroke:var(--rd);stroke-width:3}
-.fl-gl.mark{fill:color-mix(in srgb,var(--vi) 48%,var(--panel));stroke:var(--vi);stroke-width:4.5}
-.fl-gl.right{fill:color-mix(in srgb,var(--gr) 55%,var(--panel));stroke:var(--gr);stroke-width:4}
-.fl-gl.wrongm{fill:color-mix(in srgb,var(--rd) 55%,var(--panel));stroke:var(--rd);stroke-width:4}
+.fl-gl.seen{fill:color-mix(in srgb,var(--gr) 68%,var(--panel));stroke:var(--gr);stroke-width:3.4}
+.fl-gl.now{fill:color-mix(in srgb,var(--cy) 78%,var(--panel));stroke:var(--cy);stroke-width:4;filter:drop-shadow(0 0 11px var(--cy))}
+.fl-gl.cut{fill:color-mix(in srgb,var(--rd) 50%,var(--panel));stroke:var(--rd);stroke-width:3}
+.fl-gl.mark{fill:color-mix(in srgb,var(--vi) 62%,var(--panel));stroke:var(--vi);stroke-width:4.5}
+.fl-gl.right{fill:color-mix(in srgb,var(--gr) 68%,var(--panel));stroke:var(--gr);stroke-width:4}
+.fl-gl.wrongm{fill:color-mix(in srgb,var(--rd) 68%,var(--panel));stroke:var(--rd);stroke-width:4}
 .fl-sh{fill:color-mix(in srgb,var(--ink) 7%,var(--panel));stroke:color-mix(in srgb,var(--dim) 80%,var(--panel));stroke-width:2.4}
-.fl-sh.done{fill:color-mix(in srgb,var(--gr) 55%,var(--panel));stroke:var(--gr);stroke-width:3.6}
-.fl-sh.cut{fill:color-mix(in srgb,var(--rd) 34%,var(--panel));stroke:var(--rd);stroke-dasharray:5 3;stroke-width:3}
+.fl-sh.done{fill:color-mix(in srgb,var(--gr) 68%,var(--panel));stroke:var(--gr);stroke-width:3.6}
+.fl-sh.cut{fill:color-mix(in srgb,var(--rd) 46%,var(--panel));stroke:var(--rd);stroke-dasharray:5 3;stroke-width:3}
 .fl-curve{stroke-width:3.5}
 .fl-fill{fill:color-mix(in srgb,var(--vi) 22%,transparent)}
 .fl-dot{fill:var(--am);stroke:var(--panel);stroke-width:2}.fl-dot.t{fill:var(--cy);opacity:.8}.fl-dot.best{fill:var(--gr)}
