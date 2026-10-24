@@ -21,11 +21,17 @@ jobs:
           node --check tree-mastery-learn-expanded.js
           node --check midterm-mock.js
           node --check i18n/my.js
+          node --check final-prep-logic.js
+          node --check final-prep.js
+      - name: Test Final Prep Lab logic
+        run: node tests/final-prep-logic.test.js
       - name: Verify required pages
         run: |
           test -f index.html
           test -f midterm.html
           test -f midterm-mock.html
           test -f final.html
+          test -f final-prep.js
+          test -f final-prep-logic.js
           test -f study-console-adapter.css
           test -f i18n/my.js

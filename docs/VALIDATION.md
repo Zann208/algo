@@ -77,3 +77,10 @@ Verified mock distances from F: `F=0, E=3, G=5, C=9, A=10, H=10, D=11, I=11, B=1
 ## Browser/device note
 
 Responsive rules keep wide technical artifacts inside local scroll containers. A full physical-device Safari/Android/Firefox render pass is not available in this execution environment, so this report does not claim hardware/browser screenshots.
+
+## Final Prep Lab
+
+- Logic checked against answers already on the site (`node tests/final-prep-logic.test.js`): Practice Q1 Kruskal and Prim total 13, Dijkstra from A (B 3, C 2, D 8, E 10, F 13), Assignment 4 MST weight 33 (also with every tie resolved the other way), lecture Huffman tree 355 bits, Practice Q18 2.24 bits per symbol, mock Q11 alpha-beta prunes exactly one leaf, alpha-beta equals minimax on 2,000 random trees: **PASS**
+- Search map: A* and uniform cost return cost 9, greedy and breadth-first return cost 12 (the greedy trap): **PASS**
+- Interface exercised with simulated clicks in every tab (Watch and Practice, wrong-click feedback, quiz check, checklist persistence) and on the full `index.html` router: **PASS**
+- Burmese: the lab is English only (documented in the README)

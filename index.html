@@ -441,6 +441,7 @@ html.my code,html.my pre,html.my kbd,html.my .num{font-family:var(--mono)}
   <a class="navbtn" href="midterm-mock.html"><span class="dot" style="background:var(--am)"></span>Midterm Mock<span class="num">MOCK</span></a>
 
   <div class="navgroup">Final</div>
+  <button class="navbtn" data-page="finalprep" onclick="go('finalprep')"><span class="dot" style="background:var(--gr)"></span><span data-my="Final Prep Lab">Final Prep Lab</span><span class="num">LAB</span></button>
   <button class="navbtn" data-page="final" onclick="go('final')"><span class="dot" style="background:var(--rd)"></span><span data-my="စာမေးပွဲ အဓိပ္ပာယ်များ">Exam definitions</span><span class="num">FIN</span></button>
   <button class="navbtn" data-page="finalprac" onclick="go('finalprac')"><span class="dot" style="background:var(--rd)"></span><span data-my="လေ့ကျင့်ရန် ပုစ္ဆာများ">Practice problems</span><span class="num">20 Q</span></button>
   <button class="navbtn" data-page="finalmock" onclick="go('finalmock')"><span class="dot" style="background:var(--rd)"></span><span data-my="Final Mock">Final Mock</span><span class="num">MOCK</span></button>
@@ -490,7 +491,7 @@ html.my code,html.my pre,html.my kbd,html.my .num{font-family:var(--mono)}
     <p data-i18n="home.016"><b>Week 10:</b> Intelligent agents. Rationality and task environments. Uninformed search (breadth-first, depth-first, iterative deepening). Heuristic search, A*. Hill climbing and simulated annealing.</p>
     <p data-i18n="home.017"><b>Week 12:</b> Game theory. Minimax and alpha-beta pruning. Horizon effect. Decision theory, MEU. Joint probability, product rule, Bayes' law. Wumpus World.</p>
     <p data-i18n="home.018"><b>Week 13:</b> Data compression. Prefix property. Huffman and adaptive Huffman coding. Run-length encoding.</p>
-    <p style="margin-top:15px"><button class="btn b-red" onclick="go('finalmock')" data-i18n="home.019">FINAL · MOCK EXAM →</button> <button class="btn b-red" onclick="go('final')" data-i18n="home.020">FINAL · EXAM DEFINITIONS →</button> <button class="btn b-blue" onclick="go('finalprac')" data-i18n="home.021">FINAL · PRACTICE PROBLEMS →</button> <button class="btn b-yel" onclick="go('midterm')" data-i18n="home.022">MIDTERM · EXAM DEFINITIONS →</button></p>
+    <p style="margin-top:15px"><button class="btn b-grn" onclick="go('finalprep')">FINAL · VISUAL PREP LAB →</button> <button class="btn b-red" onclick="go('finalmock')" data-i18n="home.019">FINAL · MOCK EXAM →</button> <button class="btn b-red" onclick="go('final')" data-i18n="home.020">FINAL · EXAM DEFINITIONS →</button> <button class="btn b-blue" onclick="go('finalprac')" data-i18n="home.021">FINAL · PRACTICE PROBLEMS →</button> <button class="btn b-yel" onclick="go('midterm')" data-i18n="home.022">MIDTERM · EXAM DEFINITIONS →</button></p>
     <p class="small" data-i18n="home.023">Marks (from the syllabus): assignments 10% · midterm 40% · final 50%. You need 80% attendance to sit the exams.</p>
   </div>
 
@@ -2861,6 +2862,14 @@ bool hasDuplicate(const vector&lt;int&gt;&amp; a) {
   </div>
 </section>
 
+<!-- ===== FINAL: PREP LAB (visual practice for graphs and algorithms) ===== -->
+<section class="page" id="page-finalprep">
+  <div class="lvlchip c-green">Final · Prep Lab</div>
+  <h1>Final — Visual prep lab</h1>
+  <p class="sub">Practise every graph and algorithm topic from Weeks 7, 10, 12 and 13 with pictures. <b>Watch</b> an algorithm run one step at a time, then switch to <b>Practice</b> and make each decision yourself: the lab checks you as you go.</p>
+  <div id="fl-root"></div>
+</section>
+
 <!-- ===== CHEAT ===== -->
 <section class="page" id="page-cheat">
 <div class="lvlchip c-red">Reference · Read this the night before</div>
@@ -4695,6 +4704,8 @@ prFilter(0);
 <script src="./assignment3.js?v=20260823b"></script>
 <script src="./assignment4.js?v=20261006a"></script>
 <script src="./final-mock.js?v=20261007a"></script>
+<script src="./final-prep-logic.js?v=20261024a"></script>
+<script src="./final-prep.js?v=20261024a"></script>
 <script src="./tree-mastery-upgrade.js?v=20260823b"></script>
 <script src="./tree-mastery-learn-expanded.js?v=20260827a"></script>
 
