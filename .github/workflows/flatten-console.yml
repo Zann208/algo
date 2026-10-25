@@ -37,3 +37,12 @@ jobs:
           test -f final-prep-logic.js
           test -f study-console-adapter.css
           test -f i18n/my.js
+      - name: Verify Study Console v3 wiring and v2 rollback pages
+        run: |
+          for p in index midterm final midterm-mock; do
+            test -f "$p.v2.html"
+            grep -q 'study/shared/v3/boot.js' "$p.html"
+            grep -q "data-v2=\"$p.v2.html\"" "$p.html"
+            grep -q 'StudyConsole' "$p.html"
+            if grep -q 'shared/v2/' "$p.html"; then echo "$p.html still loads v2"; exit 1; fi
+          done

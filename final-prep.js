@@ -193,6 +193,11 @@ function mixc(a,b,t){function h(c){return [1,3,5].map(function(i){return parseIn
 function PAL(){
   var d=isDark(),c=d?{am:'#ffd23f',gr:'#39ff9c',cy:'#22d3ff',vi:'#c58bff',rd:'#ff4d6d',ink:'#ffffff',dim:'#c3cee6',panel:'#0a1020',panel2:'#131c33',line2:'#44557b'}
     :{am:'#b45309',gr:'#047857',cy:'#0369a1',vi:'#6d28d9',rd:'#b91c1c',ink:'#0f172a',dim:'#475569',panel:'#ffffff',panel2:'#f1f5f9',line2:'#cbd5e1'};
+  /* Study Console v3: use the shared diagram tokens when they are present (6-digit hex). */
+  var cs=getComputedStyle(document.documentElement),tk=function(n){var v=(cs.getPropertyValue(n)||'').trim();return /^#[0-9a-f]{6}$/i.test(v)?v:''};
+  if(tk('--sc-surface')&&tk('--sc-dg-1')){
+    c={am:tk('--sc-dg-3'),gr:tk('--sc-dg-6'),cy:tk('--sc-dg-1'),vi:tk('--sc-dg-2'),rd:tk('--sc-danger'),ink:tk('--sc-text'),dim:tk('--sc-muted'),panel:tk('--sc-surface'),panel2:tk('--sc-surface-2'),line2:tk('--sc-line-strong')};
+  }
   c.dark=d;return c;
 }
 var STC={in:'gr',now:'cy',cand:'vi',skip:'rd',hint:'am',rep:'rd',wrong:'rd',odd:'rd',sel:'vi'};
@@ -730,4 +735,10 @@ window.finalPrepOpen=showTab;
 window.FinalPrepDraw={graph:drawGraph,pal:PAL,mixc:mixc};
 var first='graphs';try{var sv=localStorage.getItem('algoFinalPrepTab');if(sv&&TABS.some(function(t){return t[0]===sv}))first=sv}catch(e){}
 showTab(first);
+/* Study Console v3: colors are inline, so redraw the open lab when the theme changes. */
+document.addEventListener('sc-theme-change',function(){
+  var on=q('.fl-tab.on');if(!on)return;inited={};
+  qa('.fl-body').forEach(function(b){b.innerHTML=''});
+  showTab(on.dataset.t);
+});
 })();

@@ -3,26 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script src="https://zann208.github.io/study/shared/v2/theme-init.js"></script>
-<script>try{if(localStorage.getItem("algoSideHidden")==="1")document.documentElement.classList.add("side-hidden")}catch(e){}</script>
+<script src="https://zann208.github.io/study/shared/v3/boot.js?v=20261025-1" data-console="algo" data-v2="index.v2.html"></script>
 <title>ALGO // Algorithms Console</title>
 <meta name="theme-color" content="#0a0d14">
 <style>
-:root{
-  --bg:#0a0d14; --bg2:#0e1220; --panel:#121724; --panel2:#171d2e; --panel3:#1c2438;
-  --ink:#e8ecf6; --dim:#96a3bd; --faint:#63718c;
-  --am:#f0b429; --am2:#fbbf24; --gr:#34d399; --cy:#38bdf8; --vi:#a78bfa; --rd:#f87171;
-  --line:#1e2637; --line2:#2b3550; --tline:#465878;
-  --mono:"SF Mono",ui-monospace,"JetBrains Mono",Menlo,Consolas,monospace;
-  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-  --rail:252px;
-}
-html:not(.dark){
-  --bg:#f7f9fc; --bg2:#eef2f8; --panel:#ffffff; --panel2:#f5f8fc; --panel3:#eef3fa;
-  --ink:#111827; --dim:#4b5768; --faint:#7b8798;
-  --am:#b45309; --am2:#92400e; --gr:#047857; --cy:#0369a1; --vi:#6d28d9; --rd:#b91c1c;
-  --line:#e2e8f2; --line2:#cbd5e4; --tline:#9aa9c0;
-}
 *{box-sizing:border-box;margin:0;padding:0}
 html{background:var(--bg);scroll-behavior:smooth}
 body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.68;-webkit-font-smoothing:antialiased}
@@ -30,59 +14,9 @@ a{color:var(--am);text-decoration:none}
 a:hover{text-decoration:underline}
 :focus-visible{outline:2px solid var(--am);outline-offset:2px;border-radius:4px}
 
-/* ---------- TOP BAR ---------- */
-#top{position:fixed;top:0;left:0;right:0;height:54px;z-index:60;background:color-mix(in srgb,var(--bg) 90%,transparent);
-  backdrop-filter:blur(14px);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:0 16px}
-.brand{display:flex;align-items:center;gap:10px;flex:0 0 auto}
-.bmark{width:28px;height:28px;border-radius:8px;background:linear-gradient(140deg,var(--am),#e07a1f);
-  display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-weight:800;font-size:12px;color:#1a1205;flex:0 0 auto}
-.btext{line-height:1.15}
-.btext b{display:block;font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:-.2px}
-.btext span{display:block;font-family:var(--mono);font-size:9.5px;color:var(--faint);letter-spacing:1px}
-#burger{display:none;border:1px solid var(--line);background:var(--panel);color:var(--dim);border-radius:7px;
-  padding:6px 10px;font-size:15px;cursor:pointer;font-family:var(--mono)}
-.tspace{flex:1}
-.tbtn{border:1px solid var(--line);background:var(--panel);color:var(--dim);font-family:var(--mono);font-size:11px;
-  font-weight:700;padding:7px 11px;border-radius:7px;cursor:pointer;letter-spacing:.4px;white-space:nowrap;transition:.13s}
-.tbtn:hover{color:var(--am);border-color:var(--am)}
 
-
-.brand{display:flex;align-items:center;gap:9px;border:1px solid transparent;background:none;cursor:pointer;
-  padding:4px 8px 4px 5px;border-radius:9px;transition:.13s;font-family:inherit;color:inherit}
-.brand:hover{border-color:var(--line2);background:var(--panel)}
-.brand:hover .bcaret{color:var(--am)}
-.bmark{width:28px;height:28px;border-radius:8px;border:1px solid var(--line2);background:var(--panel2);
-  display:flex;align-items:center;justify-content:center;flex:0 0 auto;color:var(--dim)}
-.btext{line-height:1.2;text-align:left}
-.btext b{display:block;font-family:var(--mono);font-size:12.5px;font-weight:700;letter-spacing:-.2px;color:var(--ink)}
-.btext b i{font-style:normal;color:var(--faint);font-weight:600}
-.btext span{display:block;font-family:var(--mono);font-size:8px;letter-spacing:1.6px;color:var(--faint);text-transform:uppercase;margin-top:1px}
-.btext span em{font-style:normal;color:var(--am);animation:neon 2.2s ease-in-out infinite}
-@keyframes neon{0%,68%,100%{text-shadow:none;opacity:.75}76%{text-shadow:0 0 4px var(--am),0 0 11px var(--am);opacity:1}84%{opacity:.9}}
-@media (prefers-reduced-motion: reduce){.btext span em{animation:none;opacity:1}}
-.bcaret{font-family:var(--mono);font-size:9px;color:var(--faint);transition:.13s}
-#csPop{right:auto;left:0}
-@media(max-width:620px){.btext{display:none}}
-
-/* ---------- SIDEBAR ---------- */
-#side{position:fixed;top:54px;left:0;bottom:0;width:var(--rail);z-index:50;background:var(--bg);
-  border-right:1px solid var(--line);padding:16px 10px 30px;overflow-y:auto}
-#side::-webkit-scrollbar{width:7px}
-#side::-webkit-scrollbar-thumb{background:var(--line2);border-radius:9px}
-.navgroup{font-family:var(--mono);font-size:9.5px;letter-spacing:1.3px;text-transform:uppercase;color:var(--faint);
-  padding:15px 12px 6px;font-weight:700}
-.navgroup:first-child{padding-top:2px}
-.navbtn{display:flex;align-items:center;gap:9px;width:100%;text-align:left;border:0;background:none;
-  font-family:var(--sans);font-size:14px;color:var(--dim);padding:8px 12px;border-radius:8px;cursor:pointer;transition:.12s}
-.navbtn:hover{background:var(--panel2);color:var(--ink)}
-.navbtn.on{background:var(--panel2);color:var(--ink);font-weight:600;box-shadow:inset 2px 0 0 var(--am)}
-.navbtn .dot{width:7px;height:7px;border-radius:50%;flex:0 0 auto;opacity:.85}
-.navbtn .num{font-family:var(--mono);font-size:10px;color:var(--faint);margin-left:auto}
-#scrim{position:fixed;inset:0;background:rgba(5,8,14,.6);z-index:45;display:none}
-#scrim.show{display:block}
 
 /* ---------- MAIN ---------- */
-main{margin-left:var(--rail);padding:54px 0 0}
 .wrap{max-width:900px;margin:0 auto;padding:34px 26px 90px}
 .page{display:none}
 .page.on{display:block;animation:fade .25s ease}
@@ -112,7 +46,6 @@ b{font-weight:650}
 
 /* ---------- CARDS ---------- */
 .card{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:22px 24px;margin-top:18px;position:relative}
-.card::before{content:"";position:absolute;top:-1px;left:22px;width:34px;height:2px;background:var(--am);border-radius:2px}
 html:not(.dark) .card{box-shadow:0 1px 3px rgba(15,23,42,.05)}
 
 /* heading markers (was coloured squares) */
@@ -121,16 +54,15 @@ html:not(.dark) .card{box-shadow:0 1px 3px rgba(15,23,42,.05)}
 .sq.s-grn{background:var(--gr)} .sq.s-blue{background:var(--cy)}
 
 /* ---------- CODE ---------- */
-.code{background:#070a12;border:1px solid var(--line2);border-radius:10px;padding:26px 15px 14px;margin:12px 0;
-  font-family:var(--mono);font-size:12.9px;line-height:1.72;overflow-x:auto;white-space:pre;color:#cfdcf3;position:relative}
-html:not(.dark) .code{background:#0d1220;color:#cfdcf3}
-.code::before{content:"C++";position:absolute;top:6px;left:13px;font-size:9px;letter-spacing:1.4px;color:#4a5c7a;font-weight:700}
-.tok-c{color:#5d7290;font-style:italic}
-.tok-s{color:#7fd6a2}
-.tok-p{color:#c39bf5}
-.tok-k{color:#ffb454}
-.tok-t{color:#5cc9f5}
-.tok-n{color:#f78c6c}
+.code{background:var(--sc-code-bg);border:1px solid var(--sc-code-line);border-radius:10px;padding:26px 15px 14px;margin:12px 0;
+  font-family:var(--mono);font-size:12.9px;line-height:1.72;overflow-x:auto;white-space:pre;color:var(--sc-code-text);position:relative}
+.code::before{content:"C++";position:absolute;top:6px;left:13px;font-family:var(--sc-sans);font-size:10px;letter-spacing:.06em;color:var(--sc-faint);font-weight:600}
+.tok-c{color:var(--sc-tok-comment);font-style:italic}
+.tok-s{color:var(--sc-tok-string)}
+.tok-p{color:var(--sc-tok-preproc)}
+.tok-k{color:var(--sc-tok-keyword)}
+.tok-t{color:var(--sc-tok-type)}
+.tok-n{color:var(--sc-tok-number)}
 code{font-family:var(--mono);font-size:.9em;background:var(--panel3);border:1px solid var(--line);
   padding:1.5px 6px;border-radius:5px;color:var(--am)}
 .code code{background:none;border:0;padding:0;color:inherit}
@@ -172,7 +104,7 @@ code{font-family:var(--mono);font-size:.9em;background:var(--panel3);border:1px 
 .chip{border:1px solid var(--line);background:var(--panel);color:var(--dim);font-family:var(--mono);font-size:11.5px;
   font-weight:700;padding:6px 13px;border-radius:20px;cursor:pointer;letter-spacing:.4px;transition:.13s}
 .chip:hover{border-color:var(--am);color:var(--am)}
-.chip.on{background:var(--am);border-color:var(--am);color:#181206}
+.chip.on{background:var(--am);border-color:var(--am);color:var(--sc-surface)}
 .btnrow{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}
 .btn{border:1px solid var(--line2);background:var(--panel2);color:var(--ink);font-family:var(--mono);font-size:13px;
   font-weight:700;padding:9px 17px;border-radius:9px;cursor:pointer;transition:.13s;letter-spacing:.3px}
@@ -266,55 +198,7 @@ code{font-family:var(--mono);font-size:.9em;background:var(--panel3);border:1px 
 .mini .mnum{font-family:var(--mono);font-size:17px;font-weight:800;color:var(--am)}
 .mini .l{font-size:13px;color:var(--dim);margin-top:2px}
 
-/* ---------- COURSE SWITCHER ---------- */
-#csWrap{position:relative;flex:0 0 auto}
-#csPop{position:absolute;top:calc(100% + 9px);right:0;width:min(92vw,330px);background:var(--panel);
-  border:1px solid var(--line2);border-radius:13px;padding:8px;z-index:200;display:none;box-shadow:0 22px 55px rgba(0,0,0,.5)}
-html:not(.dark) #csPop{box-shadow:0 22px 55px rgba(15,23,42,.16)}
-#csPop.on{display:block}
-.cshd{font-family:var(--mono);font-size:9.5px;letter-spacing:1.3px;text-transform:uppercase;color:var(--faint);
-  padding:6px 10px 8px;display:flex;justify-content:space-between}
-.csi{display:flex;align-items:center;gap:11px;border:1px solid transparent;border-radius:10px;padding:10px 11px;
-  cursor:pointer;text-decoration:none;color:var(--ink);transition:.13s}
-.csi:hover{background:var(--panel2);border-color:var(--line2);text-decoration:none}
-.csi.cur{background:var(--panel2);border-color:color-mix(in srgb,var(--am) 45%,transparent)}
-.csmk{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;
-  font-family:var(--mono);font-weight:800;font-size:10.5px;border:1px solid}
 
-.csmk.c0{background:color-mix(in srgb,var(--gr) 14%,transparent);border-color:var(--gr);color:var(--gr)}
-.csi.hub{border-bottom:1px solid var(--line);border-radius:10px 10px 0 0;margin-bottom:4px;padding-bottom:12px}
-.csmk.c1{background:color-mix(in srgb,var(--cy) 14%,transparent);border-color:var(--cy);color:var(--cy)}
-.csmk.c2{background:color-mix(in srgb,var(--vi) 14%,transparent);border-color:var(--vi);color:var(--vi)}
-.csmk.c3{background:color-mix(in srgb,var(--am) 14%,transparent);border-color:var(--am);color:var(--am)}.csmk.c4{color:#a78bfa;border-color:#a78bfa}.csmk.c5{color:#34d399;border-color:#34d399}
-.cstx{flex:1;min-width:0}
-.cstx b{display:block;font-size:13.6px;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cstx span{display:block;font-family:var(--mono);font-size:10px;color:var(--faint);margin-top:2px}
-.csnow{font-family:var(--mono);font-size:8.5px;letter-spacing:1px;color:var(--am);border:1px solid var(--am);
-  border-radius:4px;padding:2px 5px;flex:0 0 auto}
-.cssoon{font-family:var(--mono);font-size:8.5px;letter-spacing:1px;color:var(--faint);border:1px solid var(--line2);
-  border-radius:4px;padding:2px 5px;flex:0 0 auto}
-.csft{border-top:1px solid var(--line);margin-top:6px;padding:9px 11px 3px;display:flex;justify-content:space-between;
-  font-family:var(--mono);font-size:10px;color:var(--faint)}
-.csft a{color:var(--faint)}
-.csft a:hover{color:var(--am)}
-
-/* ---------- SIDEBAR HIDE / SHOW (desktop) ---------- */
-.navgroup-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
-#sideHide{border:1px solid var(--line2);background:transparent;color:var(--faint);border-radius:6px;padding:3px 8px;
-  font:700 10px/1.5 var(--mono);letter-spacing:.7px;text-transform:uppercase;cursor:pointer;transition:.13s}
-#sideHide:hover{color:var(--am);border-color:var(--am)}
-#sideShow{position:fixed;z-index:52;left:0;top:calc(var(--sc-header-h,54px) + 4px);width:18px;height:36px;display:none;
-  align-items:center;justify-content:center;padding:0;border:1px solid var(--line2);border-left:0;border-radius:0 8px 8px 0;
-  background:var(--panel);color:var(--dim);font:700 14px/1 var(--mono);cursor:pointer;transition:width .13s,color .13s,border-color .13s}
-#sideShow:hover{color:var(--am);border-color:var(--am);width:24px}
-#side{transition:transform .22s ease,visibility .22s}
-main{transition:margin-left .22s ease}
-@media(min-width:961px){
-  html.side-hidden{--rail:0px}
-  html.side-hidden #side{width:252px;transform:translateX(-100%);visibility:hidden}
-  html.side-hidden #sideShow{display:flex}
-}
-@media(prefers-reduced-motion:reduce){#side,main{transition:none}}
 
 /* ---------- WEEK 12: WUMPUS GRID ---------- */
 .wgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;max-width:460px;margin:13px 0 6px}
@@ -337,21 +221,14 @@ main{transition:margin-left .22s ease}
 
 /* ---------- RESPONSIVE ---------- */
 @media(max-width:960px){
-  :root{--rail:0px}
-  #burger{display:block}
-  #sideHide{display:none}
-  #side{transform:translateX(-100%);transition:transform .25s;width:262px;box-shadow:0 0 40px rgba(0,0,0,.4)}
-  #side.open{transform:none}
-  main{margin-left:0}
   .wrap{padding:26px 18px 80px}
-  .btext span{display:none}
 }
 @media(max-width:520px){
   .fc-face{padding:34px 20px;font-size:16.5px}
   .code{font-size:12px}
 }
 @media print{
-  #top,#side,#sideShow,#scrim,.chiprow,.btnrow{display:none!important}
+  .chiprow,.btnrow{display:none!important}
   main{margin:0}.page{display:block!important}
   body{background:#fff;color:#000}
 }
@@ -360,106 +237,10 @@ html.my body{font-family:"Noto Sans Myanmar","Myanmar Text","Padauk",-apple-syst
 html.my h1,html.my h2,html.my h3,html.my h4{line-height:1.6}
 html.my td,html.my th,html.my li,html.my .box,html.my .answer,html.my .memory{line-height:1.85}
 html.my code,html.my pre,html.my kbd,html.my .num{font-family:var(--mono)}
-#langbtn b,.sc-lang b{color:var(--cy)}
-.sc-shell-button.sc-lang{width:auto;min-width:0;padding:0 10px;font:700 11px var(--mono,ui-monospace,monospace);letter-spacing:.5px;white-space:nowrap}
 </style>
-<link rel="stylesheet" href="https://zann208.github.io/study/shared/v2/study-system.css?v=20260911-width1">
-<link rel="stylesheet" href="https://zann208.github.io/study/shared/v2/legacy-console.css">
-<link rel="stylesheet" href="./study-console-adapter.css">
-<link rel="stylesheet" href="https://zann208.github.io/study/shared/v2/reading.css?v=20260910-layout2">
 </head>
 <body data-study-console="algo" data-console-id="algo" data-console-name="Algorithms & Data Structures">
 
-<header id="top">
-  <button id="burger" onclick="toggleSide()" aria-label="Menu">☰</button>
-  <div id="csWrap">
-    <button class="brand" id="logoBtn" title="Switch course" aria-haspopup="true" aria-expanded="false">
-      <span class="bmark"><svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true">
-      <line x1="8" y1="3.4" x2="4.2" y2="8.6" stroke="currentColor" stroke-width="1.1" opacity=".5"/>
-      <line x1="8" y1="3.4" x2="11.8" y2="8.6" stroke="currentColor" stroke-width="1.1" opacity=".5"/>
-      <line x1="4.2" y1="8.6" x2="2.6" y2="13" stroke="currentColor" stroke-width="1.1" opacity=".35"/>
-      <line x1="4.2" y1="8.6" x2="6.4" y2="13" stroke="currentColor" stroke-width="1.1" opacity=".35"/>
-      <circle cx="8" cy="3.4" r="2" fill="#f0b429"/><circle cx="4.2" cy="8.6" r="1.6" fill="#34d399"/>
-      <circle cx="11.8" cy="8.6" r="1.6" fill="#38bdf8"/><circle cx="2.6" cy="13" r="1.2" fill="#63718c"/>
-      <circle cx="6.4" cy="13" r="1.2" fill="#63718c"/></svg></span>
-      <span class="btext"><b>ALGO<i>://STUDY</i></b><span>study console</span></span>
-      <span class="bcaret">▾</span>
-    </button>
-    <div id="csPop" role="menu">
-      <div class="cshd"><span>Semester consoles</span><span>5</span></div>
-      <a class="csi hub" href="https://zann208.github.io/study/" role="menuitem">
-        <span class="csmk c0">ALL</span>
-        <span class="cstx"><b>All courses</b><span>semester overview</span></span>
-        <span class="cssoon">HOME ↗</span></a>
-      <a class="csi" href="https://zann208.github.io/netdes/" role="menuitem">
-        <span class="csmk c1">NET</span>
-        <span class="cstx"><b>Network Design</b><span>Switching &amp; routing</span></span>
-        <span class="cssoon">OPEN ↗</span></a>
-      <a class="csi" href="https://zann208.github.io/wnet/" role="menuitem">
-        <span class="csmk c2">WLN</span>
-        <span class="cstx"><b>Wireless Networks</b><span>Wireless engineering</span></span>
-        <span class="cssoon">OPEN ↗</span></a>
-      <a class="csi cur" href="#" id="csSelf" role="menuitem">
-        <span class="csmk c3">ALG</span>
-        <span class="cstx"><b>Algorithms for iSNE</b><span>Algorithms &amp; data structures</span></span>
-        <span class="csnow">HERE</span></a>
-      <a class="csi" href="https://zann208.github.io/privacy/" role="menuitem">
-        <span class="csmk c4">PRV</span>
-        <span class="cstx"><b>Privacy Technologies</b><span>Privacy &amp; security</span></span>
-        <span class="cssoon">OPEN &#8599;</span></a>
-      <a class="csi" href="https://zann208.github.io/os/" role="menuitem">
-        <span class="csmk c5">OS</span>
-        <span class="cstx"><b>Operating Systems</b><span>Systems &amp; scheduling</span></span>
-        <span class="cssoon">OPEN &#8599;</span></a>
-      <div class="csft"><span>SEM 1 · 2026</span><a href="https://zann208.github.io" target="_blank" rel="noopener">portfolio ↗</a></div>
-    </div>
-  </div>
-  <div class="tspace"></div>
-  <button class="tbtn" id="langbtn" type="button" onclick="algoLang()" title="Language / ဘာသာစကား"><b>EN</b>/MY</button>
-  <button class="tbtn" id="themebtn2" onclick="toggleTheme()" title="Theme">◐</button>
-</header>
-
-<div id="scrim" onclick="toggleSide()"></div>
-
-<nav id="side">
-  <div class="navgroup navgroup-top">Overview<button id="sideHide" type="button" onclick="setSideHidden(true)" aria-controls="side" title="Hide sidebar ( [ )">‹ Hide</button></div>
-  <button class="navbtn on" data-page="home" onclick="go('home')"><span class="dot" style="background:var(--am)"></span><span data-my="သင်တန်း ပင်မ">Course home</span></button>
-
-  <div class="navgroup">Topics</div>
-  <button class="navbtn" data-page="week1" onclick="go('week1')"><span class="dot" style="background:var(--cy)"></span>Complexity<span class="num">W1</span></button>
-  <button class="navbtn" data-page="week2" onclick="go('week2')"><span class="dot" style="background:var(--rd)"></span>Arrays &amp; lists<span class="num">W2</span></button>
-  <button class="navbtn" data-page="week3" onclick="go('week3')"><span class="dot" style="background:var(--am2)"></span>Stacks &amp; queues<span class="num">W3</span></button>
-  <button class="navbtn" data-page="week4" onclick="go('week4')"><span class="dot" style="background:var(--gr)"></span>Trees &amp; heaps<span class="num">W4</span></button>
-  <button class="navbtn" data-page="week6" onclick="go('week6')"><span class="dot" style="background:var(--vi)"></span>B-Trees &amp; Tries<span class="num">W6</span></button>
-  <button class="navbtn" data-page="week7" onclick="go('week7')"><span class="dot" style="background:var(--cy)"></span><span data-my="ဂရပ်">Graphs</span><span class="num">W7</span></button>
-  <button class="navbtn" data-page="week10" onclick="go('week10')"><span class="dot" style="background:var(--gr)"></span><span data-my="Agent နှင့် search">Agents &amp; search</span><span class="num">W10</span></button>
-  <button class="navbtn" data-page="week12" onclick="go('week12')"><span class="dot" style="background:var(--rd)"></span><span data-my="ဂိမ်းနှင့် ဖြစ်နိုင်ခြေ">Games &amp; probability</span><span class="num">W12</span></button>
-  <button class="navbtn" data-page="week13" onclick="go('week13')"><span class="dot" style="background:var(--am2)"></span><span data-my="Data ချုံ့ခြင်း">Compression</span><span class="num">W13</span></button>
-
-  <div class="navgroup">Midterm</div>
-  <button class="navbtn" data-page="midterm" onclick="go('midterm')"><span class="dot" style="background:var(--am)"></span>Exam definitions<span class="num">MID</span></button>
-  <a class="navbtn" href="midterm-mock.html"><span class="dot" style="background:var(--am)"></span>Midterm Mock<span class="num">MOCK</span></a>
-
-  <div class="navgroup">Final</div>
-  <button class="navbtn" data-page="finalprep" onclick="go('finalprep')"><span class="dot" style="background:var(--gr)"></span><span data-my="Final Prep Lab">Final Prep Lab</span><span class="num">LAB</span></button>
-  <button class="navbtn" data-page="final" onclick="go('final')"><span class="dot" style="background:var(--rd)"></span><span data-my="စာမေးပွဲ အဓိပ္ပာယ်များ">Exam definitions</span><span class="num">FIN</span></button>
-  <button class="navbtn" data-page="finalprac" onclick="go('finalprac')"><span class="dot" style="background:var(--rd)"></span><span data-my="လေ့ကျင့်ရန် ပုစ္ဆာများ">Practice problems</span><span class="num">20 Q</span></button>
-  <button class="navbtn" data-page="finalmock" onclick="go('finalmock')"><span class="dot" style="background:var(--rd)"></span><span data-my="Final Mock">Final Mock</span><span class="num">MOCK</span></button>
-
-  <div class="navgroup">Assignments</div>
-  <button class="navbtn" data-page="a1" onclick="go('a1')"><span class="dot" style="background:var(--cy)"></span>Worksheet 1</button>
-  <button class="navbtn" data-page="a2" onclick="go('a2')"><span class="dot" style="background:var(--gr)"></span>Worksheet 2</button>
-  <button class="navbtn" data-page="a4" onclick="go('a4')"><span class="dot" style="background:var(--cy)"></span>Assignment 4<span class="num">MST</span></button>
-
-  <div class="navgroup">Practice</div>
-  <button class="navbtn" data-page="cards" onclick="go('cards')"><span class="dot" style="background:var(--am2)"></span><span data-my="Flashcard များ">Flashcards</span></button>
-  <button class="navbtn" data-page="quiz" onclick="go('quiz')"><span class="dot" style="background:var(--rd)"></span><span data-my="Quiz">Quiz</span></button>
-  <button class="navbtn" data-page="practice" onclick="go('practice')"><span class="dot" style="background:var(--gr)"></span>Code practice</button>
-
-  <div class="navgroup">Reference</div>
-  <button class="navbtn" data-page="cheat" onclick="go('cheat')"><span class="dot" style="background:var(--vi)"></span><span data-my="Cheat sheet">Cheat sheet</span></button>
-</nav>
-<button id="sideShow" type="button" onclick="setSideHidden(false)" aria-controls="side" aria-label="Show sidebar" title="Show sidebar ( [ )">›</button>
 
 <main><div class="wrap">
 
@@ -3189,34 +2970,9 @@ const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;
 function go(id){
   document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
   $('page-'+id).classList.add('on');
-  document.querySelectorAll('.navbtn').forEach(b => b.classList.toggle('on', b.dataset.page === id));
-  $('side').classList.remove('open');
-  $('scrim').classList.remove('show');
   window.scrollTo(0,0);
 }
-function toggleSide(){
-  $('side').classList.toggle('open');
-  $('scrim').classList.toggle('show', $('side').classList.contains('open'));
-}
 
-/* ================= sidebar hide / show (desktop) ================= */
-function setSideHidden(hidden, quiet){
-  document.documentElement.classList.toggle('side-hidden', hidden);
-  try { localStorage.setItem('algoSideHidden', hidden ? '1' : '0'); } catch(e) {}
-  if (quiet) return;
-  const next = $(hidden ? 'sideShow' : 'sideHide');
-  if (next) next.focus({preventScroll:true});
-}
-function toggleSideHidden(){
-  setSideHidden(!document.documentElement.classList.contains('side-hidden'));
-}
-document.addEventListener('keydown', function(e){
-  if (e.key !== '[' || e.ctrlKey || e.metaKey || e.altKey) return;
-  const t = e.target;
-  if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
-  if (!matchMedia('(min-width: 961px)').matches) return;
-  toggleSideHidden();
-});
 
 /* ================= final practice filter ================= */
 function fpFilter(w, el){
@@ -3224,22 +2980,8 @@ function fpFilter(w, el){
   document.querySelectorAll('#page-finalprac .fp').forEach(c => { c.style.display = (w === 0 || +c.dataset.w === w) ? '' : 'none'; });
 }
 
-/* ================= light / dark theme ================= */
-function applyTheme(dark){
-  document.documentElement.classList.toggle('dark', dark);
-  const b1 = $('themebtn');  if (b1) b1.textContent = dark ? '☀ Light mode' : '🌙 Dark mode';
-  const b2 = $('themebtn2'); if (b2) b2.textContent = dark ? '☀' : '🌙';
-  try { localStorage.setItem('algoTheme', dark ? 'dark' : 'light'); } catch(e) {}
-}
-function toggleTheme(){
-  applyTheme(!document.documentElement.classList.contains('dark'));
-}
-(function(){
-  let saved = null;
-  try { saved = localStorage.getItem('algoTheme'); } catch(e) {}
-  const prefersDark = (typeof matchMedia === 'function') && matchMedia('(prefers-color-scheme: dark)').matches;
-  applyTheme(saved ? saved === 'dark' : prefersDark);
-})();
+/* ================= light / dark theme: handled by the Study Console frame ================= */
+function toggleTheme(){ if (window.StudyShell) StudyShell.setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'); }
 
 /* ================= C++ syntax highlighter ================= */
 function hlCpp(src){
@@ -4697,20 +4439,6 @@ prFilter(0);
 
 
 
-/* ===== course switcher (canonical) ===== */
-(function(){
-  var b=document.getElementById("logoBtn"),p=document.getElementById("csPop");
-  if(!b||!p)return;
-  b.addEventListener("click",function(e){e.stopPropagation();
-    var on=p.classList.toggle("on");b.setAttribute("aria-expanded",on?"true":"false");});
-  p.addEventListener("click",function(e){e.stopPropagation()});
-  document.addEventListener("click",function(){p.classList.remove("on");b.setAttribute("aria-expanded","false")});
-  document.addEventListener("keydown",function(e){if(e.key==="Escape")p.classList.remove("on")});
-  var s=document.getElementById("csSelf");
-  if(s)s.addEventListener("click",function(e){e.preventDefault();p.classList.remove("on");
-    if(typeof go==="function"){go("home")}
-    else if(typeof showTab==="function"){showTab("home",true)}});
-})();
 </script>
 
 <script src="./tree-mastery.js?v=20260823b"></script>
@@ -4722,9 +4450,230 @@ prFilter(0);
 <script src="./final-prac-figs.js?v=20261024k"></script>
 <script src="./tree-mastery-upgrade.js?v=20260823b"></script>
 <script src="./tree-mastery-learn-expanded.js?v=20260827a"></script>
+<script>
+/* Study Console v3: this console's manifest. The frame (header, menu, search, theme,
+   language, reading size, progress) is drawn by shared/v3/shell.js from this object. */
+(function () {
+  function stored(key) { try { return JSON.parse(localStorage.getItem(key) || 'null'); } catch (e) { return null; } }
+  function some(o) { return !!o && typeof o === 'object' && Object.keys(o).some(function (k) { return o[k]; }); }
+  (window.StudyConsole = window.StudyConsole || []).push({
+    id: 'algo',
+    title: 'Algorithms & Data Structures',
+    subtitle: 'Topics, assignments, midterm and final',
+    content: 'body > main',
+    defaultView: 'home',
+    router: { show: function (view) { go(view); } },
+    viewElement: function (id) { return document.getElementById('page-' + id); },
+    i18n: {
+      langs: [{ code: 'en', label: 'EN', name: 'English' }, { code: 'my', label: 'MY', name: 'Burmese' }],
+      get: function () { try { return localStorage.getItem('algoLang') === 'my' ? 'my' : 'en'; } catch (e) { return 'en'; } },
+      set: function (code) { if (this.get() !== code && typeof window.algoLang === 'function') window.algoLang(); }
+    },
+    progress: {
+      read: function () {
+        var out = {}, mock = stored('algo-final-mock-v1');
+        if (some(stored('algoFinalPrepDone'))) out.finalprep = 'visited';
+        if (some(stored('algoTreeMastery')) || some(stored('algoMidtermTreeSkills'))) out.trees = 'visited';
+        if (mock && mock.done && mock.done.length) out.finalmock = 'visited';
+        return out;
+      }
+    },
+    groups: [
+      {
+        "label": "Overview",
+        "views": [
+          {
+            "id": "home",
+            "title": "Course home",
+            "titles": {
+              "my": "သင်တန်း ပင်မ"
+            }
+          }
+        ]
+      },
+      {
+        "label": "Topics",
+        "views": [
+          {
+            "id": "week1",
+            "title": "Complexity",
+            "badge": "W1"
+          },
+          {
+            "id": "week2",
+            "title": "Arrays & lists",
+            "badge": "W2"
+          },
+          {
+            "id": "week3",
+            "title": "Stacks & queues",
+            "badge": "W3"
+          },
+          {
+            "id": "week4",
+            "title": "Trees & heaps",
+            "badge": "W4"
+          },
+          {
+            "id": "week6",
+            "title": "B-Trees & Tries",
+            "badge": "W6"
+          },
+          {
+            "id": "week7",
+            "title": "Graphs",
+            "badge": "W7",
+            "titles": {
+              "my": "ဂရပ်"
+            }
+          },
+          {
+            "id": "week10",
+            "title": "Agents & search",
+            "badge": "W10",
+            "titles": {
+              "my": "Agent နှင့် search"
+            }
+          },
+          {
+            "id": "week12",
+            "title": "Games & probability",
+            "badge": "W12",
+            "titles": {
+              "my": "ဂိမ်းနှင့် ဖြစ်နိုင်ခြေ"
+            }
+          },
+          {
+            "id": "week13",
+            "title": "Compression",
+            "badge": "W13",
+            "titles": {
+              "my": "Data ချုံ့ခြင်း"
+            }
+          }
+        ]
+      },
+      {
+        "label": "Midterm",
+        "views": [
+          {
+            "id": "midterm",
+            "title": "Exam definitions",
+            "badge": "MID"
+          },
+          {
+            "id": "midterm-mock",
+            "title": "Midterm Mock",
+            "badge": "MOCK",
+            "href": "midterm-mock.html"
+          }
+        ]
+      },
+      {
+        "label": "Final",
+        "views": [
+          {
+            "id": "finalprep",
+            "title": "Final Prep Lab",
+            "badge": "LAB",
+            "titles": {
+              "my": "Final Prep Lab"
+            }
+          },
+          {
+            "id": "final",
+            "title": "Exam definitions",
+            "badge": "FIN",
+            "titles": {
+              "my": "စာမေးပွဲ အဓိပ္ပာယ်များ"
+            }
+          },
+          {
+            "id": "finalprac",
+            "title": "Practice problems",
+            "badge": "20 Q",
+            "titles": {
+              "my": "လေ့ကျင့်ရန် ပုစ္ဆာများ"
+            }
+          },
+          {
+            "id": "finalmock",
+            "title": "Final Mock",
+            "badge": "MOCK",
+            "titles": {
+              "my": "Final Mock"
+            }
+          }
+        ]
+      },
+      {
+        "label": "Assignments",
+        "views": [
+          {
+            "id": "a1",
+            "title": "Worksheet 1"
+          },
+          {
+            "id": "a2",
+            "title": "Worksheet 2"
+          },
+          {
+            "id": "a3",
+            "title": "Assignment 3",
+            "badge": "SPLAY"
+          },
+          {
+            "id": "a4",
+            "title": "Assignment 4",
+            "badge": "MST"
+          }
+        ]
+      },
+      {
+        "label": "Practice",
+        "views": [
+          {
+            "id": "cards",
+            "title": "Flashcards",
+            "titles": {
+              "my": "Flashcard များ"
+            }
+          },
+          {
+            "id": "quiz",
+            "title": "Quiz",
+            "titles": {
+              "my": "Quiz"
+            }
+          },
+          {
+            "id": "practice",
+            "title": "Code practice"
+          },
+          {
+            "id": "trees",
+            "title": "Tree mastery",
+            "badge": "W4+6"
+          }
+        ]
+      },
+      {
+        "label": "Reference",
+        "views": [
+          {
+            "id": "cheat",
+            "title": "Cheat sheet",
+            "titles": {
+              "my": "Cheat sheet"
+            }
+          }
+        ]
+      }
+    ]
+  });
+})();
+</script>
 
-<script src="https://zann208.github.io/study/shared/v2/study-system.js?v=20260910-layout2"></script>
-<script src="https://zann208.github.io/study/shared/v2/reading.js?v=20260910-reading1" defer></script>
 <script>
 /* Burmese (MY) layer: Weeks 7, 10, 12, 13, the Final pages, and their flashcards/quiz. Strings live in i18n/my.js. */
 (function(){
@@ -4769,19 +4718,6 @@ prFilter(0);
     document.querySelectorAll("iframe").forEach(function(f){try{f.contentWindow.postMessage({algoLang:LANG},"*")}catch(e){}});
   }
   window.algoLang=function(){LANG=LANG==="my"?"en":"my";try{localStorage.setItem(KEY,LANG)}catch(e){};paint()};
-  /* The shared Study Console header replaces the page header, so place the switch next to its theme button. */
-  function mount(){
-    var a=document.querySelector(".sc-global-actions");
-    if(!a||a.querySelector(".sc-lang"))return !!a;
-    var b=document.createElement("button");b.type="button";b.className="sc-shell-button sc-lang";
-    b.title="Language / ဘာသာစကား";b.setAttribute("aria-label","Switch language (English / Burmese)");
-    b.addEventListener("click",function(){window.algoLang()});
-    a.insertBefore(b,a.querySelector(".sc-theme"));
-    b.innerHTML=LANG==="my"?"EN/<b>MY</b>":"<b>EN</b>/MY";
-    return true;
-  }
-  var tries=0;(function retry(){if(!mount()&&tries++<40)setTimeout(retry,100)})();
-  window.addEventListener("load",mount);
   if(LANG==="my")load(function(){});
   paint();
 })();

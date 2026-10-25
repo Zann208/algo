@@ -2,7 +2,7 @@
 (function(){
 if(window.__algoAssignment3Loaded)return;window.__algoAssignment3Loaded=true;
 var side=document.getElementById('side'),wrap=document.querySelector('main .wrap');
-if(!side||!wrap)return;
+if(!wrap)return;
 
 var style=document.createElement('style');
 style.textContent=`
@@ -11,8 +11,8 @@ style.textContent=`
 `;
 document.head.appendChild(style);
 
-var a2=side.querySelector('[data-page="a2"]');
-if(!side.querySelector('[data-page="a3"]')){
+var a2=side&&side.querySelector('[data-page="a2"]');
+if(side&&!side.querySelector('[data-page="a3"]')){
   var nav=document.createElement('button');nav.className='navbtn';nav.dataset.page='a3';nav.setAttribute('onclick',"go('a3')");nav.innerHTML='<span class="dot" style="background:var(--vi)"></span>Assignment 3<span class="num">SPLAY</span>';
   if(a2&&a2.nextSibling)side.insertBefore(nav,a2.nextSibling);else side.appendChild(nav);
 }

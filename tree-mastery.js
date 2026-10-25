@@ -2,7 +2,7 @@
 (function(){
 if(window.__algoTreeMasteryLoaded)return;window.__algoTreeMasteryLoaded=true;
 var wrap=document.querySelector('main .wrap'), side=document.getElementById('side');
-if(!wrap||!side)return;
+if(!wrap)return;
 
 var st=document.createElement('style');
 st.textContent=`
@@ -21,9 +21,9 @@ st.textContent=`
 `;
 document.head.appendChild(st);
 
-var codeBtn=side.querySelector('[data-page="practice"]');
+var codeBtn=side&&side.querySelector('[data-page="practice"]');
 var nav=document.createElement('button');nav.className='navbtn';nav.dataset.page='trees';nav.setAttribute('onclick',"go('trees')");nav.innerHTML='<span class="dot" style="background:var(--gr)"></span>Tree mastery<span class="num">W4+6</span>';
-if(codeBtn&&codeBtn.nextSibling)side.insertBefore(nav,codeBtn.nextSibling);else side.appendChild(nav);
+if(side){if(codeBtn&&codeBtn.nextSibling)side.insertBefore(nav,codeBtn.nextSibling);else side.appendChild(nav);}
 
 var topics={
  basics:{name:'Tree basics',week:'W4',exam:'Root, leaf, path, level, height, complete binary tree.',html:`<div class="tm-grid"><div class="tm-card"><span class="tm-badge">FOUNDATION</span><h3>Tree vocabulary</h3><table class="tm-table"><tr><td><b>Root</b></td><td>Only node with no parent.</td></tr><tr><td><b>Leaf</b></td><td>Node with no children.</td></tr><tr><td><b>Path length</b></td><td>Number of arcs on the path.</td></tr><tr><td><b>Level</b></td><td>Path length + 1. Root is level 1.</td></tr><tr><td><b>Height</b></td><td>Longest path length, counted in arcs. One-node tree has height 0.</td></tr></table></div><div class="tm-card"><span class="tm-badge">BINARY TREE</span><h3>Binary vs complete</h3><p>A binary tree gives each node at most two children. The course's complete-tree fact is:</p><div class="tm-rule">m = k + 1</div><p class="tm-small">m = leaves, k = nonterminal nodes, when every nonterminal node has exactly two nonempty children.</p><div class="tm-note"><b>Exam trap:</b> height counts arcs, not nodes.</div></div></div>`},

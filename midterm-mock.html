@@ -3,13 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<script src="https://zann208.github.io/study/shared/v2/theme-init.js"></script>
+<script src="https://zann208.github.io/study/shared/v3/boot.js?v=20261025-1" data-console="algo" data-v2="midterm-mock.v2.html"></script>
 <title>Midterm Mock — Algorithms & Data Structures</title>
 <meta name="theme-color" content="#7d2638">
-<link rel="stylesheet" href="https://zann208.github.io/study/shared/v2/study-system.css?v=20260911-width1">
 <link rel="stylesheet" href="./midterm-mock.css">
-<link rel="stylesheet" href="https://zann208.github.io/study/shared/v2/legacy-console.css">
-<link rel="stylesheet" href="https://zann208.github.io/study/shared/v2/reading.css?v=20260910-layout2">
 </head>
 <body data-study-console="algo" data-console-id="algo" data-console-name="Algorithms & Data Structures">
 <main class="mock-main" id="main">
@@ -293,7 +290,19 @@ function1(p-&gt;right);
 </main>
 <script src="./midterm-mock.js"></script>
 <script src="./midterm-mock-readability.js"></script>
-<script src="https://zann208.github.io/study/shared/v2/study-system.js?v=20260910-layout2" defer></script>
-<script src="https://zann208.github.io/study/shared/v2/reading.js?v=20260910-reading1" defer></script>
+<script>
+/* Study Console v3: Midterm Mock in the ALG frame (exam menu). */
+(function () {
+  (window.StudyConsole = window.StudyConsole || []).push({
+    id: 'algo-midterm-mock', kind: 'exam', parent: 'algo',
+    title: 'Midterm Mock', subtitle: 'Timed practice exam',
+    docTitle: 'Midterm Mock',
+    content: 'body > main',
+    defaultView: 'mock',
+    router: { show: function () {} },
+    groups: [{ label: 'Exam', views: [{ id: 'mock', title: 'Midterm Mock', track: false }] }]
+  });
+})();
+</script>
 </body>
 </html>
