@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script src="https://zann208.github.io/study/shared/v3/boot.js?v=20261029-2" data-console="algo" data-v2="index.v2.html"></script>
+<script src="https://zann208.github.io/study/shared/v3/boot.js?v=20261029-3" data-console="algo" data-v2="index.v2.html"></script>
 <title>Algorithms &amp; Data Structures</title>
 <meta name="theme-color" content="#0a0d14">
 <style>
@@ -4444,6 +4444,15 @@ prFilter(0);
 (function () {
   function stored(key) { try { return JSON.parse(localStorage.getItem(key) || 'null'); } catch (e) { return null; } }
   function some(o) { return !!o && typeof o === 'object' && Object.keys(o).some(function (k) { return o[k]; }); }
+  // Each topic card is a section: section bar, menu sub-items and one-at-a-time reading.
+  function cardSections(view) {
+    var page = document.getElementById('page-' + view);
+    if (!page) return [];
+    return Array.prototype.filter.call(page.querySelectorAll(':scope > .card'), function (c) { return c.querySelector('h2'); }).map(function (c, i) {
+      if (!c.id) c.id = view + '-s' + (i + 1);
+      return { id: c.id, title: c.querySelector('h2').textContent.replace(/\s+/g, ' ').trim() };
+    });
+  }
   (window.StudyConsole = window.StudyConsole || []).push({
     id: 'algo',
     title: 'Algorithms & Data Structures',
@@ -4484,31 +4493,37 @@ prFilter(0);
         "views": [
           {
             "id": "week1",
+            "children": function () { return cardSections("week1"); },
             "title": "Complexity",
             "badge": "W1"
           },
           {
             "id": "week2",
+            "children": function () { return cardSections("week2"); },
             "title": "Arrays & lists",
             "badge": "W2"
           },
           {
             "id": "week3",
+            "children": function () { return cardSections("week3"); },
             "title": "Stacks & queues",
             "badge": "W3"
           },
           {
             "id": "week4",
+            "children": function () { return cardSections("week4"); },
             "title": "Trees & heaps",
             "badge": "W4"
           },
           {
             "id": "week6",
+            "children": function () { return cardSections("week6"); },
             "title": "B-Trees & Tries",
             "badge": "W6"
           },
           {
             "id": "week7",
+            "children": function () { return cardSections("week7"); },
             "title": "Graphs",
             "badge": "W7",
             "titles": {
@@ -4517,6 +4532,7 @@ prFilter(0);
           },
           {
             "id": "week10",
+            "children": function () { return cardSections("week10"); },
             "title": "Agents & search",
             "badge": "W10",
             "titles": {
@@ -4525,6 +4541,7 @@ prFilter(0);
           },
           {
             "id": "week12",
+            "children": function () { return cardSections("week12"); },
             "title": "Games & probability",
             "badge": "W12",
             "titles": {
@@ -4533,6 +4550,7 @@ prFilter(0);
           },
           {
             "id": "week13",
+            "children": function () { return cardSections("week13"); },
             "title": "Compression",
             "badge": "W13",
             "titles": {
@@ -4650,6 +4668,7 @@ prFilter(0);
         "views": [
           {
             "id": "cheat",
+            "children": function () { return cardSections("cheat"); },
             "title": "Cheat sheet",
             "titles": {
               "my": "Cheat sheet"
